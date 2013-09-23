@@ -1,18 +1,12 @@
-
-public class ReservedComment {
-	
-	public static void main( String[] args )
+private boolean isReservedComment(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
-
-        String candidate = "//";
         char   next;
         
         if (candidate.length()!=2){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -40,9 +34,9 @@ public class ReservedComment {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }
