@@ -1,18 +1,15 @@
-
-public class ReservedAnd {
+private boolean isReservedAnd(String candidate) {
 	
-	public static void main( String[] args )
-    {
+
         int START_STATE    = 0;
         int TERMINAL_STATE = 3; 
         
 
-        String candidate = "and";
         char   next;
         
         if (candidate.length()!=3){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
+        	
         }
 
         int state = START_STATE;
@@ -48,9 +45,8 @@ public class ReservedAnd {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
-    }
+            return false;
 
 }
