@@ -1,18 +1,12 @@
-
-public class ReservedTrue {
-	
-	public static void main( String[] args )
+private boolean isReservedTrue(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
-
-        String candidate = "true";
         char   next;
         
         if (candidate.length()!=4){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -57,9 +51,9 @@ public class ReservedTrue {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }

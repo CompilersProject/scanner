@@ -1,18 +1,12 @@
-
-public class ReservedAssignmentOp {
-	
-	public static void main( String[] args )
+private boolean isReservedAssignmentOp(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
-
-        String candidate = "=";
         char   next;
         
         if (candidate.length()!=1){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -32,9 +26,9 @@ public class ReservedAssignmentOp {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }

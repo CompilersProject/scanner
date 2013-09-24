@@ -1,4 +1,4 @@
-public class Token
+public class Token 
 {
 	//Grammar
     public static final int Program            = 1;
@@ -78,4 +78,1148 @@ public class Token
     public int    type  () { return type;   }
     public char   cvalue() { return cvalue; }
     public int    ivalue() { return ivalue; }
+
+    private static boolean isReservedAnd(String candidate) {
+
+
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 3; 
+        
+
+        char   next;
+        
+        if (candidate.length()!=3){
+        	return false;
+        	
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'a': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'd': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+
+     }
+
+     private static boolean isReservedAssignmentOp(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '=': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedBoolean(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 7; 
+        
+        char   next;
+        
+        if (candidate.length()!=7){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'b': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'o': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'o': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'l': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 4:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 5:
+                    switch ( next )
+                    {
+                        case 'a': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 6:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                  
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedClosedParen(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case ')': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+   
+   
+   private static boolean isReservedColon(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case ':': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedComma(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case ',': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedComment(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 2; 
+        
+        char   next;
+        
+        if (candidate.length()!=2){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '/': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case '/': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedElse(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 4; 
+        
+        char   next;
+        
+        if (candidate.length()!=4){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'l': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 's': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedEndIf(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 5; 
+        
+        char   next;
+        
+        if (candidate.length()!=5){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'd': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'i': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 4:
+                    switch ( next )
+                    {
+                        case 'f': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedFalse(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 5; 
+        
+        char   next;
+        
+        if (candidate.length()!=5){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'f': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'a': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'l': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 's': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 4:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedForwardSlash(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '/': state++; break;
+                        default : state = -1;
+                    }
+                    break;  
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedIf(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 2; 
+        
+        char   next;
+        
+        if (candidate.length()!=2){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'i': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'f': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+   
+   
+   private static boolean isReservedInteger(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 7; 
+        
+        char   next;
+        
+        if (candidate.length()!=7){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'i': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 't': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 4:
+                    switch ( next )
+                    {
+                        case 'g': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 5:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 6:
+                    switch ( next )
+                    {
+                        case 'r': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                  
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedLessThanOp(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '<': state++; break;
+                        default : state = -1;
+                    }
+                    break; 
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedMain(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 4; 
+        
+        char   next;
+        
+        if (candidate.length()!=4){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'm': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'a': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'i': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedMinusOp(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '-': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+   
+   
+   private static boolean isReservedMultiplyOp(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '*': state++; break;
+                        default : state = -1;
+                    }
+                    break; 
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedNot(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 3; 
+        
+        char   next;
+        
+        if (candidate.length()!=3){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'o': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 't': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedOpenParen(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '(': state++; break;
+                        default : state = -1;
+                    }
+                    break; 
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedOr(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 2; 
+        
+        char   next;
+        
+        if (candidate.length()!=2){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'o': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'r': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedPlusOp(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 1; 
+        
+        char   next;
+        
+        if (candidate.length()!=1){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case '+': state++; break;
+                        default : state = -1;
+                    }
+                    break; 
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedPrint(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 5; 
+        
+        char   next;
+        
+        if (candidate.length()!=5){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 'p': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'r': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'i': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+                    
+                case 4:
+                    switch ( next )
+                    {
+                        case 't': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedThen(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 4; 
+        
+        char   next;
+        
+        if (candidate.length()!=4){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 't': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'h': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'n': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
+   
+   private static boolean isReservedTrue(String candidate) {
+        int START_STATE    = 0;
+        int TERMINAL_STATE = 4; 
+        
+        char   next;
+        
+        if (candidate.length()!=4){
+        	return false;
+        }
+
+        int state = START_STATE;
+        for (int i = 0; i < candidate.length(); i++)
+        {
+            next = candidate.charAt(i);
+            switch (state)
+            {
+                case 0:
+                    switch ( next )
+                    {
+                        case 't': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 1:
+                    switch ( next )
+                    {
+                        case 'r': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 2:
+                    switch ( next )
+                    {
+                        case 'u': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+
+                case 3:
+                    switch ( next )
+                    {
+                        case 'e': state++; break;
+                        default : state = -1;
+                    }
+                    break;
+         
+            }
+        }
+
+        if ( state == TERMINAL_STATE )
+            return true;
+        else
+            return false;
+    }
+
 }

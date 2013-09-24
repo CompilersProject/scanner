@@ -1,18 +1,12 @@
-
-public class ReservedBoolean {
-	
-	public static void main( String[] args )
+private boolean isReservedBoolean(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 7; 
         
-
-        String candidate = "boolean";
         char   next;
         
         if (candidate.length()!=7){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -81,9 +75,9 @@ public class ReservedBoolean {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }

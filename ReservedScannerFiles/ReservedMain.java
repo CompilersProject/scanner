@@ -1,18 +1,12 @@
-
-public class ReservedMain {
-	
-	public static void main( String[] args )
+private boolean isReservedMain(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
-
-        String candidate = "main";
         char   next;
         
         if (candidate.length()!=4){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -56,9 +50,9 @@ public class ReservedMain {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }
