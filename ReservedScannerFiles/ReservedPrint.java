@@ -1,18 +1,12 @@
-
-public class ReservedPrint {
-	
-	public static void main( String[] args )
+private boolean isReservedPrint(String candidate)
     {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
-
-        String candidate = "print";
         char   next;
         
         if (candidate.length()!=5){
-        	System.out.println("Reject");
-        	System.exit(0);
+        	return false;
         }
 
         int state = START_STATE;
@@ -64,9 +58,9 @@ public class ReservedPrint {
         }
 
         if ( state == TERMINAL_STATE )
-            System.out.println( "accept" );
+            return true;
         else
-            System.out.println( "reject" );
+            return false;
     }
 
 }
