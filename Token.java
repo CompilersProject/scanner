@@ -1,4 +1,4 @@
-public class Token
+public class Token 
 {
 	//Grammar
     public static final int Program            = 1;
@@ -79,7 +79,7 @@ public class Token
     public char   cvalue() { return cvalue; }
     public int    ivalue() { return ivalue; }
 
-    private boolean isReservedAnd(String candidate) {
+    private static boolean isReservedAnd(String candidate) {
 
 
         int START_STATE    = 0;
@@ -132,8 +132,7 @@ public class Token
 
      }
 
-     private boolean isReservedAssignmentOp(String candidate)
-    {
+     private static boolean isReservedAssignmentOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -165,10 +164,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedBoolean(String candidate)
-    {
+   private static boolean isReservedBoolean(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 7; 
         
@@ -249,10 +246,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedClosedParen(String candidate)
-    {
+   private static boolean isReservedClosedParen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -283,11 +278,9 @@ public class Token
         else
             return false;
     }
-
-   }
    
-   private boolean isReservedColon(String candidate)
-    {
+   
+   private static boolean isReservedColon(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -319,10 +312,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedComma(String candidate)
-    {
+   private static boolean isReservedComma(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -354,10 +345,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedComment(String candidate)
-    {
+   private static boolean isReservedComment(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
@@ -397,10 +386,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedElse(String candidate)
-    {
+   private static boolean isReservedElse(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
@@ -456,10 +443,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedEndIf(String candidate)
-        {
+   private static boolean isReservedEndIf(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
@@ -523,10 +508,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedFalse(String candidate)
-    {
+   private static boolean isReservedFalse(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
@@ -591,10 +574,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedForwardSlash(String candidate)
-    {
+   private static boolean isReservedForwardSlash(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -626,10 +607,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedIf(String candidate)
-    {
+   private static boolean isReservedIf(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
@@ -668,11 +647,9 @@ public class Token
         else
             return false;
     }
-
-   }
    
-   private boolean isReservedInteger(String candidate)
-    {
+   
+   private static boolean isReservedInteger(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 7; 
         
@@ -753,10 +730,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedLessThanOp(String candidate)
-    {
+   private static boolean isReservedLessThanOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -788,10 +763,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedMain(String candidate)
-    {
+   private static boolean isReservedMain(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
@@ -847,10 +820,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedMinusOp(String candidate)
-    {
+   private static boolean isReservedMinusOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -881,11 +852,9 @@ public class Token
         else
             return false;
     }
-
-   }
    
-   private boolean isReservedMultiplyOp(String candidate)
-    {
+   
+   private static boolean isReservedMultiplyOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -917,10 +886,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedNot(String candidate)
-    {
+   private static boolean isReservedNot(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 3; 
         
@@ -968,10 +935,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedOpenParen(String candidate)
-    {
+   private static boolean isReservedOpenParen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -1003,10 +968,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedOr(String candidate)
-    {
+   private static boolean isReservedOr(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
@@ -1046,10 +1009,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedPlusOp(String candidate)
-    {
+   private static boolean isReservedPlusOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
@@ -1081,10 +1042,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedPrint(String candidate)
-    {
+   private static boolean isReservedPrint(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
@@ -1148,10 +1107,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedThen(String candidate)
-    {
+   private static boolean isReservedThen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
@@ -1207,10 +1164,8 @@ public class Token
             return false;
     }
 
-   }
    
-   private boolean isReservedTrue(String candidate)
-    {
+   private static boolean isReservedTrue(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
@@ -1267,5 +1222,4 @@ public class Token
             return false;
     }
 
-   }
 }
