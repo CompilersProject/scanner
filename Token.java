@@ -1,6 +1,8 @@
 public class Token 
 {
-	//Grammar
+  public static final int EOF                 = -1;
+  
+ //Grammar
     public static final int Program            = 1;
     public static final int Definitions        = 2;
     public static final int Def                = 3;
@@ -9,13 +11,13 @@ public class Token
     public static final int Formal             = 6;
     public static final int Body               = 7;
     public static final int Type               = 8;
-    public static final int Expr	       = 9; 
-    public static final int SimpleExpr	      = 10;
-    public static final int Term	      = 11;
-    public static final int Factor     	      = 12;
-    public static final int Actuals   	      = 13;
+    public static final int Expr        = 9; 
+    public static final int SimpleExpr       = 10;
+    public static final int Term       = 11;
+    public static final int Factor            = 12;
+    public static final int Actuals          = 13;
     public static final int NonemptyActuals   = 14;
-    public static final int Literal 	      = 15;
+    public static final int Literal        = 15;
     public static final int Print             = 16;
     
     //Reserved words and symbols
@@ -23,63 +25,124 @@ public class Token
     public static final int MinusOp            = 22;
     public static final int MultiplyOp         = 23;
     public static final int AssignmentOp       = 24;
-    public static final int LessThanOp	       = 25;
-    public static final int OpenParen	       = 26;
-    public static final int ClosedParen	       = 27;
-    public static final int If				   = 28;
-    public static final int Then			   = 29;
-    public static final int	Else			   = 30;
-    public static final int EndIf			   = 31;
-    public static final int Main     	   	           = 32;
-    public static final int Not				   = 33;
-    public static final int Or				   = 34;
-    public static final int And				   = 35;
-    public static final int Comment			   = 36;
+    public static final int LessThanOp        = 25;
+    public static final int OpenParen        = 26;
+    public static final int ClosedParen        = 27;
+    public static final int If       = 28;
+    public static final int Then      = 29;
+    public static final int Else      = 30;
+    public static final int EndIf      = 31;
+    public static final int Main                     = 32;
+    public static final int Not       = 33;
+    public static final int Or       = 34;
+    public static final int And       = 35;
+    public static final int Comment      = 36;
     public static final int ForwardSlash                   = 37;
-    public static final int Comma			   = 38;
-    public static final int Boolean			   = 39;
-    public static final int True   	                   = 40;
-    public static final int False			   = 41;
-    public static final int Colon			   = 42;
+    public static final int Comma      = 38;
+    public static final int Boolean      = 39;
+    public static final int True                       = 40;
+    public static final int False      = 41;
+    public static final int Colon      = 42;
     public static final int Integer                        = 43;
     public static final int PrintWord                      = 44;
-
+    public static final int Identifier   = 45; // ?
+   
     private int    type;
-    private char   cvalue;
-    private int    ivalue;
-
-    public Token(int t)
+    private String cvalue;
+    
+    public Token(String word)
     {
-       this( t, 'A', 0 );
+      type = getTokenNum(word);
+      cvalue = word;
     }
     
-    public Token(int t, char v)
+    public Token(int word)
     {
-       this( t, v, 0 );
+      cvalue = String.valueOf(word);
+      type = getTokenNum(cvalue);
     }
-    
-    public Token(int t, int v)
+    /*
+    public Token(char word)
     {
-       this( t, 'A', v );
-    }
+      cvalue = String.valueOf(word);
+      type = 
+    }*/
     
-//    public Token(int t, double v)
-//    {
-//       this( t, 'A', 0);
-//    }
-    
-    protected Token(int t, char c, int i )
-    {
-       type   = t;
-       cvalue = c;
-       ivalue = i;
-    }
-
     public int    type  () { return type;   }
-    public char   cvalue() { return cvalue; }
-    public int    ivalue() { return ivalue; }
+    public String cvalue() { return cvalue; }
 
-    private static boolean isReservedAnd(String candidate) {
+    public boolean isNewline()
+    {
+      return cvalue == "\n";
+    }
+    
+    public String toString(){ return (String) cvalue; }
+    
+public static int getTokenNum(String sToken)
+ {
+  int type = Identifier;
+  
+  if (isReservedPlusOp(sToken)) {
+   type = PlusOp;
+  } else if (isReservedMinusOp(sToken)) {
+   type = MinusOp;
+  } else if(isReservedMultiplyOp(sToken)) {
+   type = MultiplyOp;
+  } else if(isReservedAssignmentOp(sToken)) {
+   type = AssignmentOp;
+  } else if (isReservedLessThanOp(sToken)) {
+   type = LessThanOp;
+  } else if (isReservedOpenParen(sToken)) {
+   type = OpenParen;
+  } else if (isReservedClosedParen(sToken)) {
+   type = ClosedParen;
+  } else if (isReservedIf(sToken)) {
+   type = If;
+  } else if (isReservedThen(sToken)) {
+   type = Then;
+  } else if (isReservedElse(sToken)) {
+   type = Else;
+  } else if (isReservedEndIf(sToken)) {
+   type = EndIf;
+  } else if (isReservedMain(sToken)) {
+   type = Main;
+  } else if (isReservedNot(sToken)) {
+   type = Not;
+  } else if (isReservedOr(sToken)) {
+   type = Or;
+  } else if (isReservedAnd(sToken)) {
+   type = And;
+  } else if (isReservedComment(sToken)) {
+   type = Comment;
+  } else if (isReservedForwardSlash(sToken)) {
+   type = ForwardSlash;
+  } else if (isReservedComma(sToken)) {
+   type = Comma;
+  } else if (isReservedBoolean(sToken)) {
+   type = Boolean;
+  } else if (isReservedTrue(sToken)) {
+   type = True;
+  } else if (isReservedFalse(sToken)) {
+   type = False;
+  } else if (isReservedColon(sToken)) {
+   type = Colon;
+  } else if (isInt(sToken)) {
+   type = Integer;
+  } else if (isReservedPrint(sToken)) {
+   type = Print;
+  } else if (isEOF(sToken)){
+    type = EOF;
+  }
+  return type;
+ }
+
+public static boolean isEOF(String candidate)
+{
+  int tmp = Integer.parseInt(candidate);
+  return tmp == EOF;
+}
+                              
+    public static boolean isReservedAnd(String candidate) {
 
 
         int START_STATE    = 0;
@@ -89,8 +152,8 @@ public class Token
         char   next;
         
         if (candidate.length()!=3){
-        	return false;
-        	
+         return false;
+         
         }
 
         int state = START_STATE;
@@ -132,14 +195,14 @@ public class Token
 
      }
 
-     private static boolean isReservedAssignmentOp(String candidate) {
+     public static boolean isReservedAssignmentOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -165,14 +228,14 @@ public class Token
     }
 
    
-   private static boolean isReservedBoolean(String candidate) {
+   public static boolean isReservedBoolean(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 7; 
         
         char   next;
         
         if (candidate.length()!=7){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -247,14 +310,14 @@ public class Token
     }
 
    
-   private static boolean isReservedClosedParen(String candidate) {
+   public static boolean isReservedClosedParen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -280,14 +343,14 @@ public class Token
     }
    
    
-   private static boolean isReservedColon(String candidate) {
+   public static boolean isReservedColon(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -313,14 +376,14 @@ public class Token
     }
 
    
-   private static boolean isReservedComma(String candidate) {
+   public static boolean isReservedComma(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -346,14 +409,14 @@ public class Token
     }
 
    
-   private static boolean isReservedComment(String candidate) {
+   public static boolean isReservedComment(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
         char   next;
         
         if (candidate.length()!=2){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -387,14 +450,14 @@ public class Token
     }
 
    
-   private static boolean isReservedElse(String candidate) {
+   public static boolean isReservedElse(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
         char   next;
         
         if (candidate.length()!=4){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -444,14 +507,14 @@ public class Token
     }
 
    
-   private static boolean isReservedEndIf(String candidate) {
+   public static boolean isReservedEndIf(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
         char   next;
         
         if (candidate.length()!=5){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -509,14 +572,14 @@ public class Token
     }
 
    
-   private static boolean isReservedFalse(String candidate) {
+   public static boolean isReservedFalse(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
         char   next;
         
         if (candidate.length()!=5){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -575,14 +638,14 @@ public class Token
     }
 
    
-   private static boolean isReservedForwardSlash(String candidate) {
+   public static boolean isReservedForwardSlash(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -608,14 +671,14 @@ public class Token
     }
 
    
-   private static boolean isReservedIf(String candidate) {
+   public static boolean isReservedIf(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
         char   next;
         
         if (candidate.length()!=2){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -649,14 +712,14 @@ public class Token
     }
    
    
-   private static boolean isReservedInteger(String candidate) {
+   public static boolean isReservedInteger(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 7; 
         
         char   next;
         
         if (candidate.length()!=7){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -731,14 +794,14 @@ public class Token
     }
 
    
-   private static boolean isReservedLessThanOp(String candidate) {
+   public static boolean isReservedLessThanOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -764,14 +827,14 @@ public class Token
     }
 
    
-   private static boolean isReservedMain(String candidate) {
+   public static boolean isReservedMain(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
         char   next;
         
         if (candidate.length()!=4){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -821,14 +884,14 @@ public class Token
     }
 
    
-   private static boolean isReservedMinusOp(String candidate) {
+   public static boolean isReservedMinusOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -854,14 +917,14 @@ public class Token
     }
    
    
-   private static boolean isReservedMultiplyOp(String candidate) {
+   public static boolean isReservedMultiplyOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -887,14 +950,14 @@ public class Token
     }
 
    
-   private static boolean isReservedNot(String candidate) {
+   public static boolean isReservedNot(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 3; 
         
         char   next;
         
         if (candidate.length()!=3){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -936,14 +999,14 @@ public class Token
     }
 
    
-   private static boolean isReservedOpenParen(String candidate) {
+   public static boolean isReservedOpenParen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -969,14 +1032,14 @@ public class Token
     }
 
    
-   private static boolean isReservedOr(String candidate) {
+   public static boolean isReservedOr(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 2; 
         
         char   next;
         
         if (candidate.length()!=2){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -1010,14 +1073,14 @@ public class Token
     }
 
    
-   private static boolean isReservedPlusOp(String candidate) {
+   public static boolean isReservedPlusOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
         
         char   next;
         
         if (candidate.length()!=1){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -1043,14 +1106,14 @@ public class Token
     }
 
    
-   private static boolean isReservedPrint(String candidate) {
+   public static boolean isReservedPrint(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 5; 
         
         char   next;
         
         if (candidate.length()!=5){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -1108,14 +1171,14 @@ public class Token
     }
 
    
-   private static boolean isReservedThen(String candidate) {
+   public static boolean isReservedThen(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
         char   next;
         
         if (candidate.length()!=4){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -1165,14 +1228,14 @@ public class Token
     }
 
    
-   private static boolean isReservedTrue(String candidate) {
+   public static boolean isReservedTrue(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 4; 
         
         char   next;
         
         if (candidate.length()!=4){
-        	return false;
+         return false;
         }
 
         int state = START_STATE;
@@ -1222,4 +1285,22 @@ public class Token
             return false;
     }
 
+   public static boolean isInt(String num)
+   {
+     // TODO use parseInt ******************************************************************
+     
+     boolean why;
+     for(int x = 0; x < num.length(); x = x+1) {
+       if (Character.isDigit(num.charAt(x))) {
+         why = true;
+       } else {
+         why = false;
+         break;
+       }
+       if (why) {
+         return true;
+       }
+     }
+     return false;
+   }
 }

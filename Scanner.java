@@ -7,43 +7,30 @@ public class Scanner
   private PushbackInputStream sourceFile;
   private Token               nextToken; // Added this for peek as Wallingford pointed out we would need it
 
-  // Kept here for testing purposes
-  public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
-  {
-    try{
-    PushbackInputStream input = new PushbackInputStream(new FileInputStream("test.txt"));
-
-    Scanner test = new Scanner( input );
-    
-    String tmp = test.getNextToken();
-    while( tmp != "" ){
-      if( !tmp.equals("\n") )
-        System.out.println(tmp);
-      tmp = test.getNextToken();
-    }
-    
-    }
-    catch(Exception e){
-      System.out.println( e );
-    }
-  }
-
   public Scanner( PushbackInputStream input )
   {
     sourceFile = input;
     nextToken = null;
   }
   
+
+  public Token peek() throws IOException
+  {
+    if (nextToken == null)
+      nextToken = getNextToken();
+    return nextToken;
+  }
+
   // Was having problems getting the Token class to work here so for now it just keeps everything as a string.
   // Ideally we will return a Token from here which will be identified in its constructor.
-  public String getNextToken() throws IOException
+  public Token getNextToken() throws IOException
   {
     String rawToken = "";
     boolean check;
     int nextByte = getNextByte();
 
     if( isSymbol( (char) nextByte) ){
-      return Character.toString((char) nextByte);
+      return new Token(nextByte);
     }
 
     while( !isSymbol((char) nextByte) ){
@@ -52,13 +39,13 @@ public class Scanner
         nextByte = getNextByte();
       }
       else{
-        return rawToken;
+        return new Token(rawToken);
       }
     }
     
     // If we reach here we found a symbol signifying a new token, so we must first replace it in the stream
     sourceFile.unread( nextByte );
-    return rawToken;
+    return new Token(rawToken);
   }
   
   // This is reading bytes... just not the right ones? 
