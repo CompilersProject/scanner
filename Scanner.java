@@ -17,7 +17,8 @@ public class Scanner
     
     String tmp = test.getNextToken();
     while( tmp != "" ){
-      System.out.println(tmp);
+      if( !tmp.equals("\n") )
+        System.out.println(tmp);
       tmp = test.getNextToken();
     }
     
@@ -38,8 +39,9 @@ public class Scanner
   public String getNextToken() throws IOException
   {
     String rawToken = "";
+    boolean check;
     int nextByte = getNextByte();
-    
+
     if( isSymbol( (char) nextByte) ){
       return Character.toString((char) nextByte);
     }
@@ -63,6 +65,7 @@ public class Scanner
   public int getNextByte() throws IOException
   {
     int nextChar;
+    
     while(true)
     {
       nextChar = sourceFile.read();
@@ -79,7 +82,6 @@ public class Scanner
     return c == ' '  ||
       c == '\b' ||
       c == '\f' ||
-      c == '\n' ||
       c == '\r' ||
       c == '\t';
   }
@@ -95,7 +97,8 @@ public class Scanner
       c == '(' ||
       c == ')' ||
       c == ',' ||
-      c == ':';
+      c == ':' ||
+      c == '\n';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
 }
