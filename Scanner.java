@@ -5,25 +5,20 @@ import java.io.FileInputStream;
 
 public class Scanner
 {
-	public static final int MAX_LENGTH = 256;
-	
+ public static final int MAX_LENGTH = 256;
+ 
   private PushbackInputStream sourceFile;
   private Token               nextToken; // Added this for peek as Wallingford pointed out we would need it
 
-  public Scanner( String filename )
+  public Scanner( String filename ) throws IOException
   {
-	try{
-		sourceFile = new PushbackInputStream(new FileInputStream(filename));
-	} catch(IOException e){
-		System.out.println("Invalid filename.");
-		System.exit(0);
-	}
+    sourceFile = new PushbackInputStream(new FileInputStream(filename));
 
     nextToken = null;
   }
   
 
-  public Token peek() throws IOException
+  public Token peek() throws IOException, LexicalException
   {
     if (nextToken == null)
       nextToken = getNextToken();
@@ -31,7 +26,7 @@ public class Scanner
   }
 
 
-  public Token getNextToken() throws IOException
+  public Token getNextToken() throws IOException, LexicalException
   {
     String rawToken = "";
     int nextByte = getNextByte();
@@ -39,7 +34,7 @@ public class Scanner
     
     // Throw away leading whitespace
     while( isOurWhitespace((char) nextByte) ){
-    	nextByte = getNextByte();
+     nextByte = getNextByte();
     }
 
     if( isSymbol( (char) nextByte) ){
@@ -48,14 +43,13 @@ public class Scanner
     }
 
     while( !isSymbol( (char) nextByte) && 
-    		!isOurWhitespace( (char) nextByte) ) {
+      !isOurWhitespace( (char) nextByte) ) {
       if( tokenLength > MAX_LENGTH ){
-    	  // TODO: Put exception here
-    	  System.out.println("Identifier is too long. Max identifier length: " + MAX_LENGTH);
-    	  System.exit(0);
+        // TODO: Put exception here
+        throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
-    	  
-    	  
+       
+       
       if( nextByte != -1 ){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
@@ -70,14 +64,11 @@ public class Scanner
     sourceFile.unread( nextByte );
     return new Token(rawToken);
   }
-  
 
   public int getNextByte() throws IOException
   {
-	  return sourceFile.read();
+   return sourceFile.read();
   }
-  
-
   
   // Static member funtions
   public static boolean isOurWhitespace( char c )

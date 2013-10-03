@@ -3,19 +3,19 @@ public class Token
     private String type;
     private String cvalue;
     
-    public Token(String word)
+    public Token(String word) throws LexicalException
     {
       type = assignType(word);
       cvalue = word;
     }
     
-    public Token(int word)
+    public Token(int word) throws LexicalException
     {
-      cvalue = String.valueOf(word);
       type = assignType(cvalue);
+      cvalue = String.valueOf(word);
     }
     
-    public static String assignType(String sToken)
+    public static String assignType(String sToken) throws LexicalException
     {
       String type = "";
       
@@ -1213,7 +1213,7 @@ public class Token
     }
 
    
-   public static boolean isInt(String num)
+   public static boolean isInt(String num) throws LexicalException
    {
      Long lowerBound = -4294967296L; 
      Long upperBound =  4294967295L;
@@ -1223,14 +1223,13 @@ public class Token
        Long.valueOf(num).longValue();
        
      } catch (NumberFormatException nfe) {
-    	 return false;
+      return false;
      }
      
      Long temp = Long.valueOf(num).longValue();
-     if(!(lowerBound<=temp) && (upperBound>=temp)){
-    	 // TODO: Add exception here
-    	 System.out.println("Number out of range.");
-    	 System.exit(0);
+     if( !(lowerBound<=temp) || (upperBound>=temp) ){
+       // TODO: Add exception here
+       throw new LexicalException("Number out of range");
      }
      
      return true; 
