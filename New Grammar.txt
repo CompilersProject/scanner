@@ -1,43 +1,53 @@
+Klein Grammar
+CS4550
+10/4/13
+Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
+
+
 <PROGRAM> ::= <DEFINITIONS>
 --------------------------------------------------------
-<DEFINITIONS ::= <DEF1>
-<DEF1> ::= <DEF> <DEFINITIONS1>
+<DEFINITIONS   ::= <DEF1>
+<DEF1>         ::= <DEF> <DEFINITIONS1>
 <DEFINITIONS1> ::= <DEFINITIONS>
-				| EPSILON
+		 | EPSILON
 --------------------------------------------------------				
 <DEF> ::= <IDENTIFIER> ( <FORMALS> ) : <TYPE> <BODY>
 --------------------------------------------------------
 <FORMALS> ::= EPSILON
            | <NONEMPTYFORMALS>
 --------------------------------------------------------						
- <NONEMPTYFORMALS> ::= <FORMAL> <NONEMPTYFORMALS1>
+ <NONEMPTYFORMALS>  ::= <FORMAL> <NONEMPTYFORMALS1>
  <NONEMPTYFORMALS1> ::= , <NONEMPTYFORMALS>
-					| EPSILON
+		     | EPSILON
 --------------------------------------------------------					
 <FORMAL> ::= <IDENTIFIER> : <TYPE>
 --------------------------------------------------------
-<BODY> ::= <PRINT> <BODY1>
-		| <EXPR>
+<BODY>  ::= <PRINT> <BODY1>
+	  | <EXPR>
 <BODY1> ::= <BODY>
 --------------------------------------------------------
 <TYPE> ::= integer
         | boolean
 --------------------------------------------------------
-<EXPR> ::= <EXPR1> | <EXPR2> | <SIMPLE-EXPR>
-<EXPR1> ::= <SIMPLE-EXPR> > <EXPR>		
-<EXPR2> ::= <SIMPLE-EXPR> = <EXPR>
-< > > ::= not( < or = )
+<EXPR>  ::= <EXPR1> | <EXPR2> | <SIMPLE-EXPR>
+<EXPR1> ::= <SIMPLE-EXPR>  < <EXPR>		
+<EXPR2> ::= <SIMPLE-EXPR1> = <EXPR>
+<SIMPLE-EXPR1> ::= <SIMPLE-EXPR>
+
 --------------------------------------------------------
-<SIMPLE-EXPR> ::= <SIMPLE-EXPR1> | <SIMPLE-EXPR2> | <SIMPLE-EXPR3> | <SIMPLE-EXPR4> | <TERM>
-<SIMPLE-EXPR1> ::= <TERM> or <SIMPLE-EXPR>
-<SIMPLE-EXPR2> ::= <TERM> + <SIMPLE-EXPR>
-<SIMPLE-EXPR3> ::= -<TERM> + <SIMPLE-EXPR>
-<SIMPLE-EXPR4> ::= -<TERM>
+<SIMPLE-EXPR>  ::= <SIMPLE-EXPR1> | <SIMPLE-EXPR2> | <SIMPLE-EXPR3> | -<TERM> | <TERM>
+<SIMPLE-EXPR1> ::= <TERM>   or <SIMPLE-EXPR>
+<SIMPLE-EXPR2> ::= <TERM1>  +  <SIMPLE-EXPR>
+<SIMPLE-EXPR3> ::= <TERM2>  -  <SIMPLE-EXPR>
+<TERM1>        ::= <TERM>
+<TERM2>        ::= <TERM>
 --------------------------------------------------------
-<TERM> ::= <TERM1> | <TERM2> | <TERM3> | <FACTOR>
-<TERM1> ::= <FACTOR> and <TERM>
-<TERM2> ::= <FACTOR> * <TERM>
-<TERM3> ::= <FACTOR> * (1/<TERM>)
+<TERM>    ::= <TERM1> | <TERM2> | <TERM3> | <FACTOR>
+<TERM1>   ::= <FACTOR> and  <TERM>
+<TERM2>   ::= <FACTOR1> *   <TERM>
+<TERM3>   ::= <FACTOR2> /   <TERM>
+<FACTOR1> ::= <FACTOR>
+<FACTOR2> ::= <FACTOR>
 --------------------------------------------------------
 <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR> endif
 			| not <EXPR>
@@ -50,9 +60,9 @@
 <ACTUALS> ::= EPSILON
            | <NONEMPTYACTUALS>
 --------------------------------------------------------
-<NONEMPTYACTUALS> ::= <EXPR> , <NONEMPTYACTUALS1>
+<NONEMPTYACTUALS>  ::= <EXPR> , <NONEMPTYACTUALS1>
 <NONEMPTYACTUALS1> ::= <NONEMPTYACTUALS>
-					| EPSILON
+		     | EPSILON
 --------------------------------------------------------			
 <LITERAL> ::= <NUMBER>
            | <BOOLEAN>
