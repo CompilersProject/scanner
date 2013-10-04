@@ -46,7 +46,7 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 <TERM1>	  ::= and <TERM>
 	    | *   <TERM>
 	    | /   <TERM>
-	    |     <TERM>
+	    |     EPSILON
 --------------------------------------------------------
 <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR> endif
 			| not <FACTOR>
