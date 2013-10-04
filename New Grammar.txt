@@ -42,11 +42,11 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 		| EPSILON
 
 --------------------------------------------------------
-<TERM>    ::= <TERM> <TERM1>
-<TERM1>	  ::= and <FACTOR>
-	    | *   <FACTOR>
-	    | /   <FACTOR>
-	    |     <FACTOR>
+<TERM>    ::= <FACTOR> <TERM1>
+<TERM1>	  ::= and <TERM>
+	    | *   <TERM>
+	    | /   <TERM>
+	    |     <TERM>
 --------------------------------------------------------
 <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR> endif
 			| not <FACTOR>
