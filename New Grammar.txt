@@ -29,33 +29,34 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 <TYPE> ::= integer
         | boolean
 --------------------------------------------------------
-<EXPR>  ::= <EXPR1> | <EXPR2> | <SIMPLE-EXPR>
-<EXPR1> ::= <SIMPLE-EXPR>  < <EXPR>		
-<EXPR2> ::= <SIMPLE-EXPR1> = <EXPR>
-<SIMPLE-EXPR1> ::= <SIMPLE-EXPR>
+<EXPR>         ::= <SIMPLE-EXPR> <SIMPLE-EXPR1>
+<SIMPLE-EXPR1> ::= < <EXPR>
+		|  = <EXPR>
+		| EPSILON
 
 --------------------------------------------------------
-<SIMPLE-EXPR>  ::= <SIMPLE-EXPR1> | <SIMPLE-EXPR2> | <SIMPLE-EXPR3> | -<TERM> | <TERM>
-<SIMPLE-EXPR1> ::= <TERM>   or <SIMPLE-EXPR>
-<SIMPLE-EXPR2> ::= <TERM1>  +  <SIMPLE-EXPR>
-<SIMPLE-EXPR3> ::= <TERM2>  -  <SIMPLE-EXPR>
-<TERM1>        ::= <TERM>
-<TERM2>        ::= <TERM>
+<SIMPLE-EXPR>  ::= <TERM> <TERM1>
+<TERM1>        ::= or <SIMPLE-EXPR>
+		|  +  <SIMPLE-EXPR>
+		|  -  <SIMPLE-EXPR>
+		| EPSILON
+
 --------------------------------------------------------
-<TERM>    ::= <TERM1> | <TERM2> | <TERM3> | <FACTOR>
-<TERM1>   ::= <FACTOR> and  <TERM>
-<TERM2>   ::= <FACTOR1> *   <TERM>
-<TERM3>   ::= <FACTOR2> /   <TERM>
-<FACTOR1> ::= <FACTOR>
-<FACTOR2> ::= <FACTOR>
+<TERM>    ::= <TERM> <TERM1>
+<TERM1>	  ::= and <FACTOR>
+	    | *   <FACTOR>
+	    | /   <FACTOR>
+	    |     <FACTOR>
 --------------------------------------------------------
 <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR> endif
-			| not <EXPR>
+			| not <FACTOR>
 			| <IDENTIFIER1>
-			| <IDENTIFIER>
 			| <LITERAL>
+			| -<FACTOR>
 			
-<IDENTIFIER1> ::= <IDENTIFIER> ( <ACTUALS> )
+<IDENTIFIER1> ::= <IDENTIFIER> <ACTUALS1>
+<ACTUALS1>    ::= ( <ACTUALS> )
+		| EPSILON
 --------------------------------------------------------
 <ACTUALS> ::= EPSILON
            | <NONEMPTYACTUALS>
