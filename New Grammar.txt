@@ -35,8 +35,8 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 		| EPSILON
 
 --------------------------------------------------------
-<SIMPLE-EXPR>  ::= <TERM> <TERM1>
-<TERM1>        ::= or <SIMPLE-EXPR>
+<SIMPLE-EXPR>  ::= <TERM> <TERM2>
+<TERM2>        ::= or <SIMPLE-EXPR>
 		|  +  <SIMPLE-EXPR>
 		|  -  <SIMPLE-EXPR>
 		| EPSILON
