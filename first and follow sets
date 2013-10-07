@@ -22,7 +22,7 @@ first(formals)          = { epsilon, identifier }
 first(def)              = { identifier }
 first(def1)             = { identifier }
 first(definitions)      = { identifier }
-first(definitions1)     = { identifier }
+first(definitions1)     = { identifier, epsilon }
 first(program)          = { identifier }
 
 follow(program)          = { $ }
@@ -30,13 +30,13 @@ follow(definitions)      = { $ }
 follow(definitions1)     = { $ }
 follow(def)              = { $, identifer }
 follow(def1)             = { $ }
-follow(formals)          = { $, ), :, integer, boolean, print, if, not, identifier, literal, -}
-follow(nonemptyformals)  = { $ }
+follow(formals)          = { $, ) }
+follow(nonemptyformals)  = { $, ) }
 follow(nonemptyformals1) = { $ }
 follow(formal)           = { $, , }
 follow(body)             = { $ }
 follow(body1)            = { $ }
-follow(type)             = { print, if, not, identifier, literal, - }
+follow(type)             = { $, print, if, not, identifier, literal, - }
 follow(expr)             = { $, ), then, else, endif, , }
 follow(simple-expr)      = { $, <, = }
 follow(simple-expr1)     = { $ }
