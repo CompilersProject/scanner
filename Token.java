@@ -1,76 +1,107 @@
 public class Token 
 {     
-    private String type;
-    private String cvalue;
+    private TYPE type;
+    private String literalValue;
+    
+    // To get the integer value of enum, use this.ordinal()
+    public enum TYPE {
+      PLUS_OP, 
+        MINUS_OP, 
+        MULTIPLY_OP, 
+        ASSIGNMENT_OP,
+        LESSTHAN_OP, 
+        OPEN_PAREN,
+        CLOSED_PAREN,
+        IF,
+        THEN,
+        ELSE,
+        END_IF,
+        MAIN,
+        NOT,
+        OR,
+        AND,
+        COMMENT,
+        FORWARD_SLASH,
+        COMMA,
+        BOOLEAN,
+        TRUE,
+        FALSE,
+        COLON,
+        INTEGER,
+        PRINT,
+        IDENTIFIER
+      }
     
     public Token(String word) throws LexicalException
     {
       type = assignType(word);
-      cvalue = word;
+      literalValue = word;
     }
     
+    /*
+     * Depricated? **************
+     */
+    /*
     public Token(int word) throws LexicalException
     {
-      type = assignType(cvalue);
-      cvalue = String.valueOf(word);
+      type = assignType(word);
+      literalValue = String.valueOf(word);
     }
+    */
     
-    public static String assignType(String sToken) throws LexicalException
+    public static TYPE assignType(String sToken) throws LexicalException
     {
-      String type = "";
-      
       if (isReservedPlusOp(sToken)) {
-        type = "plusOp";
+        return TYPE.PLUS_OP;
       } else if (isReservedMinusOp(sToken)) {
-        type = "minusOp";
+        return TYPE.MINUS_OP;
       } else if(isReservedMultiplyOp(sToken)) {
-        type = "multiplyOp";
+        return TYPE.MULTIPLY_OP;
       } else if(isReservedAssignmentOp(sToken)) {
-        type = "assignmentOp";
+        return TYPE.ASSIGNMENT_OP;
       } else if (isReservedLessThanOp(sToken)) {
-        type = "lessthanOp";
+        return TYPE.LESSTHAN_OP;
       } else if (isReservedOpenParen(sToken)) {
-        type = "openparen";
+        return TYPE.OPEN_PAREN;
       } else if (isReservedClosedParen(sToken)) {
-        type = "closedparen";
+        return TYPE.CLOSED_PAREN;
       } else if (isReservedIf(sToken)) {
-        type = "if";
+        return TYPE.IF;
       } else if (isReservedThen(sToken)) {
-        type = "then";
+        return TYPE.THEN;
       } else if (isReservedElse(sToken)) {
-        type = "else";
+        return TYPE.ELSE;
       } else if (isReservedEndIf(sToken)) {
-        type = "endif";
+        return TYPE.END_IF;
       } else if (isReservedMain(sToken)) {
-        type = "main";
+        return TYPE.MAIN;
       } else if (isReservedNot(sToken)) {
-        type = "not";
+        return TYPE.NOT;
       } else if (isReservedOr(sToken)) {
-        type = "or";
+        return TYPE.OR;
       } else if (isReservedAnd(sToken)) {
-        type = "and";
+        return TYPE.AND;
       } else if (isReservedComment(sToken)) {
-        type = "comment";
+        return TYPE.COMMENT;
       } else if (isReservedForwardSlash(sToken)) {
-        type = "forwardslash";
+        return TYPE.FORWARD_SLASH;
       } else if (isReservedComma(sToken)) {
-        type = "comma";
+        return TYPE.COMMA;
       } else if (isReservedBoolean(sToken)) {
-        type = "boolean";
+        return TYPE.BOOLEAN;
       } else if (isReservedTrue(sToken)) {
-        type = "true";
+        return TYPE.TRUE;
       } else if (isReservedFalse(sToken)) {
-        type = "false";
+        return TYPE.FALSE;
       } else if (isReservedColon(sToken)) {
-        type = "colon";
+        return TYPE.COLON;
       } else if (isInt(sToken)) {
-        type = "integer";
+        return TYPE.INTEGER;
       } else if (isReservedPrint(sToken)) {
-        type = "print";
+        return TYPE.PRINT;
       }else{
-        type = "identifier";
-      }  
-      return type;
+        return TYPE.IDENTIFIER;
+      }
     }
                  
     public static boolean isReservedAnd(String candidate) {
@@ -1235,7 +1266,7 @@ public class Token
      return true; 
    }
    
-   public String getValue(){ return cvalue; }   
-   public String getType(){ return type; }
-   public String toString(){ return (String) cvalue; }
+   public String getValue(){ return literalValue; }   
+   public TYPE getType(){ return type; }
+   public String toString(){ return literalValue; }
 }
