@@ -2,6 +2,7 @@ public class Token
 {     
     private TYPE type;
     private String literalValue;
+    private String terminality;
     
     // To get the integer value of enum, use this.ordinal()
     public enum TYPE {
@@ -35,12 +36,8 @@ public class Token
     public Token(String word) throws LexicalException
     {
       type = assignType(word);
-<<<<<<< HEAD
       literalValue = word;
-=======
-      cvalue = word;
       String terminality;
->>>>>>> 370e5bcb407e61bc5c50473ead1881aa93df1e15
     }
     
     /*
@@ -49,14 +46,9 @@ public class Token
     /*
     public Token(int word) throws LexicalException
     {
-<<<<<<< HEAD
       type = assignType(word);
       literalValue = String.valueOf(word);
-=======
-      type = assignType(cvalue);
-      cvalue = String.valueOf(word);
       String terminality;
->>>>>>> 370e5bcb407e61bc5c50473ead1881aa93df1e15
     }
     */
     
@@ -1277,14 +1269,7 @@ public class Token
      return true; 
    }
    
-<<<<<<< HEAD
    public String getValue(){ return literalValue; }   
    public TYPE getType(){ return type; }
    public String toString(){ return literalValue; }
 }
-=======
-   public String getValue(){ return cvalue; }   
-   public String getType(){ return type; }
-   public String toString(){ return (String) cvalue; }
-}
->>>>>>> 370e5bcb407e61bc5c50473ead1881aa93df1e15
