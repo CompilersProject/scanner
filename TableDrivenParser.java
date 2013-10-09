@@ -2,52 +2,73 @@ import java.io.IOException;
 import java.util.Stack;
 
 public class TableDrivenParser extends Parser
+
 {
-    private ParsingTable acTable;
+	public Stack stackAttack;
+    private ParsingTable kleinTable;
 
     public TableDrivenParser( Scanner source )
     {
         super( source );
-        acTable = makeAcParsingTable();
+        kleinTable = makeKleinParsingTable();
     }
 
-    protected boolean parseProgram() throws ParseException,
-                                            LexicalException,
+    protected void parseProgram() throws 
                                             IOException
     {
+    	
+    	
+
         // ... the algorithm
-        return answer;
+        // return answer;
     }
 
     // -------------------------------------------------------------------
     // AC PARSING TABLE FACTORY
 
-    private ParsingTable makeAcParsingTable()
+    private ParsingTable makeKleinParsingTable()
     {
        ParsingTable table = new ParsingTable();
 
        try {
+    	   
+       Token endOfStream        = new Token("$");
+       Token plusOp             = new Token("+");
+       Token minusOp            = new Token("-");
+       Token multiplyOp         = new Token("*");
+       Token assignmentOp       = new Token("=");
+       Token lessThanOp         = new Token("<");
+       Token openParen          = new Token("(");
+       Token closedParen        = new Token(")");
+       Token ifOp               = new Token("if");
+       Token thenOp             = new Token("then");
+       Token elseOp             = new Token("else");
+       Token endIfOp            = new Token("endif");
+       Token mainOp             = new Token("main");
+       Token notOp              = new Token("not");
+       Token orOp               = new Token("or");
+       Token andOp              = new Token("and");
+       Token comment            = new Token("//");
+       Token forwardSlash       = new Token("/");
+       Token comma              = new Token(",");
+       Token booleanOp          = new Token("boolean");
+       Token trueOp             = new Token("true");
+       Token falseOp            = new Token("false");
+       Token colonOp            = new Token(":");
+       Token integerOp          = new Token("integer");
+       Token printOp            = new Token("print");
+       Token identifierOp       = new Token("identifier");
 
-       Token floatDeclaration = new Token( Token.FloatDeclaration );
-       Token intDeclaration   = new Token( Token.IntegerDeclaration );
-       Token print            = new Token( Token.PrintOp );
-       Token assignment       = new Token( Token.AssignmentOp );
-       Token plus             = new Token( Token.PlusOp );
-       Token minus            = new Token( Token.MinusOp );
-       Token identifier       = new Token( Token.Identifier );
-       Token floatValue       = new Token( Token.FloatValue );
-       Token integerValue     = new Token( Token.IntegerValue );
-       Token endOfStream      = new Token( Token.EOFsymbol );
+       
 
        ParseAction rule00 = new PushNothing();
-       ParseAction rule01 = new PushSequence(
-                 new ParseAction[] { new PushNonTerminal(NonTerminal.Declarations),
-                                new PushNonTerminal(NonTerminal.Statements),
-                                new PushTerminal   (endOfStream)
+       ParseAction ruleProgram = new PushSequence(
+                 new ParseAction[] { new Push("DEFINITIONS"),
+                                	 new Push(endOfStream)
                       } );
-       ParseAction rule02 = new PushSequence(
-                 new ParseAction[] { new PushNonTerminal(NonTerminal.Declaration),
-                                new PushNonTerminal(NonTerminal.Declarations)
+       ParseAction ruleDefinitions = new PushSequence(
+                 new ParseAction[] { new Push("DEF1")
+                                
                       } );
        ParseAction rule03 = new PushSequence(
                  new ParseAction[] { new PushTerminal(floatDeclaration),
