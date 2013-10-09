@@ -7,12 +7,14 @@ public class Token
     {
       type = assignType(word);
       cvalue = word;
+      String terminality;
     }
     
     public Token(int word) throws LexicalException
     {
       type = assignType(cvalue);
       cvalue = String.valueOf(word);
+      String terminality;
     }
     
     public static String assignType(String sToken) throws LexicalException
