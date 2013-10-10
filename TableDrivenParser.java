@@ -58,6 +58,7 @@ public class TableDrivenParser extends Parser
        Token integerOp          = new Token("integer");
        Token printOp            = new Token("print");
        Token identifierOp       = new Token("identifier");
+       Token print				= new Token("print");
 
        
 
@@ -70,41 +71,154 @@ public class TableDrivenParser extends Parser
                  new ParseAction[] { new Push("DEF1")
                                 
                       } );
-       ParseAction rule03 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(floatDeclaration),
-                                new PushTerminal(identifier)
+       ParseAction ruleDef1 = new PushSequence(
+                 new ParseAction[] { new Push("DEF"),
+                		 			 new Push("DEFINITIONS1")
+                                     
                       } );
-       ParseAction rule04 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(intDeclaration),
-                                new PushTerminal(identifier)
+       ParseAction ruleDefinitions1 = new PushSequence(
+                 new ParseAction[] {  new Push("Definitions"),
+                		              
                       } );
-       ParseAction rule05 = new PushSequence(
-                 new ParseAction[] { new PushNonTerminal(NonTerminal.Statement),
-                                new PushNonTerminal(NonTerminal.Statements)
+       ParseAction ruleDef = new PushSequence(
+               	new ParseAction[] { new Push("IDENTIFIER"),
+                                    new Push(openParen),
+                                    new Push("FORMALS"),
+                                    new Push(closedParen),
+                                    new Push(colonOp),
+                                    new Push("TYPE"),
+                                    new Push("BODY")
                       } );
-       ParseAction rule06 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(print),
-                                new PushTerminal(identifier)
+       ParseAction ruleFormals = new PushSequence(
+                 new ParseAction[] {
+                                     new Push("NONEMPTYFORMALS")
                       } );
-       ParseAction rule07 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(identifier),
-                                new PushTerminal(assignment),
-                                new PushNonTerminal(NonTerminal.Value),
-                                new PushNonTerminal(NonTerminal.ExpressionTail)
+       ParseAction ruleNonEmptyFormals = new PushSequence(
+                 new ParseAction[] { new Push("FORMAL"),
+                                     new Push("NONEMPTYFORMALS1")
                       } );
-       ParseAction rule08 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(plus),
-                                new PushNonTerminal(NonTerminal.Value),
-                                new PushNonTerminal(NonTerminal.ExpressionTail)
+       ParseAction ruleNonEmptyFormals1 = new PushSequence(
+                 new ParseAction[] { new Push(comma),
+                                     new Push("NONEMPTYFORMALS"),
+                                
                       } );
-       ParseAction rule09 = new PushSequence(
-                 new ParseAction[] { new PushTerminal(minus),
-                                new PushNonTerminal(NonTerminal.Value),
-                                new PushNonTerminal(NonTerminal.ExpressionTail)
+       ParseAction ruleFormal = new PushSequence(
+                 new ParseAction[] { new Push("IDENTIFIER"),
+                                new Push(colonOp),
+                                new Push("TYPE")
                       } );
-       ParseAction rule10 = new PushTerminal(identifier);
-       ParseAction rule11 = new PushTerminal(floatValue);
-       ParseAction rule12 = new PushTerminal(integerValue);
+       ParseAction ruleBody = new PushSequence(
+               new ParseAction[] { new Push("PRINT"),
+                                   new Push("BODY1")                             
+                    } );
+       ParseAction ruleBodyPart2 = new PushSequence(
+               new ParseAction[] { new Push("EXPR"),
+                    } );
+       ParseAction ruleBody1 = new PushSequence(
+               new ParseAction[] { new Push("BODY"),
+                    } );
+       ParseAction ruleType = new PushSequence(
+               new ParseAction[] { new Push(integerOp),
+                                   new Push(booleanOp),
+                    } );
+       ParseAction ruleExpr = new PushSequence(
+               new ParseAction[] { new Push("SIMPLE-EXPR"),
+                                   new Push("SIMPLE-EXPR1"),
+                    } );
+       ParseAction ruleSimpleExpr1 = new PushSequence(
+               new ParseAction[] { new Push(lessThanOp),
+                                   new Push("EXPR"),
+                    } );
+       ParseAction ruleSimpleExpr1Part2 = new PushSequence(
+               new ParseAction[] { new Push(assignmentOp),
+            		   		       new Push("EXPR"),
+                    } );
+       ParseAction ruleSimpleExpr = new PushSequence(
+               new ParseAction[] { new Push("TERM"),
+                              new Push("TERM2"),
+                    } );
+       ParseAction ruleTerm2 = new PushSequence(
+               new ParseAction[] { new Push(orOp),
+                                   new Push("SIMPLE-EXPR"),
+                    } );
+       ParseAction ruleTerm2Part2 = new PushSequence(
+               new ParseAction[] { new Push(plusOp),
+                              new Push("SIMPLE-EXPR"),
+                    } );
+       ParseAction ruleTerm2Part3 = new PushSequence(
+               new ParseAction[] { new Push(minusOp),
+                                   new Push("SIMPLE-EXPR"),
+                    } );
+       ParseAction ruleTerm = new PushSequence(
+               new ParseAction[] { new Push("FACTOR"),
+                                   new Push("TERM1"),
+                    } );
+       ParseAction ruleTerm1 = new PushSequence(
+               new ParseAction[] { new Push(andOp),
+                                   new Push("TERM"),
+                    } );
+       ParseAction ruleTerm1Part2 = new PushSequence(
+               new ParseAction[] { new Push(multiplyOp),
+                                   new Push("TERM"),
+                    } );
+       ParseAction ruleTerm1Part3 = new PushSequence(
+               new ParseAction[] {  new Push(forwardSlash),
+                                    new Push("TERM"),
+                    } );
+       ParseAction ruleFactor = new PushSequence(
+               new ParseAction[] { new Push(ifOp),
+                              new Push("EXPR"),
+                              new Push(thenOp),
+                              new Push("EXPR"),
+                              new Push(elseOp),
+                              new Push("EXPR"),
+                              new Push(endIfOp)
+                    } );
+       ParseAction ruleFactorPart2 = new PushSequence(
+               new ParseAction[] { new Push(notOp),
+                                   new Push("FACTOR"),
+                    } );
+       ParseAction ruleFactorPart3 = new PushSequence(
+               new ParseAction[] { new Push("IDENTIFIER1"),
+                    } );
+       ParseAction ruleFactorPart4 = new PushSequence(
+               new ParseAction[] { new Push("LITERAL"),
+                    } );
+       ParseAction ruleFactorPart5 = new PushSequence(
+               new ParseAction[] { new Push(minusOp),
+                                   new Push("FACTOR"),
+                    } );
+       ParseAction ruleIdentifier1 = new PushSequence(
+               new ParseAction[] { new Push("IDENTIFIER"),
+                                   new Push("ACTUALS1"),
+                    } );
+       ParseAction ruleActuals1 = new PushSequence(
+               new ParseAction[] { new Push(openParen),
+                                   new Push("ACTUALS"),
+                                   new Push(closedParen)
+                    } );
+       ParseAction ruleActuals = new PushSequence(
+               new ParseAction[] { new Push("NONEMPTYACTUALS"),
+                    } );
+       ParseAction ruleNonEmptyActuals = new PushSequence(
+               new ParseAction[] { new Push("EXPR"),
+                              	   new Push(comma),
+                              	   new Push("NONEMPTYACTUALS1")
+                    } );
+       ParseAction ruleNonEmptyActuals1 = new PushSequence(
+               new ParseAction[] { new Push("NONEMPTYACTUALS")
+                    } );
+       ParseAction ruleLiteral = new PushSequence(
+               new ParseAction[] { new Push("NUMBER"),
+            		   	           new Push("BOOLEAN"),
+                    } );
+       ParseAction rulePrint = new PushSequence(
+               new ParseAction[] { new Push(print),
+            		   			   new Push(openParen),
+            		   			   new Push("EXPR"),
+            		   			   new Push(closedParen)
+                    } );
+
 
        table.add( NonTerminal.Program, floatDeclaration, rule01 );
        table.add( NonTerminal.Program, intDeclaration,   rule01 );
