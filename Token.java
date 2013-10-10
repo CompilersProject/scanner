@@ -2,7 +2,6 @@ public class Token
 {     
     private TYPE type;
     private String literalValue;
-    private String terminality;
     
     // To get the integer value of enum, use this.ordinal()
     public enum TYPE {
@@ -30,27 +29,22 @@ public class Token
         COLON,
         INTEGER,
         PRINT,
-        IDENTIFIER
+        IDENTIFIER,
+        // Do these belong here? Also, consider changing scanner to create START/EOS characters?
+        START,
+        EOS
       }
     
     public Token(String word) throws LexicalException
     {
       type = assignType(word);
       literalValue = word;
-      String terminality;
     }
     
-    /*
-     * Depricated? **************
-     */
-    /*
-    public Token(int word) throws LexicalException
+    public Token(TYPE tokenType) throws LexicalException
     {
-      type = assignType(word);
-      literalValue = String.valueOf(word);
-      String terminality;
+      type = tokenType;
     }
-    */
     
     public static TYPE assignType(String sToken) throws LexicalException
     {
@@ -1271,5 +1265,6 @@ public class Token
    
    public String getValue(){ return literalValue; }   
    public TYPE getType(){ return type; }
+   public int typeToInt(){ return type.ordinal(); }
    public String toString(){ return literalValue; }
 }
