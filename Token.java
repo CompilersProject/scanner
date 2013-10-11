@@ -1263,6 +1263,11 @@ public class Token
      return true; 
    }
    
+   public boolean equals(Token otherToken) 
+   {
+      return type == otherToken.getType();
+   }
+   
    public String getValue(){ return literalValue; }   
    public TYPE getType(){ return type; }
    public int typeToInt(){ return type.ordinal(); }
