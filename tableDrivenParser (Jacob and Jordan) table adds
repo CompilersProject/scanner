@@ -225,7 +225,7 @@ public class TableDrivenParser extends Parser
                                    new Push("FACTOR"),
                     } );
        ParseAction rule30 = new PushSequence(
-               new ParseAction[] { new Push("IDENTIFIER"),
+               new ParseAction[] { new Push(identifierOp),
                                    new Push("ACTUALS1"),
                     } );
        ParseAction rule31 = new PushSequence(
