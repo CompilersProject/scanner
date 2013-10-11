@@ -58,29 +58,30 @@ public class TableDrivenParser extends Parser
        Token integerOp          = new Token("integer");
        Token printOp            = new Token("print");
        Token identifierOp       = new Token("identifier");
-       Token print				= new Token("print");
+       Token print              = new Token("print");
+       Token number             = new Token("number");
 
        
 
        ParseAction rule00 = new PushNothing();
-       ParseAction ruleProgram = new PushSequence(
+       ParseAction rule01 = new PushSequence(
                  new ParseAction[] { new Push("DEFINITIONS"),
-                                	 new Push(endOfStream)
+                                     new Push(endOfStream)
                       } );
-       ParseAction ruleDefinitions = new PushSequence(
+       ParseAction rule02 = new PushSequence(
                  new ParseAction[] { new Push("DEF1")
                                 
                       } );
-       ParseAction ruleDef1 = new PushSequence(
+       ParseAction rule03 = new PushSequence(
                  new ParseAction[] { new Push("DEF"),
-                		 			 new Push("DEFINITIONS1")
+                		     new Push("DEFINITIONS1")
                                      
                       } );
-       ParseAction ruleDefinitions1 = new PushSequence(
+       ParseAction rule04 = new PushSequence(
                  new ParseAction[] {  new Push("Definitions"),
                 		              
                       } );
-       ParseAction ruleDef = new PushSequence(
+       ParseAction rule05 = new PushSequence(
                	new ParseAction[] { new Push("IDENTIFIER"),
                                     new Push(openParen),
                                     new Push("FORMALS"),
@@ -89,83 +90,83 @@ public class TableDrivenParser extends Parser
                                     new Push("TYPE"),
                                     new Push("BODY")
                       } );
-       ParseAction ruleFormals = new PushSequence(
+       ParseAction rule06 = new PushSequence(
                  new ParseAction[] {
                                      new Push("NONEMPTYFORMALS")
                       } );
-       ParseAction ruleNonEmptyFormals = new PushSequence(
+       ParseAction rule07 = new PushSequence(
                  new ParseAction[] { new Push("FORMAL"),
                                      new Push("NONEMPTYFORMALS1")
                       } );
-       ParseAction ruleNonEmptyFormals1 = new PushSequence(
+       ParseAction rule08 = new PushSequence(
                  new ParseAction[] { new Push(comma),
                                      new Push("NONEMPTYFORMALS"),
                                 
                       } );
-       ParseAction ruleFormal = new PushSequence(
+       ParseAction rule09 = new PushSequence(
                  new ParseAction[] { new Push("IDENTIFIER"),
-                                new Push(colonOp),
-                                new Push("TYPE")
+                                     new Push(colonOp),
+                                     new Push("TYPE")
                       } );
-       ParseAction ruleBody = new PushSequence(
+       ParseAction rule10 = new PushSequence(
                new ParseAction[] { new Push("PRINT"),
                                    new Push("BODY1")                             
                     } );
-       ParseAction ruleBodyPart2 = new PushSequence(
+       ParseAction rule11 = new PushSequence(
                new ParseAction[] { new Push("EXPR"),
                     } );
-       ParseAction ruleBody1 = new PushSequence(
+       ParseAction rule12 = new PushSequence(
                new ParseAction[] { new Push("BODY"),
                     } );
-       ParseAction ruleType = new PushSequence(
+       ParseAction rule13 = new PushSequence(
                new ParseAction[] { new Push(integerOp),
                                    new Push(booleanOp),
                     } );
-       ParseAction ruleExpr = new PushSequence(
+       ParseAction rule14 = new PushSequence(
                new ParseAction[] { new Push("SIMPLE-EXPR"),
                                    new Push("SIMPLE-EXPR1"),
                     } );
-       ParseAction ruleSimpleExpr1 = new PushSequence(
+       ParseAction rule15 = new PushSequence(
                new ParseAction[] { new Push(lessThanOp),
                                    new Push("EXPR"),
                     } );
-       ParseAction ruleSimpleExpr1Part2 = new PushSequence(
+       ParseAction rule16 = new PushSequence(
                new ParseAction[] { new Push(assignmentOp),
             		   		       new Push("EXPR"),
                     } );
-       ParseAction ruleSimpleExpr = new PushSequence(
+       ParseAction rule17 = new PushSequence(
                new ParseAction[] { new Push("TERM"),
                               new Push("TERM2"),
                     } );
-       ParseAction ruleTerm2 = new PushSequence(
+       ParseAction rule18 = new PushSequence(
                new ParseAction[] { new Push(orOp),
                                    new Push("SIMPLE-EXPR"),
                     } );
-       ParseAction ruleTerm2Part2 = new PushSequence(
+       ParseAction rule19 = new PushSequence(
                new ParseAction[] { new Push(plusOp),
                               new Push("SIMPLE-EXPR"),
                     } );
-       ParseAction ruleTerm2Part3 = new PushSequence(
+       ParseAction rule20 = new PushSequence(
                new ParseAction[] { new Push(minusOp),
                                    new Push("SIMPLE-EXPR"),
                     } );
-       ParseAction ruleTerm = new PushSequence(
+       ParseAction rule21 = new PushSequence(
                new ParseAction[] { new Push("FACTOR"),
                                    new Push("TERM1"),
                     } );
-       ParseAction ruleTerm1 = new PushSequence(
+       ParseAction rule22 = new PushSequence(
                new ParseAction[] { new Push(andOp),
                                    new Push("TERM"),
                     } );
-       ParseAction ruleTerm1Part2 = new PushSequence(
+       ParseAction rule23 = new PushSequence(
                new ParseAction[] { new Push(multiplyOp),
                                    new Push("TERM"),
                     } );
-       ParseAction ruleTerm1Part3 = new PushSequence(
+       ParseAction rule24 = new PushSequence(
                new ParseAction[] {  new Push(forwardSlash),
                                     new Push("TERM"),
                     } );
-       ParseAction ruleFactor = new PushSequence(
+       ParseAction rule25 = new PushSequence(
                new ParseAction[] { new Push(ifOp),
                               new Push("EXPR"),
                               new Push(thenOp),
@@ -174,83 +175,157 @@ public class TableDrivenParser extends Parser
                               new Push("EXPR"),
                               new Push(endIfOp)
                     } );
-       ParseAction ruleFactorPart2 = new PushSequence(
+       ParseAction rule26 = new PushSequence(
                new ParseAction[] { new Push(notOp),
                                    new Push("FACTOR"),
                     } );
-       ParseAction ruleFactorPart3 = new PushSequence(
+       ParseAction rule27 = new PushSequence(
                new ParseAction[] { new Push("IDENTIFIER1"),
                     } );
-       ParseAction ruleFactorPart4 = new PushSequence(
+       ParseAction rule28 = new PushSequence(
                new ParseAction[] { new Push("LITERAL"),
                     } );
-       ParseAction ruleFactorPart5 = new PushSequence(
+       ParseAction rule29 = new PushSequence(
                new ParseAction[] { new Push(minusOp),
                                    new Push("FACTOR"),
                     } );
-       ParseAction ruleIdentifier1 = new PushSequence(
+       ParseAction rule30 = new PushSequence(
                new ParseAction[] { new Push("IDENTIFIER"),
                                    new Push("ACTUALS1"),
                     } );
-       ParseAction ruleActuals1 = new PushSequence(
+       ParseAction rule31 = new PushSequence(
                new ParseAction[] { new Push(openParen),
                                    new Push("ACTUALS"),
                                    new Push(closedParen)
                     } );
-       ParseAction ruleActuals = new PushSequence(
+       ParseAction rule32 = new PushSequence(
                new ParseAction[] { new Push("NONEMPTYACTUALS"),
                     } );
-       ParseAction ruleNonEmptyActuals = new PushSequence(
+       ParseAction rule33 = new PushSequence(
                new ParseAction[] { new Push("EXPR"),
                               	   new Push(comma),
                               	   new Push("NONEMPTYACTUALS1")
                     } );
-       ParseAction ruleNonEmptyActuals1 = new PushSequence(
+       ParseAction rule34 = new PushSequence(
                new ParseAction[] { new Push("NONEMPTYACTUALS")
                     } );
-       ParseAction ruleLiteral = new PushSequence(
+       ParseAction rule35 = new PushSequence(
                new ParseAction[] { new Push("NUMBER"),
-            		   	           new Push("BOOLEAN"),
+            		   	   new Push("BOOLEAN"),
                     } );
-       ParseAction rulePrint = new PushSequence(
+       ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
-            		   			   new Push(openParen),
-            		   			   new Push("EXPR"),
-            		   			   new Push(closedParen)
+            	                   new Push(openParen),
+            		           new Push("EXPR"),
+            		   	   new Push(closedParen)
                     } );
 
 
-       table.add( NonTerminal.Program, floatDeclaration, rule01 );
-       table.add( NonTerminal.Program, intDeclaration,   rule01 );
-       table.add( NonTerminal.Program, print,            rule01 );
-       table.add( NonTerminal.Program, identifier,       rule01 );
-       table.add( NonTerminal.Program, endOfStream,      rule01 );
+       table.add( "Program", identifierOp, rule01 );
+       table.add( "Definitions", identifierOP, rule02 );
+       table.add( "Def1", identifierOP, rule03 );
+       
+       table.add( "Definitions1", identifierOP, rule04 );
+       table.add( "Definitions1", endOfStream, rule00 );
 
-       table.add( NonTerminal.Declarations, floatDeclaration, rule02 );
-       table.add( NonTerminal.Declarations, intDeclaration,   rule02 );
-       table.add( NonTerminal.Declarations, print,            rule00 );
-       table.add( NonTerminal.Declarations, identifier,       rule00 );
-       table.add( NonTerminal.Declarations, endOfStream,      rule00 );
+       table.add( "Def", identifierOp, rule05 );
+       
+       table.add( "Formals", identifierOp, rule06 );
+       table.add( "Formals", endOfStream,  rule00 );
+       
+       table.add( "NonemptyFormals", identifierOp, rule07 );
+       table.add( "NonemptyFormals1", comma, rule08 );
 
-       table.add( NonTerminal.Declaration, floatDeclaration, rule03 );
-       table.add( NonTerminal.Declaration, intDeclaration,   rule04 );
+       table.add( "Formal", identifierOp , rule09 );
+       
+       table.add( "Body", print, rule10 );
+       table.add( "Body", ifOp, rule11 );
+       table.add( "Body", notOP, rule12 );
+       table.add( "Body", identifierOp, rule13 );
+       table.add( "Body", number, rule14 );
+       table.add( "Body", booleanOp, rule15 );
+       table.add( "Body", minusOp, rule16 );
+       
+       table.add( "Body1", print, rule10 );
+       table.add( "Body1", ifOp, rule11 );
+       table.add( "Body1", notOP, rule12 );
+       table.add( "Body1", identifierOp, rule13 );
+       table.add( "Body1", literal, rule14 );
+       table.add( "Body1", minusOp, rule15 );
+       
+       table.add( "Type", integerOp, rule16 );
+       table.add( "Type", booleanOp, rule17 );
+       
+       table.add( "Expr", ifOp,  rule18 );
+       table.add( "Expr", notOp,  rule19 );
+       table.add( "Expr", identifierOp,  rule20 );
+       table.add( "Expr", literal,  rule21 );
+       table.add( "Expr", minusOp,  rule22 );
+       
+       table.add( "Simple-expr1", lessThanOp,  rule23 );
+       table.add( "Simple-expr1", equalsOp,  rule24 );
+       table.add( "Simple-expr1", endOfStream,  rule00 );
+       
+       table.add( "Simple-expr", ifOp,  rule18 );
+       table.add( "Simple-expr", notOp,  rule19 );
+       table.add( "Simple-expr", identifierOp,  rule20 );
+       table.add( "Simple-expr", literal,  rule21 );
+       table.add( "Simple-expr", minusOp,  rule22 );
+       
+       table.add( "Term2", orOp, rule23 );
+       table.add( "Term2", plusOp, rule24 );
+       table.add( "Term2", minusOp, rule25 );
+       table.add( "Term2", endOfStream, rule00 );
 
-       table.add( NonTerminal.Statements, print,       rule05 );
-       table.add( NonTerminal.Statements, identifier,  rule05 );
-       table.add( NonTerminal.Statements, endOfStream, rule00 );
-
-       table.add( NonTerminal.Statement, print,      rule06 );
-       table.add( NonTerminal.Statement, identifier, rule07 );
-
-       table.add( NonTerminal.ExpressionTail, print,       rule00 );
-       table.add( NonTerminal.ExpressionTail, plus,        rule08 );
-       table.add( NonTerminal.ExpressionTail, minus,       rule09 );
-       table.add( NonTerminal.ExpressionTail, identifier,  rule00 );
-       table.add( NonTerminal.ExpressionTail, endOfStream, rule00 );
-
-       table.add( NonTerminal.Value, identifier,   rule10 );
-       table.add( NonTerminal.Value, floatValue,   rule11 );
-       table.add( NonTerminal.Value, integerValue, rule12 );
+       table.add( "Term", ifOp, rule24 );
+       table.add( "Term", notOp, rule25 );
+       table.add( "Term", identifierOp, rule26 );
+       table.add( "Term", number, rule27 );
+       table.add( "Term", booleanOp, rule28 );
+       table.add( "Term", minusOp, rule29 );
+       
+       table.add( "Term1", andOp, rule29 );
+       table.add( "Term1", multiplyOp, rule30 );
+       table.add( "Term1", divideOp, rule31 );
+       table.add( "Term1", endOfStream, rule00 );
+       
+       table.add( "Factor", ifOp, rule24 );
+       table.add( "Factor", notOp, rule25 );
+       table.add( "Factor", identifierOp, rule26 );
+       table.add( "Factor", number, rule27 );
+       table.add( "Factor", booleanOp, rule28 );
+       table.add( "Factor", minusOp, rule29 );
+       
+       table.add( "Identifier1", identifierOp, rule32 );
+       table.add( "Actuals1", OpenParen, rule33 );
+       
+       table.add( "Actuals", ifOp, rule32 );
+       table.add( "Actuals", notOp, rule33 );
+       table.add( "Actuals", identifierOp, rule34 );
+       table.add( "Actuals", number, rule35 );
+       table.add( "Actuals", booleanOp, rule36 );
+       table.add( "Actuals", minusOp, rule37 );
+       table.add( "Actuals", endOfStream, rule00 );
+       
+       table.add( "NonemptyActuals", ifOp, rule32 );
+       table.add( "NonemptyActuals", notOp, rule33 );
+       table.add( "NonemptyActuals", identifierOp, rule34 );
+       table.add( "NonemptyActuals", number, rule35 );
+       table.add( "NonemptyActuals", booleanOp, rule36 );
+       table.add( "NonemptyActuals", minusOp, rule37 );
+       
+       table.add( "NonemptyActuals1", ifOp, rule32 );
+       table.add( "NonemptyActuals1", notOp, rule33 );
+       table.add( "NonemptyActuals1", identifierOp, rule34 );
+       table.add( "NonemptyActuals1", literal, rule35 );
+       table.add( "NonemptyActuals1", minusOp, rule36 );
+       table.add( "NonemptyActuals1", endOfStream, rule00 );
+       
+       table.add( "Literal", number, rule38 );
+       table.add( "Literal", booleanOp, rule39 );
+       
+       table.add( "Print", print, rule40 );
+       
 
        } catch (Exception e) {
            System.out.println( "Trouble building parse table.  No entries." );
