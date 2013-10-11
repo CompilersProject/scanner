@@ -1,11 +1,11 @@
 import java.util.Stack;
 
 public class ParsingTable {
-	private ParseAction[][] table;
+ private ParseAction[][] table;
 
     public ParsingTable()
     {
-         table = new ParseAction[15][11];
+         table = new ParseAction[26][29];
     }
 
     public ParseAction lookup( String nonTerm, Token term )
@@ -36,32 +36,32 @@ public class ParsingTable {
 
     private int convertNonTerminal( String symbol )
     {
-        if (symbol.equals("program")            ) return 0;
-        if (symbol.equals( "definitions" )      ) return 1;
-        if (symbol.equals( "def1" )             ) return 2;
-        if (symbol.equals( "definitions1" )     ) return 3;
-        if (symbol.equals( "def" )              ) return 4;
-        if (symbol.equals( "formals" )          ) return 5;
-        if (symbol.equals( "nonemptyformals" )  ) return 6;
-        if (symbol.equals( "nonemptyformals1" ) ) return 7;
-        if (symbol.equals( "formal" )           ) return 8;
-        if (symbol.equals( "body" )             ) return 9;
-        if (symbol.equals( "body1" )            ) return 10;
-        if (symbol.equals( "type" )             ) return 11;
-        if (symbol.equals( "expr" )             ) return 12;
-        if (symbol.equals( "simple-expr1" )     ) return 13;
-        if (symbol.equals( "simple-expr" )      ) return 14;
-        if (symbol.equals( "term2" )            ) return 15;
-        if (symbol.equals( "term" )             ) return 16;
-        if (symbol.equals( "term1" )            ) return 17;
-        if (symbol.equals( "factor" )           ) return 18;
-        if (symbol.equals( "identifier1" )      ) return 19;
-        if (symbol.equals( "actuals1" )         ) return 20;
-        if (symbol.equals( "actuals" )          ) return 21;
-        if (symbol.equals( "nonemptyactuals" )  ) return 22;
-        if (symbol.equals( "nonemptyactuals1" ) ) return 23;
-        if (symbol.equals( "literal" )          ) return 24;
-        if (symbol.equals( "print" )            ) return 25;       
+        if (symbol.equalsIgnoreCase("program")            ) return 0;
+        if (symbol.equalsIgnoreCase( "definitions" )      ) return 1;
+        if (symbol.equalsIgnoreCase( "def1" )             ) return 2;
+        if (symbol.equalsIgnoreCase( "definitions1" )     ) return 3;
+        if (symbol.equalsIgnoreCase( "def" )              ) return 4;
+        if (symbol.equalsIgnoreCase( "formals" )          ) return 5;
+        if (symbol.equalsIgnoreCase( "nonemptyformals" )  ) return 6;
+        if (symbol.equalsIgnoreCase( "nonemptyformals1" ) ) return 7;
+        if (symbol.equalsIgnoreCase( "formal" )           ) return 8;
+        if (symbol.equalsIgnoreCase( "body" )             ) return 9;
+        if (symbol.equalsIgnoreCase( "body1" )            ) return 10;
+        if (symbol.equalsIgnoreCase( "type" )             ) return 11;
+        if (symbol.equalsIgnoreCase( "expr" )             ) return 12;
+        if (symbol.equalsIgnoreCase( "simple-expr1" )     ) return 13;
+        if (symbol.equalsIgnoreCase( "simple-expr" )      ) return 14;
+        if (symbol.equalsIgnoreCase( "term2" )            ) return 15;
+        if (symbol.equalsIgnoreCase( "term" )             ) return 16;
+        if (symbol.equalsIgnoreCase( "term1" )            ) return 17;
+        if (symbol.equalsIgnoreCase( "factor" )           ) return 18;
+        if (symbol.equalsIgnoreCase( "identifier1" )      ) return 19;
+        if (symbol.equalsIgnoreCase( "actuals1" )         ) return 20;
+        if (symbol.equalsIgnoreCase( "actuals" )          ) return 21;
+        if (symbol.equalsIgnoreCase( "nonemptyactuals" )  ) return 22;
+        if (symbol.equalsIgnoreCase( "nonemptyactuals1" ) ) return 23;
+        if (symbol.equalsIgnoreCase( "literal" )          ) return 24;
+        if (symbol.equalsIgnoreCase( "print" )            ) return 25;       
         
         //left all numbers as 0 until we figure out what were keeping
         //hey group...should identifier be one? it's not in our grammar

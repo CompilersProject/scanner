@@ -20,10 +20,15 @@ ParseAction.java -
   ParseAction is an interface that utilizes the execute and toString methods.
 
 TableDrivenParser.java -
-  The TableDrivenParser class creates the kleinTable.Rules are created from the Klein grammar and
-  are added to the table. The parseProgram then 
-
-/// ADD!!!!!!!!!!!!!!!!!!!!!!!!!!
+  The TableDrivenParser class creates the kleinTable. Rules are created from the Klein grammar and
+  are added to the table. The parseProgram then reads a token from the scanner and pops a Symbol from the parseStack.
+  If the next symbol to be parsed is a terminal, the next token and symbol are compared and consumed.
+  If the next symbol is non-terminal, look for a rule with symbol and token, push found rules on the stack.
+  If nothing is found in either case, a SemanticException is thrown.
+  
+  The algorithm doesn't currently work because our grammar and by extension, parseTable rules, are not working.
+  
+  But, included is our updated scanner, which is now working.
 
 Compiling-
 
