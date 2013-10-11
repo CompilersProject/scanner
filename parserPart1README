@@ -1,0 +1,40 @@
+CS 4550
+10/11/2013
+Parser Part 1
+Anthony Spoerl
+Jacob Nanke
+Jordan Greiner
+Will Schau
+
+
+ParsingTable.java -
+  This file contains the ParsingTable class that sets up a new table. It also includes the methods 
+  to add and lookup items in the table. We converted our non terminals and terminals to integers 
+  in this file.
+
+Push.java -
+  The Push method has constructors to take in a token or a string and then uses the execute method
+  to push these to the stack.
+
+ParseAction.java -
+  ParseAction is an interface that utilizes the execute and toString methods.
+
+TableDrivenParser.java -
+  The TableDrivenParser class creates the kleinTable.Rules are created from the Klein grammar and
+  are added to the table. The parseProgram then 
+
+/// ADD!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Compiling-
+
+in compiler/src/ directory, run
+	$ javac Scanner.java
+
+Running- 
+
+The main exists in the Scanner.java and will be executed when running the file.
+The main also runs the test file automatically.
+
+in compiler/src/ directory, run
+	$ java Scanner.java
+
