@@ -343,12 +343,14 @@ public class TableDrivenParser extends Parser
        table.add( "ACTUALS", literal, rule28 );
        table.add( "ACTUALS", minusOp, rule29 );
        table.add( "ACTUALS", endOfStream, rule00 );
+       table.add( "ACTUALS", closedParen, rule00 );
        
        table.add( "NONEMPTYACTUALS", ifOp, rule25 );
        table.add( "NONEMPTYACTUALS", notOp, rule26 );
        table.add( "NONEMPTYACTUALS", identifierOp, rule30 );
        table.add( "NONEMPTYACTUALS", literal, rule28 );
        table.add( "NONEMPTYACTUALS", minusOp, rule29 );
+       table.add( "NONEMPTYACTUALS", endOfStream, rule00 );
        
        table.add( "NONEMPTYACTUALS1", ifOp, rule25 );
        table.add( "NONEMPTYACTUALS1", notOp, rule26 );
