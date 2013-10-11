@@ -3,7 +3,7 @@ import java.util.Stack;
 public class Push implements ParseAction {
 	
 	   private Token token;
-	   private String string;
+	   private String terminal;
 
 	   public Push( Token token )
 	   {
@@ -12,7 +12,7 @@ public class Push implements ParseAction {
 	   
 	   public Push (String string)
 	   {
-		   this.string = string;
+		   this.string = terminal;
 	   }
 
 	   public void execute( Stack stack )
@@ -21,7 +21,7 @@ public class Push implements ParseAction {
 		   {
 			   stack.push( token );
 		   } else {
-			   stack.push( string );
+			   stack.push( terminal );
 		   }
 	      	
 	   }
