@@ -5,14 +5,19 @@ import java.io.FileInputStream;
 
 public class Scanner
 {
- public static final int MAX_LENGTH = 256;
- 
+	public static final int MAX_LENGTH = 256;
+	
   private PushbackInputStream sourceFile;
   private Token               nextToken; // Added this for peek as Wallingford pointed out we would need it
 
-  public Scanner( String filename ) throws IOException
+  public Scanner( String filename )
   {
-    sourceFile = new PushbackInputStream(new FileInputStream(filename));
+	try{
+		sourceFile = new PushbackInputStream(new FileInputStream(filename));
+	} catch(IOException e){
+		System.out.println("Invalid filename.");
+		System.exit(0);
+	}
 
     nextToken = null;
   }
@@ -34,22 +39,30 @@ public class Scanner
     
     // Throw away leading whitespace
     while( isOurWhitespace((char) nextByte) ){
-     nextByte = getNextByte();
+    	nextByte = getNextByte();
     }
-
+    if( isComment( (char) nextByte) ){
+        char temp='j';
+        while (temp!='\n')
+        {
+          temp = (char) sourceFile.read();
+        }
+        return new Token(Token.TYPE.COMMENT);
+      }
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
       return new Token(stringByte);
     }
 
     while( !isSymbol( (char) nextByte) && 
-      !isOurWhitespace( (char) nextByte) ) {
+    		!isOurWhitespace( (char) nextByte) ) {
       if( tokenLength > MAX_LENGTH ){
-        // TODO: Put exception here
-        throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
+    	  // TODO: Put exception here
+    	  System.out.println("Identifier is too long. Max identifier length: " + MAX_LENGTH);
+    	  System.exit(0);
       }
-       
-       
+    	  
+    	  
       if( nextByte != -1 ){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
@@ -64,11 +77,14 @@ public class Scanner
     sourceFile.unread( nextByte );
     return new Token(rawToken);
   }
+  
 
   public int getNextByte() throws IOException
   {
-   return sourceFile.read();
+	  return sourceFile.read();
   }
+  
+
   
   // Static member funtions
   public static boolean isOurWhitespace( char c )
@@ -95,4 +111,16 @@ public class Scanner
       c == ':';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
+  public boolean isComment (char c) throws IOException
+  {
+    char temp = (char)sourceFile.read();
+    if ((c=='/') && temp=='/')
+    {
+      sourceFile.unread(temp);
+      return true;
+    }
+    sourceFile.unread(temp);
+    return false;
+  }
+  
 }

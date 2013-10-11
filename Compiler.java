@@ -9,13 +9,13 @@ public class Compiler {
     
      try{
 
-     Scanner test = new Scanner( "digitsum.kln" );
+     Scanner test = new Scanner( "testKlein!.txt" );
      Token tmp = test.getNextToken();
     
-     System.out.println("<program>");
+     System.out.println("<PROGRAM>");
      while( tmp.getValue() != "" ){
        
-       if((tmp.getType() == Token.TYPE.IDENTIFIER) || (tmp.getType() == Token.TYPE.INTEGER))
+       if((tmp.getType() == Token.TYPE.IDENTIFIER))
          System.out.println("<"+tmp.getType()+">" + " " +tmp);
        
        else{System.out.println("<"+tmp.getType()+">");
