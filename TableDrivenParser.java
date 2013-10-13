@@ -32,7 +32,7 @@ public class TableDrivenParser extends Parser
             break; // Ignore comments
           } else if( terminal.equals( scanner.peek() )){
             // * For debugging *
-            System.out.println( scanner.getNextToken() );
+            System.out.println( "Consumed: " + scanner.getNextToken() );
           } else{
             // * For debugging *
             System.out.println( "Next Token: " + scanner.peek() );
@@ -46,7 +46,7 @@ public class TableDrivenParser extends Parser
           ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
           
           if( rule instanceof PushSequence ){
-            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
+            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek() + " ["  + scanner.peek().typeToInt() + "]");
             rule.execute(parseStack); // PushSequence loops through rules backwards
           } else if( rule instanceof PushNothing ){
             // **** Do nothing? ****
@@ -69,34 +69,32 @@ public class TableDrivenParser extends Parser
        try {
         
        Token endOfStream        = new Token( Token.TYPE.EOS );
-       Token plusOp             = new Token("+");
-       Token minusOp            = new Token("-");
-       Token multiplyOp         = new Token("*");
-       Token assignmentOp       = new Token("=");
-       Token lessThanOp         = new Token("<");
-       Token openParen          = new Token("(");
-       Token closedParen        = new Token(")");
-       Token ifOp               = new Token("if");
-       Token thenOp             = new Token("then");
-       Token elseOp             = new Token("else");
-       Token endIfOp            = new Token("endif");
-       Token mainOp             = new Token("main");
-       Token notOp              = new Token("not");
-       Token orOp               = new Token("or");
-       Token andOp              = new Token("and");
-       Token comment            = new Token("//");
-       Token forwardSlash       = new Token("/");
-       Token comma              = new Token(",");
-       Token booleanOp          = new Token("boolean");
-       Token trueOp             = new Token("true");
-       Token falseOp            = new Token("false");
-       Token colonOp            = new Token(":");
-       Token integerOp          = new Token("integer");
-       Token printOp            = new Token("print");
-       Token identifierOp       = new Token("identifier");
-       Token print              = new Token("print");
-       Token number             = new Token("number");
-       Token literal            = new Token("literal");
+       Token plusOp             = new Token( Token.TYPE.PLUS );
+       Token minusOp            = new Token( Token.TYPE.MINUS );
+       Token multiplyOp         = new Token( Token.TYPE.MULTIPLY );
+       Token assignmentOp       = new Token( Token.TYPE.ASSIGNMENT );
+       Token lessThanOp         = new Token( Token.TYPE.LESSTHAN );
+       Token openParen          = new Token( Token.TYPE.OPEN_PAREN );
+       Token closedParen        = new Token( Token.TYPE.CLOSED_PAREN );
+       Token ifOp               = new Token( Token.TYPE.IF );
+       Token thenOp             = new Token( Token.TYPE.THEN );
+       Token elseOp             = new Token( Token.TYPE.ELSE );
+       Token endIfOp            = new Token( Token.TYPE.END_IF );
+       Token mainOp             = new Token( Token.TYPE.MAIN );
+       Token notOp              = new Token( Token.TYPE.NOT );
+       Token orOp               = new Token( Token.TYPE.OR );
+       Token andOp              = new Token( Token.TYPE.AND );
+       Token comment            = new Token( Token.TYPE.COMMENT );
+       Token forwardSlash       = new Token( Token.TYPE.FORWARD_SLASH );
+       Token comma              = new Token( Token.TYPE.COMMA );
+       Token booleanOp          = new Token( Token.TYPE.BOOLEAN );
+       Token trueOp             = new Token( Token.TYPE.TRUE );
+       Token falseOp            = new Token( Token.TYPE.FALSE );
+       Token colonOp            = new Token( Token.TYPE.COLON );
+       Token integerOp          = new Token( Token.TYPE.INTEGER );
+       Token identifierOp       = new Token( Token.TYPE.IDENTIFIER );
+       Token print              = new Token( Token.TYPE.PRINT );
+       Token number             = new Token( Token.TYPE.NUMBER );
 
        
 
@@ -287,8 +285,8 @@ public class TableDrivenParser extends Parser
        table.add( "BODY", print, rule10 );
        table.add( "BODY", ifOp, rule25 );
        table.add( "BODY", notOp, rule26 );
-       table.add( "BODY", identifierOp, rule30 );
-       //table.add( "BODY", number, rule35 );
+       table.add( "BODY", identifierOp, rule11 );
+       //table.add( "BODY", number, rule35 ); // Why was this taken out?
        table.add( "BODY", booleanOp, rule98 );
        table.add( "BODY", minusOp, rule29 );
        

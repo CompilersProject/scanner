@@ -5,11 +5,11 @@ public class Token
     
     // To get the integer value of enum, use this.ordinal()
     public enum TYPE {
-      PLUS_OP, 
-        MINUS_OP, 
-        MULTIPLY_OP, 
-        ASSIGNMENT_OP,
-        LESSTHAN_OP, 
+      PLUS,
+        MINUS,
+        MULTIPLY,
+        ASSIGNMENT,
+        LESSTHAN,
         OPEN_PAREN,
         CLOSED_PAREN,
         IF,
@@ -30,9 +30,9 @@ public class Token
         INTEGER,
         PRINT,
         IDENTIFIER,
-        // Do these belong here? Also, consider changing scanner to create START/EOS characters?
+        NUMBER,
         EOS
-      }
+    }
     
     public Token(String word) throws LexicalException
     {
@@ -48,15 +48,15 @@ public class Token
     public static TYPE assignType(String sToken) throws LexicalException
     {
       if (isReservedPlusOp(sToken)) {
-        return TYPE.PLUS_OP;
+        return TYPE.PLUS;
       } else if (isReservedMinusOp(sToken)) {
-        return TYPE.MINUS_OP;
+        return TYPE.MINUS;
       } else if(isReservedMultiplyOp(sToken)) {
-        return TYPE.MULTIPLY_OP;
+        return TYPE.MULTIPLY;
       } else if(isReservedAssignmentOp(sToken)) {
-        return TYPE.ASSIGNMENT_OP;
+        return TYPE.ASSIGNMENT;
       } else if (isReservedLessThanOp(sToken)) {
-        return TYPE.LESSTHAN_OP;
+        return TYPE.LESSTHAN;
       } else if (isReservedOpenParen(sToken)) {
         return TYPE.OPEN_PAREN;
       } else if (isReservedClosedParen(sToken)) {
@@ -91,10 +91,12 @@ public class Token
         return TYPE.FALSE;
       } else if (isReservedColon(sToken)) {
         return TYPE.COLON;
-      } else if (isInt(sToken)) {
+      } else if (isReservedInteger(sToken)) {
         return TYPE.INTEGER;
       } else if (isReservedPrint(sToken)) {
         return TYPE.PRINT;
+      } else if (isNumber(sToken)) {
+        return TYPE.NUMBER;
       }else{
         return TYPE.IDENTIFIER;
       }
@@ -1238,9 +1240,8 @@ public class Token
         else
             return false;
     }
-
    
-   public static boolean isInt(String num) throws LexicalException
+   public static boolean isNumber(String num) throws LexicalException
    {
      Long lowerBound = -4294967296L; 
      Long upperBound =  4294967295L;

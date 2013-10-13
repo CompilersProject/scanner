@@ -5,7 +5,7 @@ public class ParsingTable {
 
     public ParsingTable()
     {
-         table = new ParseAction[26][29];
+         table = new ParseAction[27][29];
     }
 
     public ParseAction lookup( String nonTerm, Token term )
