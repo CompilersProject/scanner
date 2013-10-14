@@ -46,7 +46,7 @@ public class TableDrivenParser extends Parser
           ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
           
           if( rule instanceof PushSequence ){
-            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek() + " ["  + scanner.peek().typeToInt() + "]");
+            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
             rule.execute(parseStack); // PushSequence loops through rules backwards
           } else if( rule instanceof PushNothing ){
             // **** Do nothing? ****
@@ -262,6 +262,12 @@ public class TableDrivenParser extends Parser
                          new Push("EXPR"),
                      new Push(closedParen)
                     } );
+       ParseAction rule96 = new PushSequence(
+                                             new ParseAction[] { new Push(trueOp) }
+                                             );
+       ParseAction rule97 = new PushSequence(
+                                             new ParseAction[] { new Push(falseOp) }
+                                             );
        
        table.add( "PROGRAM", identifierOp, rule01 );
        table.add( "DEFINITIONS", identifierOp, rule02 );
@@ -277,59 +283,64 @@ public class TableDrivenParser extends Parser
        table.add( "FORMALS", closedParen,  rule00 );
        
        table.add( "NONEMPTYFORMALS", identifierOp, rule07 );
+       table.add( "NONEMPTYFORMALS", closedParen, rule00 ); // Follow set
+       
        table.add( "NONEMPTYFORMALS1", comma, rule08 );
-       table.add( "NONEMPTYFORMALS1", closedParen, rule00 );
+       table.add( "NONEMPTYFORMALS1", closedParen, rule00 ); // Not in follow set?
 
        table.add( "FORMAL", identifierOp , rule09 );
        
        table.add( "BODY", print, rule10 );
-       table.add( "BODY", ifOp, rule25 );
-       table.add( "BODY", notOp, rule26 );
+       table.add( "BODY", ifOp, rule11 );
+       table.add( "BODY", notOp, rule11 );
        table.add( "BODY", identifierOp, rule11 );
-       //table.add( "BODY", number, rule35 ); // Why was this taken out?
-       table.add( "BODY", booleanOp, rule98 );
-       table.add( "BODY", minusOp, rule29 );
+       table.add( "BODY", number, rule11 );
+       table.add( "BODY", trueOp, rule11 );
+       table.add( "BODY", falseOp, rule11 );
+       table.add( "BODY", minusOp, rule11 );
        
-       table.add( "BODY1", print, rule10 );
-       table.add( "BODY1", ifOp, rule25 );  
-       table.add( "BODY1", notOp, rule26 );
-       table.add( "BODY1", identifierOp, rule30 );     
-       table.add( "BODY1", number, rule35 );
-       table.add( "BODY1", booleanOp, rule98 ); 
-       table.add( "BODY1", minusOp, rule29 );
+       table.add( "BODY1", print, rule12 );
+       table.add( "BODY1", ifOp, rule12 );
+       table.add( "BODY1", notOp, rule12 );
+       table.add( "BODY1", identifierOp, rule12 );
+       table.add( "BODY1", number, rule12 );
+       table.add( "BODY1", trueOp, rule12 );
+       table.add( "BODY1", falseOp, rule12 );
+       table.add( "BODY1", minusOp, rule12 );
        
        table.add( "TYPE", integerOp, rule13 );
-       table.add( "TYPE", booleanOp, rule99 );         //cut these into two rules 13 and 99
+       table.add( "TYPE", booleanOp, rule99 );
        
-       table.add( "EXPR", ifOp,  rule25 );
-       table.add( "EXPR", notOp,  rule26 );
-       table.add( "EXPR", identifierOp,  rule30 );
-       table.add( "EXPR", number, rule35 );
-       table.add( "EXPR", booleanOp, rule98 );
-       table.add( "EXPR", minusOp,  rule29 );
+       table.add( "EXPR", ifOp,  rule14 );
+       table.add( "EXPR", notOp,  rule14 );
+       table.add( "EXPR", identifierOp,  rule14 );
+       table.add( "EXPR", number, rule14 );
+       table.add( "EXPR", trueOp, rule14 );
+       table.add( "EXPR", falseOp, rule14 );
+       table.add( "EXPR", minusOp,  rule14 );
        
        table.add( "SIMPLE-EXPR1", lessThanOp,  rule15 );
        table.add( "SIMPLE-EXPR1", assignmentOp,  rule16 );
        table.add( "SIMPLE-EXPR1", endOfStream,  rule00 );
        
-       table.add( "SIMPLE-EXPR", ifOp,  rule25 );
-       table.add( "SIMPLE-EXPR", notOp,  rule26 );
-       table.add( "SIMPLE-EXPR", identifierOp,  rule30 );
-       table.add( "SIMPLE-EXPR", number, rule35 );
-       table.add( "SIMPLE-EXPR", booleanOp, rule98 );
-       table.add( "SIMPLE-EXPR", minusOp,  rule29 );
+       table.add( "SIMPLE-EXPR", ifOp,  rule17 );
+       table.add( "SIMPLE-EXPR", notOp,  rule17 );
+       table.add( "SIMPLE-EXPR", identifierOp,  rule17 );
+       table.add( "SIMPLE-EXPR", number, rule17 );
+       table.add( "SIMPLE-EXPR", booleanOp, rule17 );
+       table.add( "SIMPLE-EXPR", minusOp,  rule17 );
        
        table.add( "TERM2", orOp, rule18 );
        table.add( "TERM2", plusOp, rule19 );
        table.add( "TERM2", minusOp, rule20 );
        table.add( "TERM2", endOfStream, rule00 );
 
-       table.add( "TERM", ifOp, rule25 );
-       table.add( "TERM", notOp, rule26 );
-       table.add( "TERM", identifierOp, rule30 );
-       table.add( "TERM", minusOp, rule29 );
-       table.add( "TERM", number, rule35 );
-       table.add( "TERM", booleanOp, rule98 );
+       table.add( "TERM", ifOp, rule21 );
+       table.add( "TERM", notOp, rule21 );
+       table.add( "TERM", identifierOp, rule21 );
+       table.add( "TERM", minusOp, rule21 );
+       table.add( "TERM", number, rule21 );
+       table.add( "TERM", booleanOp, rule21 );
        
        table.add( "TERM1", andOp, rule22 );
        table.add( "TERM1", multiplyOp, rule23 );
@@ -338,43 +349,44 @@ public class TableDrivenParser extends Parser
        
        table.add( "FACTOR", ifOp, rule25 );
        table.add( "FACTOR", notOp, rule26 );
-       table.add( "FACTOR", identifierOp, rule30 );
-       table.add( "FACTOR", number, rule35 );
-       table.add( "FACTOR", booleanOp, rule98 );
+       table.add( "FACTOR", identifierOp, rule27 );
+       table.add( "FACTOR", number, rule28 );
+       table.add( "FACTOR", trueOp, rule28 );
+       table.add( "FACTOR", falseOp, rule28 );
        table.add( "FACTOR", minusOp, rule29 );
        
        table.add( "IDENTIFIER1", identifierOp, rule30 );
        
        table.add( "ACTUALS1", openParen, rule31 );
+       
+       table.add( "ACTUALS", ifOp, rule32 );
+       table.add( "ACTUALS", notOp, rule32 );
+       table.add( "ACTUALS", identifierOp, rule32 );
+       table.add( "ACTUALS", number, rule32 );
+       table.add( "ACTUALS", booleanOp, rule32 );
+       table.add( "ACTUALS", minusOp, rule32 );
+       table.add( "ACTUALS", closedParen, rule32 );
        table.add( "ACTUALS", endOfStream, rule00 );
        
-       table.add( "ACTUALS", ifOp, rule25 );
-       table.add( "ACTUALS", notOp, rule26 );
-       table.add( "ACTUALS", identifierOp, rule30 );
-       table.add( "ACTUALS", number, rule35 );
-       table.add( "ACTUALS", booleanOp, rule98 );
-       table.add( "ACTUALS", minusOp, rule29 );
-       table.add( "ACTUALS", endOfStream, rule00 );
-       table.add( "ACTUALS", closedParen, rule00 );
+       table.add( "NONEMPTYACTUALS", ifOp, rule33 );
+       table.add( "NONEMPTYACTUALS", notOp, rule33 );
+       table.add( "NONEMPTYACTUALS", identifierOp, rule33 );
+       table.add( "NONEMPTYACTUALS", number, rule33 );
+       table.add( "NONEMPTYACTUALS", booleanOp, rule33 );
+       table.add( "NONEMPTYACTUALS", minusOp, rule33 );
+       table.add( "NONEMPTYACTUALS", endOfStream, rule33 );
        
-       table.add( "NONEMPTYACTUALS", ifOp, rule25 );
-       table.add( "NONEMPTYACTUALS", notOp, rule26 );
-       table.add( "NONEMPTYACTUALS", identifierOp, rule30 );
-       table.add( "NONEMPTYACTUALS", number, rule35 );
-       table.add( "NONEMPTYACTUALS", booleanOp, rule98 );
-       table.add( "NONEMPTYACTUALS", minusOp, rule29 );
-       table.add( "NONEMPTYACTUALS", endOfStream, rule00 );
-       
-       table.add( "NONEMPTYACTUALS1", ifOp, rule25 );
-       table.add( "NONEMPTYACTUALS1", notOp, rule26 );
-       table.add( "NONEMPTYACTUALS1", identifierOp, rule30 );
-       table.add( "NONEMPTYACTUALS1", number, rule35 );
-       table.add( "NONEMPTYACTUALS1", booleanOp, rule98 );
-       table.add( "NONEMPTYACTUALS1", minusOp, rule29 );
+       table.add( "NONEMPTYACTUALS1", ifOp, rule32 );
+       table.add( "NONEMPTYACTUALS1", notOp, rule32 );
+       table.add( "NONEMPTYACTUALS1", identifierOp, rule32 );
+       table.add( "NONEMPTYACTUALS1", number, rule32 );
+       table.add( "NONEMPTYACTUALS1", booleanOp, rule32 );
+       table.add( "NONEMPTYACTUALS1", minusOp, rule32 );
        table.add( "NONEMPTYACTUALS1", endOfStream, rule00 );
        
        table.add( "LITERAL", number, rule35 );
-       table.add( "LITERAL", booleanOp, rule98 );
+       table.add( "LITERAL", trueOp, rule96 );
+       table.add( "LITERAL", falseOp, rule97 );
        
        table.add( "PRINT", print, rule36 );
 
