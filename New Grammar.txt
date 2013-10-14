@@ -61,8 +61,8 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 <ACTUALS> ::= EPSILON
            | <NONEMPTYACTUALS>
 --------------------------------------------------------
-<NONEMPTYACTUALS>  ::= <EXPR> , <NONEMPTYACTUALS1>
-<NONEMPTYACTUALS1> ::= <NONEMPTYACTUALS>
+<NONEMPTYACTUALS>  ::= <EXPR>  <NONEMPTYACTUALS1>
+<NONEMPTYACTUALS1> ::= , <NONEMPTYACTUALS>
 		     | EPSILON
 --------------------------------------------------------
 <LITERAL> ::= <NUMBER>
