@@ -3,7 +3,7 @@ first(literal)          = { number, boolean }
 first(nonemptyactuals)  = { if, not, identifier, literal, - }
 first(nonemptyactuals1) = { epsilon, if, not, identifier, literal, - }
 first(actuals)          = { epsilon, if, not identifier, literal, - }
-first(actuals1)         = { ( }
+first(actuals1)         = { epsilon, ( }
 first(identifier1)      = { identifier }
 first(factor)           = { if, not, identifier, literal, - }
 first(term)             = { if, not, identifier, literal, - }
@@ -17,7 +17,7 @@ first(body)             = { print, if, not, identifier, literal, - }
 first(body1)            = { print, if, not, identifier, literal, - }
 first(formal)           = { identifier }
 first(nonemptyformals)  = { identifier }
-first(nonemptyformals1) = { , }
+first(nonemptyformals1) = { epsilon, , }
 first(formals)          = { epsilon, identifier }
 first(def)              = { identifier }
 first(def1)             = { identifier }
@@ -32,22 +32,22 @@ follow(def)              = { identifer }
 follow(def1)             = { $ }
 follow(formals)          = { ) }
 follow(nonemptyformals)  = { ) }
-follow(nonemptyformals1) = { $ }
-follow(formal)           = { , }
+follow(nonemptyformals1) = { ) }
+follow(formal)           = { ), , }
 follow(body)             = { $ }
 follow(body1)            = { $ }
-follow(type)             = { $, print, if, not, identifier, literal, - }
+follow(type)             = { $, print, if, not, identifier, number, boolean, -, ), , }
 follow(expr)             = { $, ), then, else, endif, , }
-follow(simple-expr)      = { $, <, = }
-follow(simple-expr1)     = { $ }
-follow(term)             = { $, or, +, - }
-follow(term1)            = { $ }
-follow(term2)            = { $ }
-follow(factor)           = { $, and, *, / }
-follow(identifier1)      = { $ }
-follow(actuals)          = { $, ) }
-follow(actuals1)         = { $ }
-follow(nonemptyactuals)  = { $ }
-follow(nonemptyactuals1) = { $ }
-follow(literal)          = { $ }
-follow(print)            = { $, print, if, not, identifier, literal, - }
+follow(simple-expr)      = { $, <, =, ), then, else, endif, , }
+follow(simple-expr1)     = { $, ), then, else, endif, , }
+follow(term)             = { $, or, +, -, <, =, ), then, else, endif, , }
+follow(term1)            = { or, +, -, <, =, ), then, else, endif, , }
+follow(term2)            = { <, =, ), then, else, endif, , }
+follow(factor)           = { $, and, *, /, or, +, -, <, =, ), then, else, endif, , }
+follow(identifier1)      = { $, and, *, /, or, +, -, <, =, ), then, else, endif, , }
+follow(actuals)          = { ) }
+follow(actuals1)         = { and, *, /, or, +, -, <, =, ), then, else, endif, , }
+follow(nonemptyactuals)  = { ) }
+follow(nonemptyactuals1) = { ) }
+follow(literal)          = { number, boolean }
+follow(print)            = { $ }
