@@ -28,6 +28,12 @@ public class Scanner
 
   public Token getNextToken() throws IOException, LexicalException
   {
+    if( nextToken != null ){
+      Token tmp = nextToken;
+      nextToken = null;
+      return tmp;
+    }
+    
     String rawToken = "";
     int nextByte = getNextByte();
     int tokenLength = 1;
