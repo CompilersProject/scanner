@@ -28,15 +28,13 @@ public class TableDrivenParser extends Parser
           if( terminal.getType() == Token.TYPE.EOS ){
             System.out.println("LE FIN");
             return;
-          } else if( terminal.getType() == Token.TYPE.COMMENT ){
-            break; // Ignore comments
           } else if( terminal.equals( scanner.peek() )){
             // * For debugging *
             System.out.println( "Consumed: " + scanner.getNextToken() );
           } else{
             // * For debugging *
             System.out.println( "Next Token: " + scanner.peek() );
-            System.out.println( "Terminal: " + terminal );
+            System.out.println( "Terminal: " + terminal.typeToInt() );
             throw new SemanticException("Bad things found");
           }
         }
@@ -80,7 +78,6 @@ public class TableDrivenParser extends Parser
        Token thenOp             = new Token( Token.TYPE.THEN );
        Token elseOp             = new Token( Token.TYPE.ELSE );
        Token endIfOp            = new Token( Token.TYPE.END_IF );
-       Token mainOp             = new Token( Token.TYPE.MAIN );
        Token notOp              = new Token( Token.TYPE.NOT );
        Token orOp               = new Token( Token.TYPE.OR );
        Token andOp              = new Token( Token.TYPE.AND );
@@ -282,7 +279,7 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "FORMALS", identifierOp, rule06 );
-       table.add( "FORMALS", endOfStream,  rule00 );
+       //table.add( "FORMALS", endOfStream,  rule00 );
        table.add( "FORMALS", closedParen,  rule00 );
        
        
@@ -295,6 +292,8 @@ public class TableDrivenParser extends Parser
 
        
        table.add( "FORMAL", identifierOp , rule09 );
+       table.add( "FORMAL", closedParen, rule00 );
+       table.add( "FORMAL", comma, rule00 );
        
        
        table.add( "BODY", print, rule10 );
@@ -306,6 +305,8 @@ public class TableDrivenParser extends Parser
        table.add( "BODY", falseOp, rule11 );
        table.add( "BODY", minusOp, rule11 );
        
+       table.add( "BODY", endOfStream, rule00 );
+       
        
        table.add( "BODY1", print, rule12 );
        table.add( "BODY1", ifOp, rule12 );
@@ -316,9 +317,21 @@ public class TableDrivenParser extends Parser
        table.add( "BODY1", falseOp, rule12 );
        table.add( "BODY1", minusOp, rule12 );
        
+       table.add( "BODY1", endOfStream, rule00 );
+       
        
        table.add( "TYPE", integerOp, rule13 );
        table.add( "TYPE", booleanOp, rule99 );
+       
+       table.add("TYPE", print, rule00 );
+       table.add("TYPE", ifOp, rule00 );
+       table.add("TYPE", notOp, rule00 );
+       table.add("TYPE", identifierOp, rule00 );
+       table.add("TYPE", number, rule00 );
+       table.add("TYPE", minusOp, rule00 );
+       table.add("TYPE", closedParen, rule00 );
+       table.add("TYPE", comma, rule00 );
+       table.add("TYPE", endOfStream, rule00 );
        
        
        table.add( "EXPR", ifOp,  rule14 );
@@ -328,6 +341,13 @@ public class TableDrivenParser extends Parser
        table.add( "EXPR", trueOp, rule14 );
        table.add( "EXPR", falseOp, rule14 );
        table.add( "EXPR", minusOp,  rule14 );
+       
+       table.add( "EXPR", closedParen,  rule00 );
+       table.add( "EXPR", thenOp,  rule00 );
+       table.add( "EXPR", elseOp,  rule00 );
+       table.add( "EXPR", endIfOp,  rule00 );
+       table.add( "EXPR", comma,  rule00 );
+       table.add( "EXPR", endOfStream,  rule00 );
        
        
        table.add( "SIMPLE-EXPR1", lessThanOp,  rule15 );
@@ -349,16 +369,22 @@ public class TableDrivenParser extends Parser
        table.add( "SIMPLE-EXPR", booleanOp, rule17 );
        table.add( "SIMPLE-EXPR", minusOp,  rule17 );
        
+       table.add( "SIMPLE-EXPR", lessThanOp,  rule00 );
        table.add( "SIMPLE-EXPR", thenOp, rule00 );
        table.add( "SIMPLE-EXPR", elseOp, rule00 );
        table.add( "SIMPLE-EXPR", endIfOp, rule00 );
        table.add( "SIMPLE-EXPR", assignmentOp, rule00 );
+       table.add( "SIMPLE-EXPR", closedParen, rule00 );
+       table.add( "SIMPLE-EXPR", comma, rule00 );
+       table.add( "SIMPLE-EXPR", endOfStream, rule00 );
        
        
        table.add( "TERM2", orOp, rule18 );
        table.add( "TERM2", plusOp, rule19 );
        table.add( "TERM2", minusOp, rule20 );
        
+       
+       table.add( "TERM2", lessThanOp, rule00 );
        table.add( "TERM2", thenOp, rule00 );
        table.add( "TERM2", elseOp, rule00 );
        table.add( "TERM2", endIfOp, rule00 );
@@ -366,7 +392,7 @@ public class TableDrivenParser extends Parser
        table.add( "TERM2", identifierOp, rule00 );
        table.add( "TERM2", comma, rule00 );
        table.add( "TERM2", closedParen, rule00 );
-       table.add( "TERM2", endOfStream, rule00 );
+       //table.add( "TERM2", endOfStream, rule00 );
 
        
        table.add( "TERM", ifOp, rule21 );
@@ -376,11 +402,26 @@ public class TableDrivenParser extends Parser
        table.add( "TERM", number, rule21 );
        table.add( "TERM", booleanOp, rule21 );
        
+       table.add( "TERM", assignmentOp, rule00 );
+       table.add( "TERM", closedParen, rule00 );
+       table.add( "TERM", thenOp, rule00 );
+       table.add( "TERM", elseOp, rule00 );
+       table.add( "TERM", endIfOp, rule00 );
+       table.add( "TERM", lessThanOp, rule00 );
+       table.add( "TERM", minusOp, rule00 );
+       table.add( "TERM", orOp, rule00 );
+       table.add( "TERM", plusOp, rule00 );
+       table.add( "TERM", comma, rule00 );
+       table.add( "TERM", endOfStream, rule00 );
+       
        
        table.add( "TERM1", andOp, rule22 );
        table.add( "TERM1", multiplyOp, rule23 );
        table.add( "TERM1", forwardSlash, rule24 );
        
+       table.add( "TERM1", minusOp, rule00 );
+       table.add( "TERM1", lessThanOp, rule00 );
+       table.add( "TERM1", orOp, rule00 );
        table.add( "TERM1", plusOp, rule00 );
        table.add( "TERM1", thenOp, rule00 );
        table.add( "TERM1", elseOp, rule00 );
@@ -400,14 +441,55 @@ public class TableDrivenParser extends Parser
        table.add( "FACTOR", falseOp, rule28 );
        table.add( "FACTOR", minusOp, rule29 );
        
+       table.add( "FACTOR", andOp, rule00 );
+       table.add( "FACTOR", multiplyOp, rule00 );
+       table.add( "FACTOR", forwardSlash, rule00 );
+       table.add( "FACTOR", orOp, rule00 );
+       table.add( "FACTOR", plusOp, rule00 );
+       table.add( "FACTOR", minusOp, rule00 );
+       table.add( "FACTOR", lessThanOp, rule00 );
+       table.add( "FACTOR", assignmentOp, rule00 );
+       table.add( "FACTOR", closedParen, rule00 );
+       table.add( "FACTOR", thenOp, rule00 );
+       table.add( "FACTOR", elseOp, rule00 );
+       table.add( "FACTOR", endIfOp, rule00 );
+       table.add( "FACTOR", comma, rule00 );
+       table.add( "FACTOR", endOfStream, rule00 );
        
        table.add( "IDENTIFIER1", identifierOp, rule30 );
+       
+       table.add( "IDENTIFIER1", andOp, rule00 );
+       table.add( "IDENTIFIER1", multiplyOp, rule00 );
+       table.add( "IDENTIFIER1", forwardSlash, rule00 );
+       table.add( "IDENTIFIER1", orOp, rule00 );
+       table.add( "IDENTIFIER1", plusOp, rule00 );
+       table.add( "IDENTIFIER1", minusOp, rule00 );
+       table.add( "IDENTIFIER1", lessThanOp, rule00 );
+       table.add( "IDENTIFIER1", assignmentOp, rule00 );
+       table.add( "IDENTIFIER1", closedParen, rule00 );
+       table.add( "IDENTIFIER1", thenOp, rule00 );
+       table.add( "IDENTIFIER1", elseOp, rule00 );
+       table.add( "IDENTIFIER1", endIfOp, rule00 );
+       table.add( "IDENTIFIER1", comma, rule00 );
+       table.add( "IDENTIFIER1", endOfStream, rule00 );
        
        
        table.add( "ACTUALS1", openParen, rule31 );
        
-       table.add( "ACTUALS1", comma, rule00 );
+       table.add( "ACTUALS1", andOp, rule00 );
+       table.add( "ACTUALS1", multiplyOp, rule00 );
        table.add( "ACTUALS1", forwardSlash, rule00 );
+       table.add( "ACTUALS1", orOp, rule00 );
+       table.add( "ACTUALS1", plusOp, rule00 );
+       table.add( "ACTUALS1", minusOp, rule00 );
+       table.add( "ACTUALS1", lessThanOp, rule00 );
+       table.add( "ACTUALS1", assignmentOp, rule00 );
+       table.add( "ACTUALS1", closedParen, rule00 );
+       table.add( "ACTUALS1", thenOp, rule00 );
+       table.add( "ACTUALS1", elseOp, rule00 );
+       table.add( "ACTUALS1", endIfOp, rule00 );
+       table.add( "ACTUALS1", comma, rule00 );
+       
        
        table.add( "ACTUALS", ifOp, rule32 );
        table.add( "ACTUALS", notOp, rule32 );
@@ -415,7 +497,8 @@ public class TableDrivenParser extends Parser
        table.add( "ACTUALS", number, rule32 );
        table.add( "ACTUALS", booleanOp, rule32 );
        table.add( "ACTUALS", minusOp, rule32 );
-       table.add( "ACTUALS", closedParen, rule32 );
+       
+       table.add( "ACTUALS", closedParen, rule00 );
        table.add( "ACTUALS", endOfStream, rule00 );
        
        
@@ -427,10 +510,12 @@ public class TableDrivenParser extends Parser
        table.add( "NONEMPTYACTUALS", minusOp, rule33 );
        table.add( "NONEMPTYACTUALS", endOfStream, rule33 );
        
+       table.add( "NONEMPTYACTUALS", closedParen, rule00 );
+       
        
        table.add( "NONEMPTYACTUALS1", comma, rule34 );
+       
        table.add( "NONEMPTYACTUALS1", closedParen, rule00 );
-       table.add( "NONEMPTYACTUALS1", endOfStream, rule00 );
        
        
        table.add( "LITERAL", number, rule35 );
