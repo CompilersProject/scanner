@@ -28,12 +28,6 @@ public class Scanner
 
   public Token getNextToken() throws IOException, LexicalException
   {
-    if( nextToken != null ){
-      Token tmp = nextToken;
-      nextToken = null;
-      return tmp;
-    }
-    
     String rawToken = "";
     int nextByte = getNextByte();
     int tokenLength = 1;
@@ -42,7 +36,14 @@ public class Scanner
     while( isOurWhitespace((char) nextByte) ){
      nextByte = getNextByte();
     }
-
+    if( isComment( (char) nextByte) ){
+        char temp='j';
+        while (temp!='\n')
+        {
+          temp = (char) sourceFile.read();
+        }
+        return new Token(Token.TYPE.COMMENT);
+      }
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
       return new Token(stringByte);
@@ -101,4 +102,16 @@ public class Scanner
       c == ':';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
+  public boolean isComment (char c) throws IOException
+  {
+    char temp = (char)sourceFile.read();
+    if ((c=='/') && temp=='/')
+    {
+      sourceFile.unread(temp);
+      return true;
+    }
+    sourceFile.unread(temp);
+    return false;
+  }
+  
 }

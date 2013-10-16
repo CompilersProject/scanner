@@ -1255,7 +1255,7 @@ public class Token
      }
      
      Long temp = Long.valueOf(num).longValue();
-     if( !(lowerBound<=temp) || (upperBound>=temp) ){
+     if( !(lowerBound<=temp) || !(upperBound>=temp) ){
        // TODO: Add exception here
        throw new LexicalException("Number out of range");
      }
