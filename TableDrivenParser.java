@@ -23,6 +23,8 @@ public class TableDrivenParser extends Parser
       while( true ){ // Step 3?
         Object symbol = parseStack.pop(); // Pop A
         
+        skipComments( scanner.peek() );
+        
         if( symbol instanceof Token ){ // A is terminal
           Token terminal = (Token) symbol;
           if( terminal.getType() == Token.TYPE.EOS ){
@@ -531,5 +533,12 @@ public class TableDrivenParser extends Parser
        }
 
        return table;
+    }
+    
+    private void skipComments( Token nextToken ) throws IOException, LexicalException
+    {
+      if( nextToken.getType() == Token.TYPE.COMMENT ){
+        skipComments( scanner.getNextToken() ); // Consume this token and check again
+      }
     }
 }

@@ -52,7 +52,7 @@ public class Scanner
       }
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
-      return new Token(stringByte);
+      return makeToken(stringByte);
     }
 
     while( !isSymbol( (char) nextByte) && 
@@ -69,13 +69,13 @@ public class Scanner
         nextByte = getNextByte();
       }
       else{
-        return new Token(rawToken);
+        return makeToken(rawToken);
       }
     }
 
     // If we reach here we found a symbol signifying a new token, so we must first replace it in the stream
     sourceFile.unread( nextByte );
-    return new Token(rawToken);
+    return makeToken(rawToken);
   }
 
   public int getNextByte() throws IOException
@@ -120,4 +120,9 @@ public class Scanner
     return false;
   }
   
+  private Token makeToken( String rawToken ) throws LexicalException
+  {
+    nextToken = new Token( rawToken );
+    return nextToken;
+  }
 }
