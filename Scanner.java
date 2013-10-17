@@ -58,18 +58,16 @@ public class Scanner
     while( !isSymbol( (char) nextByte) && 
       !isOurWhitespace( (char) nextByte) ) {
       if( tokenLength > MAX_LENGTH ){
-        // TODO: Put exception here
         throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
-       
-       
+      
       if( nextByte != -1 ){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
       }
       else{
-        return makeToken(rawToken);
+        return new Token(Token.TYPE.EOS);
       }
     }
 

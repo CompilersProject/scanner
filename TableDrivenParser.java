@@ -268,7 +268,12 @@ public class TableDrivenParser extends Parser
                                              new ParseAction[] { new Push(falseOp) }
                                              );
        
+       ParseAction rule0X = new PushSequence(
+                                             new ParseAction[] { new Push(endOfStream) }
+                                             );
+       
        table.add( "PROGRAM", identifierOp, rule01 );
+       
        table.add( "DEFINITIONS", identifierOp, rule02 );
        table.add( "DEF1", identifierOp, rule03 );
        
@@ -394,7 +399,7 @@ public class TableDrivenParser extends Parser
        table.add( "TERM2", identifierOp, rule00 );
        table.add( "TERM2", comma, rule00 );
        table.add( "TERM2", closedParen, rule00 );
-       //table.add( "TERM2", endOfStream, rule00 );
+       table.add( "TERM2", endOfStream, rule00 );
 
        
        table.add( "TERM", ifOp, rule21 );
@@ -491,6 +496,8 @@ public class TableDrivenParser extends Parser
        table.add( "ACTUALS1", elseOp, rule00 );
        table.add( "ACTUALS1", endIfOp, rule00 );
        table.add( "ACTUALS1", comma, rule00 );
+       //table.add( "ACTUALS1", identifierOp, rule00 );
+       table.add( "ACTUALS1", endOfStream, rule00 );
        
        
        table.add( "ACTUALS", ifOp, rule32 );
@@ -510,7 +517,7 @@ public class TableDrivenParser extends Parser
        table.add( "NONEMPTYACTUALS", number, rule33 );
        table.add( "NONEMPTYACTUALS", booleanOp, rule33 );
        table.add( "NONEMPTYACTUALS", minusOp, rule33 );
-       table.add( "NONEMPTYACTUALS", endOfStream, rule33 );
+       table.add( "NONEMPTYACTUALS", endOfStream, rule00 );
        
        table.add( "NONEMPTYACTUALS", closedParen, rule00 );
        
