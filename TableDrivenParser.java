@@ -254,17 +254,15 @@ public class TableDrivenParser extends Parser
        ParseAction rule37 = new PushSequence(
                new ParseAction[] { 
                                    new Push(booleanOp)
+                    } );
        ParseAction rule38 = new PushSequence(
                                              new ParseAction[] { new Push(trueOp) }
                                              );
        ParseAction rule39 = new PushSequence(
                                              new ParseAction[] { new Push(falseOp) }
                                              );
-       ParseAction rule40 = new PushSequence(
-               new ParseAction[] { 
-                     new Push("BOOLEAN"),
-                    } );
-                    
+       
+       
        table.add( "PROGRAM", identifierOp, rule01 );
        
        table.add( "DEFINITIONS", identifierOp, rule02 );
@@ -279,16 +277,15 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "FORMALS", identifierOp, rule06 );
-       //table.add( "FORMALS", endOfStream,  rule00 );
        table.add( "FORMALS", closedParen,  rule00 );
        
        
        table.add( "NONEMPTYFORMALS", identifierOp, rule07 );
-       table.add( "NONEMPTYFORMALS", closedParen, rule00 ); // Follow set
+       table.add( "NONEMPTYFORMALS", closedParen, rule00 );
        
        
        table.add( "NONEMPTYFORMALS1", comma, rule08 );
-       table.add( "NONEMPTYFORMALS1", closedParen, rule00 ); // Not in follow set?
+       table.add( "NONEMPTYFORMALS1", closedParen, rule00 );
 
        
        table.add( "FORMAL", identifierOp , rule09 );
