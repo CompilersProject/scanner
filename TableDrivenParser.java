@@ -154,10 +154,6 @@ public class TableDrivenParser extends Parser
                new ParseAction[] { new Push(integerOp),
                                    
                     } );
-       ParseAction rule99 = new PushSequence(
-               new ParseAction[] { 
-                                   new Push(booleanOp)
-                    } );
        ParseAction rule14 = new PushSequence(
                new ParseAction[] { new Push("SIMPLE-EXPR"),
                                    new Push("SIMPLE-EXPR1"),
@@ -249,27 +245,26 @@ public class TableDrivenParser extends Parser
                new ParseAction[] { new Push(number),
                      
                     } );
-       ParseAction rule98 = new PushSequence(
-               new ParseAction[] { 
-                     new Push("BOOLEAN"),
-                    } );
        ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
                                 new Push(openParen),
                          new Push("EXPR"),
                      new Push(closedParen)
                     } );
-       ParseAction rule96 = new PushSequence(
+       ParseAction rule37 = new PushSequence(
+               new ParseAction[] { 
+                                   new Push(booleanOp)
+       ParseAction rule38 = new PushSequence(
                                              new ParseAction[] { new Push(trueOp) }
                                              );
-       ParseAction rule97 = new PushSequence(
+       ParseAction rule39 = new PushSequence(
                                              new ParseAction[] { new Push(falseOp) }
                                              );
-       
-       ParseAction rule0X = new PushSequence(
-                                             new ParseAction[] { new Push(endOfStream) }
-                                             );
-       
+       ParseAction rule40 = new PushSequence(
+               new ParseAction[] { 
+                     new Push("BOOLEAN"),
+                    } );
+                    
        table.add( "PROGRAM", identifierOp, rule01 );
        
        table.add( "DEFINITIONS", identifierOp, rule02 );
@@ -326,7 +321,7 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "TYPE", integerOp, rule13 );
-       table.add( "TYPE", booleanOp, rule99 );
+       table.add( "TYPE", booleanOp, rule37 );
        
        table.add("TYPE", print, rule00 );
        table.add("TYPE", ifOp, rule00 );
@@ -530,8 +525,8 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "LITERAL", number, rule35 );
-       table.add( "LITERAL", trueOp, rule96 );
-       table.add( "LITERAL", falseOp, rule97 );
+       table.add( "LITERAL", trueOp, rule38 );
+       table.add( "LITERAL", falseOp, rule39 );
        
        
        table.add( "PRINT", print, rule36 );
