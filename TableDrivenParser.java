@@ -35,7 +35,7 @@ public class TableDrivenParser extends Parser
             System.out.println( "Consumed: " + scanner.getNextToken() );
           } else{
             // * For debugging *
-            System.out.println( "Next Token: " + scanner.peek() );
+            System.out.println( "Next Token: " + scanner.peek().typeToInt() );
             System.out.println( "Terminal: " + terminal.typeToInt() );
             throw new SemanticException("Bad things found");
           }
@@ -55,8 +55,6 @@ public class TableDrivenParser extends Parser
           }
         }
       }
-      // ... the algorithm
-      // return answer;
     }
 
     // -------------------------------------------------------------------
@@ -373,6 +371,8 @@ public class TableDrivenParser extends Parser
        table.add( "SIMPLE-EXPR", notOp,  rule17 );
        table.add( "SIMPLE-EXPR", identifierOp,  rule17 );
        table.add( "SIMPLE-EXPR", number, rule17 );
+       table.add( "SIMPLE-EXPR", trueOp, rule17 );
+       table.add( "SIMPLE-EXPR", falseOp, rule17 );
        table.add( "SIMPLE-EXPR", booleanOp, rule17 );
        table.add( "SIMPLE-EXPR", minusOp,  rule17 );
        
@@ -407,6 +407,8 @@ public class TableDrivenParser extends Parser
        table.add( "TERM", identifierOp, rule21 );
        table.add( "TERM", minusOp, rule21 );
        table.add( "TERM", number, rule21 );
+       table.add( "TERM", trueOp, rule21 );
+       table.add( "TERM", falseOp, rule21 );
        table.add( "TERM", booleanOp, rule21 );
        
        table.add( "TERM", assignmentOp, rule00 );
@@ -496,7 +498,7 @@ public class TableDrivenParser extends Parser
        table.add( "ACTUALS1", elseOp, rule00 );
        table.add( "ACTUALS1", endIfOp, rule00 );
        table.add( "ACTUALS1", comma, rule00 );
-       //table.add( "ACTUALS1", identifierOp, rule00 );
+       table.add( "ACTUALS1", identifierOp, rule00 );
        table.add( "ACTUALS1", endOfStream, rule00 );
        
        

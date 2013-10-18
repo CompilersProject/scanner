@@ -94,7 +94,7 @@ public class Token
         return TYPE.PRINT;
       } else if (isNumber(sToken)) {
         return TYPE.NUMBER;
-      }else{
+      } else{
         return TYPE.IDENTIFIER;
       }
     }
@@ -1200,7 +1200,7 @@ public class Token
        throw new LexicalException("Number out of range");
      }
      
-     return true; 
+     return true;
    }
    
    public boolean equals(Token otherToken) 

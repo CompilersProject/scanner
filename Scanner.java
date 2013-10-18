@@ -42,6 +42,12 @@ public class Scanner
     while( isOurWhitespace((char) nextByte) ){
      nextByte = getNextByte();
     }
+   if( nextByte == -1 ){
+      // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
+      // Saving off a copy of EOS when it is found initially doesn't work well for peeks
+      // Best solution that works so far.
+      return new Token(Token.TYPE.EOS);
+    }
     if( isComment( (char) nextByte) ){
         char temp='j';
         while (temp!='\n')
@@ -67,7 +73,9 @@ public class Scanner
         nextByte = getNextByte();
       }
       else{
-        return new Token(Token.TYPE.EOS);
+        // Found the End of FIle, return what we were reading and save an EOS Token
+        //nextToken = new Token(Token.TYPE.EOS);
+        return makeToken(rawToken);
       }
     }
 
