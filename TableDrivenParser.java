@@ -16,6 +16,7 @@ public class TableDrivenParser extends Parser
     protected void parseProgram() throws IOException, LexicalException, SemanticException
     {
       Stack parseStack = new Stack();
+      stackAttack = new Stack();
       
       new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
       new Push( "PROGRAM" ).execute(parseStack); // Step 2
@@ -28,31 +29,44 @@ public class TableDrivenParser extends Parser
         if( symbol instanceof Token ){ // A is terminal
           Token terminal = (Token) symbol;
           if( terminal.getType() == Token.TYPE.EOS ){
-            System.out.println("LE FIN");
+            System.out.println("LE FIN.\nProgram parsed with no errors.");
             return;
           } else if( terminal.equals( scanner.peek() )){
-            // * For debugging *
-            System.out.println( "Consumed: " + scanner.getNextToken() );
+            if( Compiler.extendedDebug ){
+              // * For debugging *
+              System.out.println( "Consumed: " + scanner.getNextToken() );
+            } else {
+              scanner.getNextToken();
+            }
           } else{
             // * For debugging *
-            System.out.println( "Next Token: " + scanner.peek().typeToInt() );
-            System.out.println( "Terminal: " + terminal.typeToInt() );
-            throw new SemanticException("Bad things found");
+            if( Compiler.extendedDebug ){
+              System.out.println( "Next Token: " + scanner.peek().typeToInt() );
+              System.out.println( "Terminal: " + terminal.typeToInt() );
+            }
+            throw new SemanticException("Bad things found"); // TODO: Consider adding alternate Semantic Exception to output found/expected Tokens
           }
         }
-        else { // A is non-terminal
+        else if( symbol instanceof String ){ // A is non-terminal
           String nonTerminal = (String) symbol;
           Token tmp = scanner.peek();
           ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
           
           if( rule instanceof PushSequence ){
-            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
-            rule.execute(parseStack); // PushSequence loops through rules backwards
+            if( Compiler.extendedDebug ){
+              System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
+              rule.execute(parseStack); // PushSequence loops through rules backwards
+            }
           } else if( rule instanceof PushNothing ){
             // **** Do nothing? ****
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
+        } else if( symbol instanceof SemanticAction ){
+          SemanticAction sa = (SemanticAction) symbol;
+          sa.execute(stackAttack);
+        } else {
+          throw new SemanticException("Invalid object found on parse stack."); // Create a new exception for this?
         }
       }
     }
@@ -152,7 +166,9 @@ public class TableDrivenParser extends Parser
                     } );
        ParseAction rule13 = new PushSequence(
                new ParseAction[] { new Push(integerOp),
-                                   
+                    } );
+       ParseAction rule99 = new PushSequence(
+               new ParseAction[] { new Push(booleanOp)
                     } );
        ParseAction rule14 = new PushSequence(
                new ParseAction[] { new Push("SIMPLE-EXPR"),
@@ -177,6 +193,7 @@ public class TableDrivenParser extends Parser
        ParseAction rule19 = new PushSequence(
                new ParseAction[] { new Push(plusOp),
                               new Push("SIMPLE-EXPR"),
+                              new SemanticAction("Plus Action")
                     } );
        ParseAction rule20 = new PushSequence(
                new ParseAction[] { new Push(minusOp),
@@ -245,23 +262,26 @@ public class TableDrivenParser extends Parser
                new ParseAction[] { new Push(number),
                      
                     } );
+       ParseAction rule98 = new PushSequence(
+               new ParseAction[] { 
+                     new Push("BOOLEAN"),
+                    } );
        ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
                                 new Push(openParen),
                          new Push("EXPR"),
                      new Push(closedParen)
                     } );
-       ParseAction rule37 = new PushSequence(
-               new ParseAction[] { 
-                                   new Push(booleanOp)
-                    } );
-       ParseAction rule38 = new PushSequence(
+       ParseAction rule96 = new PushSequence(
                                              new ParseAction[] { new Push(trueOp) }
                                              );
-       ParseAction rule39 = new PushSequence(
+       ParseAction rule97 = new PushSequence(
                                              new ParseAction[] { new Push(falseOp) }
                                              );
        
+       ParseAction rule0X = new PushSequence(
+                                             new ParseAction[] { new Push(endOfStream) }
+                                             );
        
        table.add( "PROGRAM", identifierOp, rule01 );
        
@@ -277,15 +297,16 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "FORMALS", identifierOp, rule06 );
+       //table.add( "FORMALS", endOfStream,  rule00 );
        table.add( "FORMALS", closedParen,  rule00 );
        
        
        table.add( "NONEMPTYFORMALS", identifierOp, rule07 );
-       table.add( "NONEMPTYFORMALS", closedParen, rule00 );
+       table.add( "NONEMPTYFORMALS", closedParen, rule00 ); // Follow set
        
        
        table.add( "NONEMPTYFORMALS1", comma, rule08 );
-       table.add( "NONEMPTYFORMALS1", closedParen, rule00 );
+       table.add( "NONEMPTYFORMALS1", closedParen, rule00 ); // Not in follow set?
 
        
        table.add( "FORMAL", identifierOp , rule09 );
@@ -318,7 +339,7 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "TYPE", integerOp, rule13 );
-       table.add( "TYPE", booleanOp, rule37 );
+       table.add( "TYPE", booleanOp, rule99 );
        
        table.add("TYPE", print, rule00 );
        table.add("TYPE", ifOp, rule00 );
@@ -522,8 +543,8 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "LITERAL", number, rule35 );
-       table.add( "LITERAL", trueOp, rule38 );
-       table.add( "LITERAL", falseOp, rule39 );
+       table.add( "LITERAL", trueOp, rule96 );
+       table.add( "LITERAL", falseOp, rule97 );
        
        
        table.add( "PRINT", print, rule36 );

@@ -4,30 +4,26 @@ import java.io.PushbackInputStream;
 
 
 public class Compiler {
+  // No good compile-time code stripping for Java
+  // Any if statements with static final variables should be evaluated at compile time
+  // So this should work without unnecessary overhead
+  public static final boolean extendedDebug = true;
+  
    public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
    {
      
      try{
-       
-       Scanner test = new Scanner( "digitsum_nocomments.kln" );
+       String testFile;
+       if( args.length != 0 ){
+         testFile = args[0];
+       }
+       else{
+         testFile = "klein-programs/tests02-parser/03-arithmetic.kln";
+       }
+       Scanner test = new Scanner( testFile );
        TableDrivenParser tdp = new TableDrivenParser( test );
        
        tdp.parseProgram();
-       /*
-       Token tmp = test.getNextToken();
-       
-       System.out.println("<program>");
-       while( tmp.getValue() != "" ){
-       
-         if((tmp.getType() == Token.TYPE.IDENTIFIER) || (tmp.getType() == Token.TYPE.INTEGER))
-           System.out.println("<"+tmp.getType()+">" + " " +tmp);
-         
-         else{System.out.println("<"+tmp.getType()+">");
-         }
-       
-         tmp = test.getNextToken();
-       }
-       */
      }
      catch(Exception e){
        System.out.println( e );
