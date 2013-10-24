@@ -10,16 +10,16 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 <DEF1>         ::= <DEF> <DEFINITIONS1>
 <DEFINITIONS1> ::= <DEFINITIONS>
 		 | EPSILON
---------------------------------------------------------				
+--------------------------------------------------------
 <DEF> ::= <IDENTIFIER> ( <FORMALS> ) : <TYPE> <BODY>
 --------------------------------------------------------
 <FORMALS> ::= EPSILON
            | <NONEMPTYFORMALS>
---------------------------------------------------------						
+--------------------------------------------------------
  <NONEMPTYFORMALS>  ::= <FORMAL> <NONEMPTYFORMALS1>
  <NONEMPTYFORMALS1> ::= , <NONEMPTYFORMALS>
 		     | EPSILON
---------------------------------------------------------					
+--------------------------------------------------------
 <FORMAL> ::= <IDENTIFIER> : <TYPE>
 --------------------------------------------------------
 <BODY>  ::= <PRINT> <BODY1>
@@ -61,10 +61,10 @@ Jacob Nanke, Anthony Spoerl, Jordan Greiner, Will Schau
 <ACTUALS> ::= EPSILON
            | <NONEMPTYACTUALS>
 --------------------------------------------------------
-<NONEMPTYACTUALS>  ::= <EXPR> , <NONEMPTYACTUALS1>
-<NONEMPTYACTUALS1> ::= <NONEMPTYACTUALS>
+<NONEMPTYACTUALS>  ::= <EXPR>  <NONEMPTYACTUALS1>
+<NONEMPTYACTUALS1> ::= , <NONEMPTYACTUALS>
 		     | EPSILON
---------------------------------------------------------			
+--------------------------------------------------------
 <LITERAL> ::= <NUMBER>
            | <BOOLEAN>
 --------------------------------------------------------

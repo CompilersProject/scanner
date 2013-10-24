@@ -18,17 +18,24 @@ public class Compiler {
          testFile = args[0];
        }
        else{
+<<<<<<< HEAD
          testFile = "new.txt";
+=======
+         testFile = "klein-programs/tests02-parser/03-arithmetic.kln";
+>>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
        }
        Scanner test = new Scanner( testFile );
        TableDrivenParser tdp = new TableDrivenParser( test );
        
        tdp.parseProgram();
+<<<<<<< HEAD
        
        while( !tdp.stackAttack.empty() ){
          System.out.println( tdp.stackAttack.pop() );
        }
        
+=======
+>>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
      }
      catch(Exception e){
        System.out.println( e );

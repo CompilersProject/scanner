@@ -62,7 +62,14 @@ public class ParsingTable {
         if (symbol.equalsIgnoreCase( "nonemptyactuals1" ) ) return 23;
         if (symbol.equalsIgnoreCase( "literal" )          ) return 24;
         if (symbol.equalsIgnoreCase( "print" )            ) return 25;       
+<<<<<<< HEAD
 
+=======
+        
+        //left all numbers as 0 until we figure out what were keeping
+        //hey group...should identifier be one? it's not in our grammar
+        
+>>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
         return 0; // return an exception
     }
 
