@@ -1,34 +1,39 @@
 import java.util.Stack;
 
 public class Push implements ParseAction {
-	
-	   private Token token;
-	   private String terminal;
+ 
+    private Token token;
+    private String string;
 
-	   public Push( Token token )
-	   {
-	      this.token = token;
-	   }
-	   
-	   public Push (String string)
-	   {
-		   this.string = terminal;
-	   }
+    public Push( Token token )
+    {
+       this.token = token;
+    }
+    
+    public Push (String string)
+    {
+     this.string = string;
+    }
 
-	   public void execute( Stack stack )
-	   {
-		   if (string==null)
-		   {
-			   stack.push( token );
-		   } else {
-			   stack.push( terminal );
-		   }
-	      	
-	   }
+    public void execute( Stack stack )
+    {
+     if (string==null)
+     {
+      stack.push( token );
+     } else {
+      stack.push( string );
+     }
+        
+    }
 
-//	   public String toString()
-//	   {
-//	      return " " +  symbol;
-//	   }
+    public String toString()
+    {
+      if( string != "" ){
+        return " " + string;
+      }
+      else{
+        return " " + token;
+      }
+    }
 
 }
