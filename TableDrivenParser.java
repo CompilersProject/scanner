@@ -24,8 +24,9 @@ public class TableDrivenParser extends Parser
       
       new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
       new Push( "PROGRAM" ).execute(parseStack); // Step 2
+      //new MakeProgram().execute(parseStack);
       
-      while( true ){ // Step 3?
+      while( true ){ // Step 3
         Object symbol = parseStack.pop(); // Pop A
         
         skipComments( scanner.peek() );
@@ -67,7 +68,7 @@ public class TableDrivenParser extends Parser
             }
               rule.execute(parseStack); // PushSequence loops through rules backwards
           } else if( rule instanceof PushNothing ){
-            // **** Do nothing? ****
+            int l = 0;// **** Do nothing? ****
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
@@ -121,7 +122,9 @@ public class TableDrivenParser extends Parser
        ParseAction rule00 = new PushNothing();
        ParseAction rule01 = new PushSequence(
                  new ParseAction[] { new Push("DEFINITIONS"),
-                                     new Push(endOfStream)
+                                     new MakeProgram(),
+                                     //new Push(endOfStream)
+                                     //new MakeProgram()
                       } );
        ParseAction rule02 = new PushSequence(
                  new ParseAction[] { new Push("DEF1")
@@ -137,14 +140,15 @@ public class TableDrivenParser extends Parser
                                 
                       } );
        ParseAction rule05 = new PushSequence(
-                new ParseAction[] { new Push(identifierOp),
+                new ParseAction[] { new NameAction(),
+                                    new Push(identifierOp),
                                     new Push(openParen),
                                     new Push("FORMALS"),
                                     new Push(closedParen),
                                     new Push(colonOp),
                                     new Push("TYPE"),
                                     new Push("BODY"),
-                                    //new MakeIdentifier()
+                                    new MakeDefinition()//new MakeIdentifier()
                       } );
        ParseAction rule06 = new PushSequence(
                  new ParseAction[] {

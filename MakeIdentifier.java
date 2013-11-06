@@ -6,6 +6,11 @@ public class MakeIdentifier extends SemanticAction
     type = "Identifier Node";
   }
   
+  public MakeIdentifier( String name ){
+    type = "Identifier Node";
+    this.name = name;
+  }
+  
   public MakeIdentifier( MakeIdentifier mi ){
     type = mi.type;
     name = mi.name;

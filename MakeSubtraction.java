@@ -20,7 +20,7 @@ public class MakeSubtraction extends SemanticAction
     
     semanticStack.push( this );
     if( Compiler.extendedDebug )
-      System.out.println( "Pushing subtraction" );
+      System.out.println( "Pushing Subtraction" );
   }
   
   public SemanticAction copy(){
