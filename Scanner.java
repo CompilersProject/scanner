@@ -51,8 +51,10 @@ public class Scanner
     if( isComment( (char) nextByte) ){
         char temp='j';
         while (temp!='\n')
-        {
+        {         
           temp = (char) sourceFile.read();
+          if (temp == 65535)
+            break;
         }
         return new Token(Token.TYPE.COMMENT);
       }
@@ -116,7 +118,7 @@ public class Scanner
   }
   public boolean isComment (char c) throws IOException
   {
-    char temp = (char)sourceFile.read();
+    char temp = (char)sourceFile.read();    
     if ((c=='/') && temp=='/')
     {
       sourceFile.unread(temp);
