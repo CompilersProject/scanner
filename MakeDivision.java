@@ -8,6 +8,7 @@ public class MakeDivision extends SemanticAction
   }
   
   public MakeDivision( MakeDivision mi ){
+    super();
     branches = new SemanticAction[2];
     
     type = mi.type;

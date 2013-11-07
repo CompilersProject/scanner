@@ -9,7 +9,7 @@ public class SemanticAction implements ParseAction
   String name;
 
   public SemanticAction( ){
-    branches = new SemanticAction[1];
+    branches = new SemanticAction[0];
     
     type = "Generic Action: no type";
     name = "";

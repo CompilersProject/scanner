@@ -4,10 +4,10 @@ import java.util.Stack;
 public class TableDrivenParser extends Parser
 
 {
+  public static int defNodes = 0; // Keep track of how many def nodes are on stackAttack for allocating arrays
   public Stack stackAttack;
   private ParsingTable kleinTable;
 
-  
   private String tmpIdentifierName; // NAMING
 
     public TableDrivenParser( Scanner source )
@@ -123,8 +123,6 @@ public class TableDrivenParser extends Parser
        ParseAction rule01 = new PushSequence(
                  new ParseAction[] { new Push("DEFINITIONS"),
                                      new MakeProgram(),
-                                     //new Push(endOfStream)
-                                     //new MakeProgram()
                       } );
        ParseAction rule02 = new PushSequence(
                  new ParseAction[] { new Push("DEF1")
@@ -148,7 +146,7 @@ public class TableDrivenParser extends Parser
                                     new Push(colonOp),
                                     new Push("TYPE"),
                                     new Push("BODY"),
-                                    new MakeDefinition()//new MakeIdentifier()
+                                    new MakeDefinition()
                       } );
        ParseAction rule06 = new PushSequence(
                  new ParseAction[] {
@@ -164,10 +162,11 @@ public class TableDrivenParser extends Parser
                                 
                       } );
        ParseAction rule09 = new PushSequence(
-                 new ParseAction[] { new Push(identifierOp),
+                 new ParseAction[] { new NameAction(),
+                                     new Push(identifierOp),
                                      new Push(colonOp),
                                      new Push("TYPE"),
-                                     //new MakeIdentifier()
+                                     new MakeFormal()
                       } );
        ParseAction rule10 = new PushSequence(
                new ParseAction[] { new Push("PRINT"),
@@ -180,10 +179,14 @@ public class TableDrivenParser extends Parser
                new ParseAction[] { new Push("BODY"),
                     } );
        ParseAction rule13 = new PushSequence(
-               new ParseAction[] { new Push(integerOp),
+               new ParseAction[] { new NameAction(),
+                                   new Push(integerOp),
+                                   new MakeType()
                     } );
        ParseAction rule99 = new PushSequence(
-               new ParseAction[] { new Push(booleanOp)
+               new ParseAction[] { new NameAction(),
+                                   new Push(booleanOp),
+                                   new MakeType()
                     } );
        ParseAction rule14 = new PushSequence(
                new ParseAction[] { new Push("SIMPLE-EXPR"),
@@ -240,7 +243,8 @@ public class TableDrivenParser extends Parser
                               new Push("EXPR"),
                               new Push(elseOp),
                               new Push("EXPR"),
-                              new Push(endIfOp)
+                              new Push(endIfOp),
+                              new MakeIf()
                     } );
        ParseAction rule26 = new PushSequence(
                new ParseAction[] { new Push(notOp),
@@ -288,9 +292,10 @@ public class TableDrivenParser extends Parser
                     } );
        ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
-                                new Push(openParen),
-                         new Push("EXPR"),
-                     new Push(closedParen)
+                                   new Push(openParen),
+                                   new Push("EXPR"),
+                                   new Push(closedParen),
+                                   new MakePrint()
                     } );
        ParseAction rule96 = new PushSequence(
                                              new ParseAction[] { new Push(trueOp) }

@@ -3,7 +3,6 @@ import java.util.Stack;
 public class MakeDefinition extends SemanticAction
 {
   public MakeDefinition(){
-    //branches = new SemanticAction[];
     type = "Definition Node";
   }
   
@@ -13,17 +12,25 @@ public class MakeDefinition extends SemanticAction
     type = mi.type;
     name = mi.name;
   }
-  
+   
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Definition" );
     
-    branches = new SemanticAction[semanticStack.size() + 1]; // Enough space for arguments and funct name
+    branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // Enough space for arguments and funct name
     branches[0] = new MakeIdentifier( (String) nameStack.pop() );
-    for( int i = 1; !semanticStack.isEmpty(); i++ ){
-      branches[i] = (SemanticAction) semanticStack.pop();
+    for( int i = 0; !semanticStack.isEmpty(); i++ ){
+      SemanticAction sa = (SemanticAction) semanticStack.pop();
+      if( sa instanceof MakeDefinition ){
+        // Replace the Def node so we don't nest them but it is still on the stack
+        semanticStack.push( sa );
+        break;
+      }
+      
+      branches[i] = sa;
     }
     
+    TableDrivenParser.defNodes++;
     semanticStack.push( this );
   }
   
