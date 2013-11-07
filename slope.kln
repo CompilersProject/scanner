@@ -2,7 +2,7 @@
 // File: slope.kln
 // Date: November 07, 2013
 // Comments: Program to calculate the slope of a line when
-//           when given two points in a graph. (forced to an int)
+//           given two points in a graph. (forced to an int)
 
 main( y2 : integer, y1 : integer, x2 : integer, x1 : integer ) : boolean
   printAndReturn( slope(y2 - y1, x2 - x1 ) )
