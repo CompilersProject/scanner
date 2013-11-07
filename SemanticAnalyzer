@@ -1,0 +1,18 @@
+public class SemanticAnalyzer
+{  
+   table = new ParseAction[100][100];
+   SemanticAction node = new SemanticAcion;
+   
+   public makeSymbolTable (SemanticAction node)
+   {
+      for (int = 0; i < node.getBranches().size(); i++)
+      {
+         if (node.getBranches()[i] instanceof SemanticAction)
+            SemanticCheck(node.getBranches()[i]);
+         else
+            table.add(node.getBranches()[i]);
+      }                 
+   }
+   
+   // Do stuff with the Symbol table
+}
