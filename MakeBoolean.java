@@ -1,26 +1,27 @@
 import java.util.Stack;
 
-public class MakeIdentifier extends SemanticAction
+public class MakeBoolean extends SemanticAction
 {
-  public MakeIdentifier( ){
-    type = "Identifier Node";
+  public MakeBoolean( ){
+    type = "Boolean Node";
   }
   
-  public MakeIdentifier( String name ){
-    type = "Identifier Node";
+  public MakeBoolean( String name ){
+    type = "Boolean Node";
     this.name = name;
   }
   
-  public MakeIdentifier( MakeIdentifier mi ){
+  public MakeBoolean( MakeBoolean mi ){
     type = mi.type;
     name = mi.name;
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
-      System.out.println("Pushing Identifier");
+      System.out.println("Pushing Boolean");
     
     name = (String) nameStack.pop();
+    
     semanticStack.push( this );
   }
   
@@ -29,6 +30,6 @@ public class MakeIdentifier extends SemanticAction
   }
   
   public SemanticAction copy(){
-    return new MakeIdentifier( this );
+    return new MakeBoolean( this );
   }
 }

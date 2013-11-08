@@ -15,12 +15,13 @@ public class MakeMultiplication extends SemanticAction
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
-    branches[0] = (SemanticAction) semanticStack.pop();
-    branches[1] = (SemanticAction) semanticStack.pop();
-    
-    semanticStack.push( this );
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Multiplication" );
+    
+    branches[1] = (SemanticAction) semanticStack.pop();
+    branches[0] = (SemanticAction) semanticStack.pop();
+    
+    semanticStack.push( this );
   }
   
   public SemanticAction copy( ){

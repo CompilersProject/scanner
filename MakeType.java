@@ -17,9 +17,8 @@ public class MakeType extends SemanticAction
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
-    if( Compiler.extendedDebug ){
-      System.out.println("Pushing Type " + this.name);
-    }
+    if( Compiler.extendedDebug )
+      System.out.println("Pushing Type");
     
     name = (String) nameStack.pop(); // NAMING
     semanticStack.push( this );

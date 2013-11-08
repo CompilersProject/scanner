@@ -1,12 +1,12 @@
 import java.util.Stack;
 
-public class MakeDefinition extends SemanticAction
+public class MakeFunction extends SemanticAction
 {
-  public MakeDefinition(){
-    type = "Definition Node";
+  public MakeFunction(){
+    type = "Function Node";
   }
   
-  public MakeDefinition( MakeDefinition mi ){
+  public MakeFunction( MakeFunction mi ){
     branches = mi.branches; // Need to copy every element?
     
     type = mi.type;
@@ -15,13 +15,12 @@ public class MakeDefinition extends SemanticAction
    
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
-      System.out.println( "Pushing Definition" );
+      System.out.println( "Pushing Function" );
     
-    branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // Enough space for arguments and funct name
-    name = (String) nameStack.pop();//branches[0] = new MakeIdentifier( (String) nameStack.pop() );
+    branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // TODO: find a way to not allocate too many spaces
     for( int i = 0; !semanticStack.isEmpty(); i++ ){
       SemanticAction sa = (SemanticAction) semanticStack.pop();
-      if( sa instanceof MakeDefinition ){
+      if( sa instanceof MakeType || sa instanceof MakeFormal){
         // Replace the Def node so we don't nest them but it is still on the stack
         semanticStack.push( sa );
         break;
@@ -30,11 +29,10 @@ public class MakeDefinition extends SemanticAction
       branches[i] = sa;
     }
     
-    TableDrivenParser.defNodes++;
     semanticStack.push( this );
   }
   
   public SemanticAction copy(){
-    return new MakeDefinition( this );
+    return new MakeFunction( this );
   }
 }

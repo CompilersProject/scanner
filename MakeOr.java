@@ -1,13 +1,13 @@
 import java.util.Stack;
 
-public class MakeSubtraction extends SemanticAction
+public class MakeOr extends SemanticAction
 {
-  public MakeSubtraction(){
+  public MakeOr(){
     branches = new SemanticAction[2];
-    type = "Subtraction Node";
+    type = "Or Node";
   }
   
-  public MakeSubtraction( MakeSubtraction mi ){
+  public MakeOr( MakeOr mi ){
     branches = new SemanticAction[2];
     
     type = mi.type;
@@ -16,7 +16,7 @@ public class MakeSubtraction extends SemanticAction
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
-      System.out.println( "Pushing Subtraction" );
+      System.out.println( "Pushing Or" );
     
     branches[1] = (SemanticAction) semanticStack.pop();
     branches[0] = (SemanticAction) semanticStack.pop();
@@ -25,6 +25,6 @@ public class MakeSubtraction extends SemanticAction
   }
   
   public SemanticAction copy(){
-    return new MakeSubtraction( this );
+    return new MakeOr( this );
   }
 }

@@ -1,26 +1,26 @@
 import java.util.Stack;
 
-public class MakeIdentifier extends SemanticAction
+public class MakeInteger extends SemanticAction
 {
-  public MakeIdentifier( ){
-    type = "Identifier Node";
+  public MakeInteger( ){
+    type = "Integer Node";
   }
   
-  public MakeIdentifier( String name ){
-    type = "Identifier Node";
+  public MakeInteger( String name ){
+    type = "Integer Node";
     this.name = name;
   }
   
-  public MakeIdentifier( MakeIdentifier mi ){
+  public MakeInteger( MakeInteger mi ){
     type = mi.type;
     name = mi.name;
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
-      System.out.println("Pushing Identifier");
+      System.out.println("Pushing Integer");
     
-    name = (String) nameStack.pop();
+    name = (String) nameStack.pop(); // NAMING
     semanticStack.push( this );
   }
   
@@ -29,6 +29,6 @@ public class MakeIdentifier extends SemanticAction
   }
   
   public SemanticAction copy(){
-    return new MakeIdentifier( this );
+    return new MakeInteger( this );
   }
 }

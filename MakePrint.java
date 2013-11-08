@@ -15,11 +15,13 @@ public class MakePrint extends SemanticAction
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
-    branches[0] = (SemanticAction) semanticStack.pop(); // Expression to print
-    branches[1] = (SemanticAction) semanticStack.pop(); // Body
+    if( Compiler.extendedDebug )
+      System.out.println( "Pushing Print" );
+    
+    branches[1] = (SemanticAction) semanticStack.pop(); // Expression to print
+    branches[0] = (SemanticAction) semanticStack.pop(); // Body
     
     semanticStack.push( this );
-    System.out.println( "Pushing Print" );
   }
   
   public SemanticAction copy(){
