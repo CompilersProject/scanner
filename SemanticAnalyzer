@@ -1,18 +1,24 @@
+import java.util.Set;
+import java.util.TreeSet;
+
 public class SemanticAnalyzer
-{  
-   table = new ParseAction[100][100];
-   SemanticAction node = new SemanticAcion;
+{    
+   Set<String> SA = new TreeSet<String>();
    
-   public makeSymbolTable (SemanticAction node)
+   public boolean mainCheck (SemanticAction node)
    {
-      for (int = 0; i < node.getBranches().size(); i++)
+      for (int i = 0; i < node.getBranches().length; i++)
       {
          if (node.getBranches()[i] instanceof SemanticAction)
-            SemanticCheck(node.getBranches()[i]);
+            mainCheck(node.getBranches()[i]);
          else
-            table.add(node.getBranches()[i]);
-      }                 
+            if (node.getBranches()[i].toString() == "main" && 
+                SA.contains(node.getBranches()[i].toString()) == false)
+               return false;
+            else 
+               SA.add(node.getBranches()[i].toString());
+      }
+      return true;                 
    }
    
-   // Do stuff with the Symbol table
 }
