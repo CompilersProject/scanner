@@ -3,7 +3,7 @@ import java.util.Stack;
 public class MakeFunction extends SemanticAction
 {
   public MakeFunction(){
-    type = "Function Node";
+    type = TYPE.FUNCTION;
   }
   
   public MakeFunction( MakeFunction mi ){

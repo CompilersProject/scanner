@@ -3,11 +3,11 @@ import java.util.Stack;
 public class MakeBoolean extends SemanticAction
 {
   public MakeBoolean( ){
-    type = "Boolean Node";
+    type = TYPE.BOOLEAN;
   }
   
   public MakeBoolean( String name ){
-    type = "Boolean Node";
+    type = TYPE.BOOLEAN;
     this.name = name;
   }
   

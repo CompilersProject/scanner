@@ -5,13 +5,13 @@ public class MakeFormal extends SemanticAction
   public MakeFormal( ){
     branches = new SemanticAction[1];
     
-    type = "Formal Node";
+    type = TYPE.FORMAL;
   }
   
   public MakeFormal( String name ){
     branches = new SemanticAction[1];
     
-    type = "Formal Node";
+    type = TYPE.FORMAL;
     this.name = name;
   }
   

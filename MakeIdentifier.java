@@ -3,11 +3,11 @@ import java.util.Stack;
 public class MakeIdentifier extends SemanticAction
 {
   public MakeIdentifier( ){
-    type = "Identifier Node";
+    type = TYPE.IDENTIFIER;
   }
   
   public MakeIdentifier( String name ){
-    type = "Identifier Node";
+    type = TYPE.IDENTIFIER;
     this.name = name;
   }
   

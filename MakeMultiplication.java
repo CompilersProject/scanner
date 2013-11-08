@@ -4,7 +4,7 @@ public class MakeMultiplication extends SemanticAction
 {
   public MakeMultiplication(){
     branches = new SemanticAction[2];
-    type = "Multiplication Node";
+    type = TYPE.MULTIPLICATION;
   }
   
   public MakeMultiplication( MakeMultiplication mi ){

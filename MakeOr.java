@@ -4,7 +4,7 @@ public class MakeOr extends SemanticAction
 {
   public MakeOr(){
     branches = new SemanticAction[2];
-    type = "Or Node";
+    type = TYPE.OR;
   }
   
   public MakeOr( MakeOr mi ){

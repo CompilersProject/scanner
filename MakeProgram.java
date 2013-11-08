@@ -3,8 +3,7 @@ import java.util.Stack;
 public class MakeProgram extends SemanticAction
 {
   public MakeProgram(){
-    //branches = new SemanticAction[];
-    type = "Program Node";
+    type = TYPE.PROGRAM;
   }
   
   public MakeProgram( MakeProgram mi ){

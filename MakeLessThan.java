@@ -4,7 +4,7 @@ public class MakeLessThan extends SemanticAction
 {
   public MakeLessThan(){
     branches = new SemanticAction[2];
-    type = "Less Than Node";
+    type = TYPE.LESSTHAN;
   }
   
   public MakeLessThan( MakeLessThan mi ){

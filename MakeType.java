@@ -3,11 +3,11 @@ import java.util.Stack;
 public class MakeType extends SemanticAction
 {
   public MakeType( ){
-    type = "Type Node";
+    type = TYPE.TYPE;
   }
   
   public MakeType( String name ){
-    type = "Type Node";
+    type = TYPE.TYPE;
     this.name = name;
   }
   

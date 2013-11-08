@@ -4,7 +4,7 @@ public class MakeEquals extends SemanticAction
 {
   public MakeEquals(){
     branches = new SemanticAction[2];
-    type = "Equals Node";
+    type = TYPE.EQUALS;
   }
   
   public MakeEquals( MakeEquals mi ){

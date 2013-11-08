@@ -81,9 +81,6 @@ public class TableDrivenParser extends Parser
       }
     }
 
-    // -------------------------------------------------------------------
-    // AC PARSING TABLE FACTORY
-
     private ParsingTable makeKleinParsingTable()
     {
        ParsingTable table = new ParsingTable();

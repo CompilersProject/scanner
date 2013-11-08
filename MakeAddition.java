@@ -4,7 +4,7 @@ public class MakeAddition extends SemanticAction
 {
   public MakeAddition(){
     branches = new SemanticAction[2];
-    type = "Addition Node";
+    type = TYPE.ADDITION;
   }
   
   public MakeAddition( MakeAddition mi ){

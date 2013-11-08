@@ -4,7 +4,7 @@ public class MakeSubtraction extends SemanticAction
 {
   public MakeSubtraction(){
     branches = new SemanticAction[2];
-    type = "Subtraction Node";
+    type = TYPE.SUBTRACTION;
   }
   
   public MakeSubtraction( MakeSubtraction mi ){

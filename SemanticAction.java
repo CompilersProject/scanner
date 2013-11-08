@@ -2,20 +2,42 @@ import java.util.Stack;
 
 public class SemanticAction implements ParseAction
 {
-  SemanticAction[] branches;
+  protected SemanticAction[] branches;
   
   // Only needed for debugging?
-  String type;
-  String name;
+  protected TYPE type;
+  protected String name;
 
+  public enum TYPE {
+    ADDITION,
+      AND,
+      BOOLEAN,
+      DEFINITION,
+      DIVISION,
+      EQUALS,
+      FORMAL,
+      FUNCTION,
+      IDENTIFIER,
+      IF,
+      INTEGER,
+      LESSTHAN,
+      MULTIPLICATION,
+      OR,
+      PRINT,
+      PROGRAM,
+      SUBTRACTION,
+      TYPE,
+      ERROR
+  }
+  
   public SemanticAction( ){
     branches = new SemanticAction[0];
     
-    type = "Generic Action: no type";
+    type = TYPE.ERROR;
     name = "";
   }
   
-  public SemanticAction( String type ){
+  public SemanticAction( TYPE type ){
     this.type = type;
   }
   
@@ -40,7 +62,7 @@ public class SemanticAction implements ParseAction
   
   public String toString()
   {
-    return type;
+    return name;
   }
   
   public SemanticAction[] getBranches() {return branches;}

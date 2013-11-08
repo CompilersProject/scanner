@@ -3,11 +3,11 @@ import java.util.Stack;
 public class MakeInteger extends SemanticAction
 {
   public MakeInteger( ){
-    type = "Integer Node";
+    type = TYPE.INTEGER;
   }
   
   public MakeInteger( String name ){
-    type = "Integer Node";
+    type = TYPE.INTEGER;
     this.name = name;
   }
   

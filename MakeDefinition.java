@@ -3,7 +3,7 @@ import java.util.Stack;
 public class MakeDefinition extends SemanticAction
 {
   public MakeDefinition(){
-    type = "Definition Node";
+    type = TYPE.DEFINITION;
   }
   
   public MakeDefinition( MakeDefinition mi ){

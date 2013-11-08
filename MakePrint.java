@@ -4,7 +4,7 @@ public class MakePrint extends SemanticAction
 {
   public MakePrint(){
     branches = new SemanticAction[2];
-    type = "Print Node";
+    type = TYPE.PRINT;
   }
   
   public MakePrint( MakePrint mi ){

@@ -4,7 +4,7 @@ public class MakeIf extends SemanticAction
 {
   public MakeIf(){
     branches = new SemanticAction[3];
-    type = "If Node";
+    type = TYPE.IF;
   }
   
   public MakeIf( MakeIf mi ){

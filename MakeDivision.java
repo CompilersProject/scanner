@@ -4,7 +4,7 @@ public class MakeDivision extends SemanticAction
 {
   public MakeDivision(){
     branches = new SemanticAction[2];
-    type = "Division Node";
+    type = TYPE.DIVISION;
   }
   
   public MakeDivision( MakeDivision mi ){

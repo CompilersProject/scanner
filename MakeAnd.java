@@ -4,7 +4,7 @@ public class MakeAnd extends SemanticAction
 {
   public MakeAnd(){
     branches = new SemanticAction[2];
-    type = "And Node";
+    type = TYPE.AND;
   }
   
   public MakeAnd( MakeAnd mi ){
