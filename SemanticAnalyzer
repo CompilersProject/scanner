@@ -3,7 +3,7 @@ import java.util.TreeSet;
 
 public class SemanticAnalyzer
 {    
-   Set<String> SA = new TreeSet<String>();
+   Set<String> MS = new TreeSet<String>();
    
    public boolean mainCheck (SemanticAction node)
    {
@@ -13,12 +13,14 @@ public class SemanticAnalyzer
             mainCheck(node.getBranches()[i]);
          else
             if (node.getBranches()[i].toString() == "main" && 
-                SA.contains(node.getBranches()[i].toString()) == false)
+                MS.contains(node.getBranches()[i].toString()) == true)
                return false;
             else 
-               SA.add(node.getBranches()[i].toString());
+               MS.add(node.getBranches()[i].toString());
       }
-      return true;                 
-   }
-   
+      if (MS.contains("main"))
+         return true;    
+      else
+         return false;             
+   }   
 }
