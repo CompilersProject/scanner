@@ -5,7 +5,7 @@ public class TableDrivenParser extends Parser
 
 {
   public static int defNodes; // Keep track of how many def nodes are on stackAttack for allocating arrays
-  public Stack stackAttack;
+  private Stack stackAttack;
   private ParsingTable kleinTable;
 
   private String tmpIdentifierName; // NAMING
@@ -590,4 +590,6 @@ public class TableDrivenParser extends Parser
         skipComments( scanner.getNextToken() ); // Consume this token and check again
       }
     }
+    
+    public SemanticAction getSemanticNode() { return (SemanticAction) stackAttack.pop(); }
 }

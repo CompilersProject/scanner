@@ -44,7 +44,6 @@ public class SemanticAction implements ParseAction
   public void execute( Stack stack )
   {
     stack.push(this);
-    //System.out.println( "Pushed " + type + " onto parse stack");
   }
   
   public SemanticAction( SemanticAction mi ){

@@ -4,6 +4,7 @@ public class MakeProgram extends SemanticAction
 {
   public MakeProgram(){
     type = TYPE.PROGRAM;
+    name = "Program";
   }
   
   public MakeProgram( MakeProgram mi ){
