@@ -26,7 +26,7 @@ public class SemanticAction implements ParseAction
       PRINT,
       PROGRAM,
       SUBTRACTION,
-      TYPE,
+      TYPE, // TODO: CHANGE THIS NAME
       ERROR
   }
   
@@ -64,5 +64,12 @@ public class SemanticAction implements ParseAction
     return name;
   }
   
+  public boolean equals( SemanticAction rh )
+  {
+    return this.name.equals( rh.name ); //&& this.branches[0].type == rh.type;
+  }
+  
   public SemanticAction[] getBranches() {return branches;}
+  public String getName() {return name;}
+  public TYPE getType() {return type;}
 }

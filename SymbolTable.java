@@ -1,28 +1,40 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SymbolTable 
 {
- private Object[][] table;
-
-    public SymbolTable()
+  Map<String, List<SemanticAction>> table;
+  
+  public SymbolTable()
+  {
+    table = new HashMap<String, List<SemanticAction>>();
+  }
+  
+  public boolean compare( String key, SemanticAction value )
+  {
+    List<SemanticAction> nodes = table.get( key );
+    
+    for( SemanticAction tmp: nodes )
     {
-         table = new Object[100][100];
+      if( tmp.equals( value ) ){
+        return true;
+      }
     }
+    return false;
+  }
 
-    public Object lookup( int row, int col )
-    {
-
-        return table[row][col];
+  public void put( String functionName, SemanticAction node )
+  {
+    if( table.get(functionName) == null ){
+      ArrayList<SemanticAction> tmp = new ArrayList<SemanticAction>();
+      tmp.add( node );
+      table.put( functionName, tmp );
     }
-
-    // ------------------------------------------------------------------
-
-    public void add( Object node, int row, int col )
-    {
-      table[row][col] = node;
-    }
-
-    public String toString()
-    {
-        return table.toString();
-    }
+    else
+      table.get( functionName ).add( node );
+  }
+  
+  public Map<String, List<SemanticAction>> getTable() { return table; }
 }

@@ -14,6 +14,6 @@ public class NameAction implements ParseAction
   
   public String toString()
   {
-    return "";
+    return "Name Action";
   }
 }

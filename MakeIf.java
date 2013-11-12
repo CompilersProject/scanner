@@ -15,7 +15,8 @@ public class MakeIf extends SemanticAction
   }
   
   public void updateAST( Stack semanticStack, Stack nameStack ){
-    System.out.println( "Pushing If" );
+    if( Compiler.extendedDebug )
+      System.out.println( "Pushing If" );
     
     branches[0] = (SemanticAction) semanticStack.pop(); // If (boolean exp)
     branches[1] = (SemanticAction) semanticStack.pop(); // Then (exp)
