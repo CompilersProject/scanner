@@ -1,0 +1,6 @@
+main(n : integer) : integer
+  if n then
+    n
+  else
+    z - 10
+  endif
