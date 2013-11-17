@@ -18,6 +18,7 @@ public class MakeFunction extends SemanticAction
       System.out.println( "Pushing Function" );
     
     branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // TODO: find a way to not allocate too many spaces
+    //branches = new SemanticAction[ TableDrivenParser.currentActuals ];
     for( int i = 0; !semanticStack.isEmpty(); i++ ){
       SemanticAction sa = (SemanticAction) semanticStack.pop();
       if( sa instanceof MakeType || sa instanceof MakeFormal){
@@ -29,6 +30,7 @@ public class MakeFunction extends SemanticAction
       branches[i] = sa;
     }
     
+    //TableDrivenParser.currentActuals = 0;
     semanticStack.push( this );
   }
   
