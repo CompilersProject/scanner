@@ -3,25 +3,17 @@ import java.util.Stack;
 public class MakeSubtraction extends SemanticAction
 {
   public MakeSubtraction(){
-    branches = new SemanticAction[2];
-    type = TYPE.SUBTRACTION;
+    type = "Subtraction Node";
   }
   
   public MakeSubtraction( MakeSubtraction mi ){
-    branches = new SemanticAction[2];
-    
     type = mi.type;
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, Stack nameStack ){
-    if( Compiler.extendedDebug )
-      System.out.println( "Pushing Subtraction" );
-    
-    branches[1] = (SemanticAction) semanticStack.pop();
-    branches[0] = (SemanticAction) semanticStack.pop();
-    
+  public void updateAST( Stack semanticStack, String name ){
     semanticStack.push( this );
+    System.out.println( "Pushing subtraction" );
   }
   
   public SemanticAction copy(){

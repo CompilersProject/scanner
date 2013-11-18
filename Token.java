@@ -8,7 +8,7 @@ public class Token
       PLUS,
         MINUS,
         MULTIPLY,
-        ASSIGNMENT,   // TODO: *** RENAME ***
+        ASSIGNMENT,
         LESSTHAN,
         OPEN_PAREN,
         CLOSED_PAREN,
