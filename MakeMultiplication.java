@@ -1,19 +1,26 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeMultiplication extends SemanticAction
 {
   public MakeMultiplication(){
-    type = "Multiplication Node";
+    type = TYPE.MULTIPLICATION;
   }
   
   public MakeMultiplication( MakeMultiplication mi ){
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
+    
     type = mi.type;
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, String name ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
+    if( Compiler.extendedDebug )
+      System.out.println( "Pushing Multiplication" );
+
+    addNodes( semanticStack, 2 );
+    
     semanticStack.push( this );
-    System.out.println( "Pushing Multiplication" );
   }
   
   public SemanticAction copy( ){

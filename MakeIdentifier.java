@@ -3,7 +3,12 @@ import java.util.Stack;
 public class MakeIdentifier extends SemanticAction
 {
   public MakeIdentifier( ){
-    type = "Identifier Node";
+    type = TYPE.IDENTIFIER;
+  }
+  
+  public MakeIdentifier( String name ){
+    type = TYPE.IDENTIFIER;
+    this.name = name;
   }
   
   public MakeIdentifier( MakeIdentifier mi ){
@@ -11,16 +16,19 @@ public class MakeIdentifier extends SemanticAction
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, String name ){
-    this.name = name; // NAMING
+  public void updateAST( Stack semanticStack, Stack nameStack ){
+    if( Compiler.extendedDebug )
+      System.out.println("Pushing Identifier");
+    
+    TableDrivenParser.currentActuals++;
+    name = (String) nameStack.pop();
     semanticStack.push( this );
-    System.out.println("Pushing Identifier " + this.name);
   }
   
   public String toString(){
-    return type + " " + name; // NAMING
+    return type + " " + name;
   }
-  
+
   public SemanticAction copy(){
     return new MakeIdentifier( this );
   }

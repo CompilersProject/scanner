@@ -13,7 +13,7 @@ public class PushSequence implements ParseAction {
   {
     for (int i = actions.length-1; i >= 0; i--){
       if( Compiler.extendedDebug ){
-        System.out.println(actions[i]);
+        //System.out.println(actions[i]);
       }
       actions[i].execute( stack );
     }
@@ -26,5 +26,4 @@ public class PushSequence implements ParseAction {
       answer += (actions[i].toString() + ", ");
     return answer;
   }
-  
 }

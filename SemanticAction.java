@@ -1,17 +1,42 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class SemanticAction implements ParseAction
 {
-  // Only needed for debugging?
-  String type;
-  String name;
+  protected ArrayList<SemanticAction> branches;
+  
+  protected TYPE type;
+  protected String name;
 
-  public SemanticAction( ){
-    type = "Generic Action: no type";
-    name = "";
+  public enum TYPE {
+    ADDITION,
+      AND,
+      BOOLEAN,
+      DEFINITION,
+      DIVISION,
+      EQUALS,
+      FORMAL,
+      FUNCTION,
+      IDENTIFIER,
+      IF,
+      INTEGER,
+      LESSTHAN,
+      MULTIPLICATION,
+      OR,
+      PRINT,
+      PROGRAM,
+      SUBTRACTION,
+      TYPE, // TODO: CHANGE THIS NAME
+      ERROR
   }
   
-  public SemanticAction( String type ){
+  public SemanticAction( ){
+    branches = new ArrayList<SemanticAction>();
+    
+    type = TYPE.ERROR;
+  }
+  
+  public SemanticAction( TYPE type ){
     this.type = type;
   }
   
@@ -19,14 +44,15 @@ public class SemanticAction implements ParseAction
   {
     stack.push(this);
   }
-  
+
   public SemanticAction( SemanticAction mi ){
     type = mi.type;
     name = mi.name;
   }
   
   // Applies a semantic action 
-  public void updateAST( Stack semanticStack, String name ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
+    semanticStack.push( this );
   }
   
   public SemanticAction copy(){
@@ -35,6 +61,23 @@ public class SemanticAction implements ParseAction
   
   public String toString()
   {
-    return type;
+    return name;
   }
+  
+  public boolean equals( SemanticAction rh )
+  {
+    return this.name.equals( rh.name ); //&& this.branches[0].type == rh.type;
+  }
+  
+  protected void addNodes( Stack stack, int n )
+  {
+    while( n > 0 ){
+      branches.add( (SemanticAction) stack.pop() );
+      n--;
+    }
+  }
+  
+  public ArrayList<SemanticAction> getBranches() {return branches;}
+  public String getName() {return name;}
+  public TYPE getType() {return type;}
 }

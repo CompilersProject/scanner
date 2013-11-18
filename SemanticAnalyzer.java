@@ -18,23 +18,30 @@ public class SemanticAnalyzer
   
   private void makeSymbolTable( )
   {
-    SemanticAction[] branches = startNode.getBranches();
+    //SemanticAction[] branches = startNode.getBranches();
+    //ArrayList<SemanticAction> branches = startNode.getBranches();
     
-    for (int i = 0; i < branches.length; i++) // Search through defs
+    //for (int i = 0; i < branches.length; i++) // Search through defs
+    for( SemanticAction def: startNode.getBranches() )
     {
-      String defName = branches[i].toString();
+      //String defName = branches[i].toString();
+      String defName = def.getName();
       if( defName.equals("print") ){
         System.out.println( "User-defined print function not allowed." );
       } else if( defName.equals("main") ){
         mainCounter++;
       }
       
-      SemanticAction[] functionArgs = branches[i].getBranches();
-      for( int j = 0; j < functionArgs.length; j++ )
+      //SemanticAction[] functionArgs = branches[i].getBranches();
+      //for( int j = 0; j < functionArgs.length; j++ )
+      for( SemanticAction defNode: def.getBranches() )
       {
-        if( functionArgs[j].type == SemanticAction.TYPE.TYPE ||
-            functionArgs[j].type == SemanticAction.TYPE.FORMAL )
-          symbolTable.put( defName, functionArgs[j] );
+        /*if( functionArgs[j].type == SemanticAction.TYPE.TYPE ||
+           functionArgs[j].type == SemanticAction.TYPE.FORMAL )
+          symbolTable.put( defName, functionArgs[j] );*/
+        if( defNode.type == SemanticAction.TYPE.TYPE ||
+           defNode.type == SemanticAction.TYPE.FORMAL )
+          symbolTable.put( defName, defNode );
       }
     }
     
@@ -47,20 +54,24 @@ public class SemanticAnalyzer
   
   public SemanticAction analyzeTree( )
   {
-    SemanticAction[] defBranches = startNode.getBranches();
+    //SemanticAction[] defBranches = startNode.getBranches();
+    //ArrayList<SemanticAction> defBranches = startNode.getBranches();
 
-    for (int i = 0; i < defBranches.length; i++) // Search through defs
+    //for (int i = 0; i < defBranches.length; i++) // Search through defs
+    for( SemanticAction defNode: startNode.getBranches() )
     {
-      SemanticAction tmp = defBranches[i].getBranches()[0];
-      helper( defBranches[i].getName(), tmp );
+      //SemanticAction tmp = defBranches[i].getBranches()[0];
+      //helper( defBranches[i].getName(), tmp );
+      helper( defNode.getName(), defNode.getBranches().get(0) );
     }
 
-    return new SemanticAction();
+    return new SemanticAction(); // ?? wat
   }
   
   public void helper (String defName, SemanticAction node)
   {
-    if (node.getBranches().length==0)
+    //if (node.getBranches().length==0)
+    if( node.getBranches().isEmpty() )
     {
       if(node.getType() == SemanticAction.TYPE.INTEGER ||
          node.getType() == SemanticAction.TYPE.BOOLEAN ){
@@ -71,9 +82,11 @@ public class SemanticAnalyzer
         }
       }
     } else {
-      for (int i = 0; i < node.getBranches().length; i++)
+      //for (int i = 0; i < node.getBranches().length; i++)
+      for( SemanticAction branch: node.getBranches() )
       {
-        helper( defName, node.getBranches()[i] );
+        //helper( defName, node.getBranches()[i] );
+        helper( defName, branch );
       }
     }
   }

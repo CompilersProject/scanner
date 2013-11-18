@@ -1,13 +1,15 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeDefinition extends SemanticAction
 {
   public MakeDefinition(){
+    
     type = TYPE.DEFINITION;
   }
   
   public MakeDefinition( MakeDefinition mi ){
-    branches = mi.branches; // Need to copy every element?
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
     
     type = mi.type;
     name = mi.name;
@@ -16,10 +18,9 @@ public class MakeDefinition extends SemanticAction
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Definition" );
-    
-    branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // Enough space for arguments and funct name
-    name = (String) nameStack.pop();//branches[0] = new MakeIdentifier( (String) nameStack.pop() );
-    for( int i = 0; !semanticStack.isEmpty(); i++ ){
+
+    name = (String) nameStack.pop();
+    while( !semanticStack.isEmpty() ){
       SemanticAction sa = (SemanticAction) semanticStack.pop();
       if( sa instanceof MakeDefinition ){
         // Replace the Def node so we don't nest them but it is still on the stack
@@ -27,10 +28,9 @@ public class MakeDefinition extends SemanticAction
         break;
       }
       
-      branches[i] = sa;
+      branches.add( sa );
     }
     
-    TableDrivenParser.defNodes++;
     semanticStack.push( this );
   }
   

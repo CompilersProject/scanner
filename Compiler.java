@@ -9,28 +9,31 @@ public class Compiler {
   // So this should work without unnecessary overhead
   public static final boolean extendedDebug = true;
   
-   public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
-   {
-     
-     try{
-       String testFile;
-       if( args.length != 0 ){
-         testFile = args[0];
-       }
-       else{
-         testFile = "klein-programs/tests02-parser/03-arithmetic.kln";
-       }
-       Scanner test = new Scanner( testFile );
-       TableDrivenParser tdp = new TableDrivenParser( test );
-       
-       tdp.parseProgram();
-       
-       while( !tdp.stackAttack.empty() ){
-         System.out.println( tdp.stackAttack.pop() );
-       }
-     }
-     catch(Exception e){
-       System.out.println( e );
-     }
-   }
+  public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
+  {
+    try{
+      String testFile;
+      if( args.length != 0 ){
+        testFile = args[0];
+      }
+      else{
+        testFile = "klein-programs\\tests02-parser\\06-function.kln";
+      }
+      SemanticAnalyzer analyzer;
+      Scanner test = new Scanner( testFile );
+      TableDrivenParser tdp = new TableDrivenParser( test );
+      
+      tdp.parseProgram();
+      
+      analyzer = new SemanticAnalyzer( tdp.getSemanticNode() );
+      for( String defName: analyzer.getSymbolTable().getTable().keySet() )
+      {
+        System.out.println( defName + ": " + analyzer.getSymbolTable().getTable().get( defName ).toString() );
+      }
+      analyzer.analyzeTree( );
+    }
+    catch(Exception e){
+      System.out.println( e );
+    }
+  }
 }

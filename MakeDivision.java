@@ -1,19 +1,26 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeDivision extends SemanticAction
 {
   public MakeDivision(){
-    type = "Division Node";
+    type = TYPE.DIVISION;
   }
   
   public MakeDivision( MakeDivision mi ){
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
+    
     type = mi.type;
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, String name ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
+    if( Compiler.extendedDebug )
+       System.out.println( "Pushing Division" );
+    
+    addNodes( semanticStack, 2 );
+    
     semanticStack.push( this );
-    System.out.println( "Pushing Division" );
   }
   
   public SemanticAction copy(){
