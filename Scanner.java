@@ -42,7 +42,7 @@ public class Scanner
     while( isOurWhitespace((char) nextByte) ){
      nextByte = getNextByte();
     }
-   if( nextByte == -1 || nextByte == '�'){
+   if( nextByte == -1 || nextByte == 'ÿ'){
       // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
       // Saving off a copy of EOS when it is found initially doesn't work well for peeks
       // Best solution that works so far.
@@ -70,7 +70,7 @@ public class Scanner
         throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
       
-      if( nextByte != -1 || nextByte == '�'){ // EOF character
+      if( nextByte != -1 || nextByte == 'ÿ'){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
