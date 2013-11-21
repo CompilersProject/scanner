@@ -66,7 +66,7 @@ public class SemanticAction implements ParseAction
   
   public boolean equals( SemanticAction rh )
   {
-    return this.name.equals( rh.name ); //&& this.branches[0].type == rh.type;
+    return this.name.equals( rh.name );
   }
   
   protected void addNodes( Stack stack, int n )

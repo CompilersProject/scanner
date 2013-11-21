@@ -20,7 +20,10 @@ public class MakeIdentifier extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println("Pushing Identifier");
     
-    TableDrivenParser.currentActuals++;
+    //TableDrivenParser.currentActuals++;
+    //int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
+    //tmp++;
+    
     name = (String) nameStack.pop();
     semanticStack.push( this );
   }

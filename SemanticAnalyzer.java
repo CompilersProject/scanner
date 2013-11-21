@@ -18,27 +18,16 @@ public class SemanticAnalyzer
   
   private void makeSymbolTable( )
   {
-    //SemanticAction[] branches = startNode.getBranches();
-    //ArrayList<SemanticAction> branches = startNode.getBranches();
-    
-    //for (int i = 0; i < branches.length; i++) // Search through defs
     for( SemanticAction def: startNode.getBranches() )
     {
-      //String defName = branches[i].toString();
       String defName = def.getName();
       if( defName.equals("print") ){
         System.out.println( "User-defined print function not allowed." );
       } else if( defName.equals("main") ){
         mainCounter++;
       }
-      
-      //SemanticAction[] functionArgs = branches[i].getBranches();
-      //for( int j = 0; j < functionArgs.length; j++ )
       for( SemanticAction defNode: def.getBranches() )
       {
-        /*if( functionArgs[j].type == SemanticAction.TYPE.TYPE ||
-           functionArgs[j].type == SemanticAction.TYPE.FORMAL )
-          symbolTable.put( defName, functionArgs[j] );*/
         if( defNode.type == SemanticAction.TYPE.TYPE ||
            defNode.type == SemanticAction.TYPE.FORMAL )
           symbolTable.put( defName, defNode );
@@ -52,27 +41,20 @@ public class SemanticAnalyzer
       System.out.println( "Too many main functions defined." );
   }
   
-  public SemanticAction analyzeTree( )
+  public void analyzeTree( )
   {
-    //SemanticAction[] defBranches = startNode.getBranches();
-    //ArrayList<SemanticAction> defBranches = startNode.getBranches();
-
-    //for (int i = 0; i < defBranches.length; i++) // Search through defs
     for( SemanticAction defNode: startNode.getBranches() )
     {
-      //SemanticAction tmp = defBranches[i].getBranches()[0];
-      //helper( defBranches[i].getName(), tmp );
       helper( defNode.getName(), defNode.getBranches().get(0) );
     }
-
-    return new SemanticAction(); // ?? wat
   }
   
   public void helper (String defName, SemanticAction node)
   {
-    //if (node.getBranches().length==0)
-    if( node.getBranches().isEmpty() )
-    {
+    if( Compiler.extendedDebug ){
+      System.out.println( node.getName() );
+    }
+    if( node.getBranches().isEmpty() ){
       if(node.getType() == SemanticAction.TYPE.INTEGER ||
          node.getType() == SemanticAction.TYPE.BOOLEAN ){
         return;
@@ -81,16 +63,19 @@ public class SemanticAnalyzer
           System.out.println( "No formal parameter: " + node + " inside defintion of " + defName );
         }
       }
-    } else {
-      //for (int i = 0; i < node.getBranches().length; i++)
-      for( SemanticAction branch: node.getBranches() )
-      {
-        //helper( defName, node.getBranches()[i] );
-        helper( defName, branch );
-      }
+    }
+    
+    if( node.getType() == SemanticAction.TYPE.FUNCTION &&
+       !symbolTable.checkFunctionCall( node.getName() ) ){
+      System.out.println( "No function definition for call to: " + node.getName() );
+    }
+    
+    for( SemanticAction branch: node.getBranches() )
+    {
+      helper( defName, branch );
     }
   }
-  
+
   public void adder(ArrayList allElements, int col)
   {
     for (int i=0; i<allElements.size(); i++)

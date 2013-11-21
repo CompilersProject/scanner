@@ -5,6 +5,7 @@ public class MakeFunction extends SemanticAction
 {
   public MakeFunction(){
     type = TYPE.FUNCTION;
+    name = "Function";
   }
   
   public MakeFunction( MakeFunction mi ){
@@ -20,8 +21,14 @@ public class MakeFunction extends SemanticAction
     
     name = (String) nameStack.pop();
     
-    addNodes( semanticStack, TableDrivenParser.currentActuals );
-    TableDrivenParser.currentActuals = 0;
+    //addNodes( semanticStack, TableDrivenParser.currentActuals );
+    //TableDrivenParser.currentActuals = 0;
+    
+    //addNodes( semanticStack, TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth ) );
+    //TableDrivenParser.actualsCounts.remove( TableDrivenParser.functionDepth );
+    //TableDrivenParser.functionDepth--;
+    
+    addNodes( semanticStack, 1 );
     
     semanticStack.push( this );
   }

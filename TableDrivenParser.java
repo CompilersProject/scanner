@@ -1,20 +1,27 @@
 import java.io.IOException;
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class TableDrivenParser extends Parser
 
 {
-  public static int currentActuals;
-  
+  //public static int currentActuals;
+  public static int functionDepth;
+  public static ArrayList<Integer> actualsCounts;
+
   private Stack stackAttack;
   private ParsingTable kleinTable;
+  private SemanticAction programNode;
 
   private String tmpIdentifierName;
 
     public TableDrivenParser( Scanner source )
     {
       super( source );
-      currentActuals = 0;
+      //currentActuals = 0;
+      functionDepth = 0;
+      actualsCounts = new ArrayList<Integer>();
+      
       kleinTable = makeKleinParsingTable();
     }
 
@@ -44,10 +51,10 @@ public class TableDrivenParser extends Parser
           } else if( terminal.equals( scanner.peek() )){
             if( Compiler.extendedDebug ){
               // * For debugging *
-              tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
-              System.out.println( "Consumed: " + tmpIdentifierName ); // NAMING
+              tmpIdentifierName = scanner.getNextToken().toString();
+              System.out.println( "Consumed: " + tmpIdentifierName );
             } else {
-              tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
+              tmpIdentifierName = scanner.getNextToken().toString();
             }
           } else{
             // * For debugging *
@@ -75,7 +82,7 @@ public class TableDrivenParser extends Parser
           }
         } else if( symbol instanceof SemanticAction ){
           SemanticAction sa = ( (SemanticAction) symbol ).copy();
-          sa.updateAST( stackAttack, nameStack ); // NAMING
+          sa.updateAST( stackAttack, nameStack );
         } else {
           throw new SemanticException("Invalid object found on parse stack."); // Create a new exception for this?
         }
@@ -260,17 +267,17 @@ public class TableDrivenParser extends Parser
                     } );
        ParseAction rule30 = new PushSequence(
                new ParseAction[] { new NameAction(),
-                                   //new EndFunction(),
                                    new Push(identifierOp),
                                    //new MakeIdentifier(),
                                    new Push("ACTUALS1"),
                     } );
        ParseAction rule31 = new PushSequence(
-               new ParseAction[] { //new EndFunction(),
+               new ParseAction[] { 
                                    new Push(openParen),
                                    new Push("ACTUALS"),
                                    new Push(closedParen),
-                                   new MakeFunction()
+                                   new MakeFunction(),
+                                   //new StartActualsCounter(),
                     } );
        ParseAction rule32 = new PushSequence(
                new ParseAction[] { new Push("NONEMPTYACTUALS"),
@@ -293,7 +300,6 @@ public class TableDrivenParser extends Parser
                                    new Push(openParen),
                                    new Push("EXPR"),
                                    new Push(closedParen),
-                                   //new MakePrint()
                     } );
        ParseAction rule37 = new PushSequence(
                    new ParseAction[] { new NameAction(),
@@ -332,7 +338,6 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "FORMALS", identifierOp, rule06 );
-       //table.add( "FORMALS", endOfStream,  rule00 );
        table.add( "FORMALS", closedParen,  rule00 );
        
        
@@ -546,21 +551,6 @@ public class TableDrivenParser extends Parser
        table.add( "ACTUALS1", comma, rule00X );
        table.add( "ACTUALS1", identifierOp, rule00X );
        table.add( "ACTUALS1", endOfStream, rule00X );
-       /*table.add( "ACTUALS1", andOp, rule00 );
-       table.add( "ACTUALS1", multiplyOp, rule00 );
-       table.add( "ACTUALS1", forwardSlash, rule00 );
-       table.add( "ACTUALS1", orOp, rule00 );
-       table.add( "ACTUALS1", plusOp, rule00 );
-       table.add( "ACTUALS1", minusOp, rule00 );
-       table.add( "ACTUALS1", lessThanOp, rule00 );
-       table.add( "ACTUALS1", assignmentOp, rule00 );
-       table.add( "ACTUALS1", closedParen, rule00 );
-       table.add( "ACTUALS1", thenOp, rule00 );
-       table.add( "ACTUALS1", elseOp, rule00 );
-       table.add( "ACTUALS1", endIfOp, rule00 );
-       table.add( "ACTUALS1", comma, rule00 );
-       table.add( "ACTUALS1", identifierOp, rule00 );
-       table.add( "ACTUALS1", endOfStream, rule00 );*/
        
        
        table.add( "ACTUALS", ifOp, rule32 );
@@ -612,5 +602,5 @@ public class TableDrivenParser extends Parser
       }
     }
     
-    public SemanticAction getSemanticNode() { return (SemanticAction) stackAttack.pop(); }
+    public SemanticAction getProgramNode() { return (SemanticAction) stackAttack.pop(); }//if( programNode != null) return programNode; else return (SemanticAction) stackAttack.pop(); }
 }

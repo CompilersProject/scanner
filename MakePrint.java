@@ -5,6 +5,7 @@ public class MakePrint extends SemanticAction
 {
   public MakePrint(){
     type = TYPE.PRINT;
+    name = "print";
   }
   
   public MakePrint( MakePrint mi ){

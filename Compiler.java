@@ -17,7 +17,7 @@ public class Compiler {
         testFile = args[0];
       }
       else{
-        testFile = "klein-programs\\tests02-parser\\06-function.kln";
+        testFile = "klein-programs\\tests02-parser\\08-print.kln";
       }
       SemanticAnalyzer analyzer;
       Scanner test = new Scanner( testFile );
@@ -25,12 +25,16 @@ public class Compiler {
       
       tdp.parseProgram();
       
-      analyzer = new SemanticAnalyzer( tdp.getSemanticNode() );
+      SemanticAction programNode = tdp.getProgramNode();
+      
+      analyzer = new SemanticAnalyzer( programNode );
       for( String defName: analyzer.getSymbolTable().getTable().keySet() )
       {
         System.out.println( defName + ": " + analyzer.getSymbolTable().getTable().get( defName ).toString() );
       }
       analyzer.analyzeTree( );
+      
+      CodeGenerator.generateTMCode( testFile, programNode );
     }
     catch(Exception e){
       System.out.println( e );
