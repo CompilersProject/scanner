@@ -15,7 +15,7 @@ public class MakePrint extends SemanticAction
     name = mi.name;
   }
   
-  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Print" );
 

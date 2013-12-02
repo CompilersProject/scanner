@@ -6,13 +6,11 @@ public class CodeGenerator
 {
   private static int currentLineNumber = 0;
   private static int registerCounter   = 3; // First argument will go here for main
-  private static int offsetCounter     = 1; // Memory offset (consider renaming)
+  private static int offsetCounter     = 1;
   
-  private static int returnAddress             = 1;
-  private static int returnValue               = 2;
-  private static int leftBranchReturnRegister  = 2;
-  private static int rightBranchReturnRegister = 3;
-  private static int programCounter            = 7;
+  private static int returnAddress  = 1;
+  private static int returnValue    = 2;
+  private static int programCounter = 7;
   
   private static String output = "";
   
@@ -26,22 +24,22 @@ public class CodeGenerator
           }
         }
         
-        // *** RUN-TIME SETUP ***
-        appendRegisterMemory( "LDA", returnAddress, 1, programCounter ); // LDA 1, 1(7) store return address
+        appendRegisterMemory( "LDA", returnAddress, 1, programCounter ); // LDA 1, 1(7)
         appendRegisterMemory( "LDA", programCounter, (currentLineNumber + 3), 0 );
         appendRegisterOnly(   "OUT", returnValue, 0, 0 );
         appendRegisterOnly(   "HALT", 0, 0, 0 );
-        
-        // *** MAIN ***    TODO: move to recursive loop
-        appendRegisterMemory( "ST", returnAddress, offsetCounter, 0 ); // Store return address into offset[0]
-        typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
-        appendRegisterMemory( "LD", programCounter, offsetCounter, 0 ); // Load return address into PC
-        
-        break;
       }
     }
-
-    writeOutputFile( outputFileName(inputFileName) );
+    
+    //recurseTree( programNode );
+    writeOutputFile( inputFileName );
+  }
+  
+  private static void recurseTree( SemanticAction node )
+  {
+    for( SemanticAction child: node.getBranches() ){
+      
+    }
   }
   
   private static void appendRegisterMemory( String instruction, int r1, int offset, int r2 )
@@ -59,7 +57,7 @@ public class CodeGenerator
   private static void writeOutputFile( String outFileName )
   {
     try {
-    File file = new File( outFileName );
+    File file = new File( "abcdefg.tm" );
     BufferedWriter outBuffer = new BufferedWriter( new FileWriter( file ) );
     outBuffer.write( output );
     outBuffer.close();
@@ -71,22 +69,23 @@ public class CodeGenerator
   
   private static String outputFileName( String fileName )
   {
-    return fileName.substring(0, fileName.indexOf('.')) + ".tm";
+    return fileName + ".tm"; // TODO: create output .tm name
   }
   
-  private static void typeCheckCodeGenerator( SemanticAction node, int branchReturnRegister )
+  private static void typeCheckCodeGenerator( SemanticAction node, String leftOrRight )
   {
     switch ( node.getType() )
     {
+      case DEFINITION:
+        if( !node.getName().equals("main") ){
+        
+      }
+        break;
+        
       case PRINT:
-        typeCheckCodeGenerator( node.getBranches().get(0), leftBranchReturnRegister ); // Call left branch
-        appendRegisterOnly( "OUT", leftBranchReturnRegister, 0, 0 );
-        typeCheckCodeGenerator( node.getBranches().get(1), rightBranchReturnRegister ); // Call right branch
-        appendRegisterOnly( "ADD", branchReturnRegister, rightBranchReturnRegister, 0 );
         break;
         
       case INTEGER:
-        appendRegisterMemory( "LDC", branchReturnRegister, Integer.parseInt( node.getName() ), 0 );
         break;
     }
   }

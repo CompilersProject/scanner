@@ -16,12 +16,12 @@ public class MakeIdentifier extends SemanticAction
     name = mi.name;
   }
   
-  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println("Pushing Identifier");
     
     //TableDrivenParser.currentActuals++;
-    TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
+    //int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
     //tmp++;
     
     name = (String) nameStack.pop();

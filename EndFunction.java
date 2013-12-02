@@ -12,9 +12,4 @@ public class EndFunction extends SemanticAction
     System.out.println( "Pushing End Function" );
     stack.push( this );
   }
-  
-  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack )
-  {
-    
-  }
 }

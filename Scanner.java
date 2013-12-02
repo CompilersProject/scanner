@@ -42,7 +42,7 @@ public class Scanner
     while( isOurWhitespace((char) nextByte) ){
      nextByte = getNextByte();
     }
-   if( nextByte == -1 || nextByte == 'ÿ'){
+   if( nextByte == -1 || nextByte == 'Ã¿'){
       // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
       // Saving off a copy of EOS when it is found initially doesn't work well for peeks
       // Best solution that works so far.
@@ -70,7 +70,7 @@ public class Scanner
         throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
       
-      if( nextByte != -1 || nextByte == 'ÿ'){ // EOF character
+      if( nextByte != -1 || nextByte == 'Ã¿'){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
@@ -115,7 +115,7 @@ public class Scanner
       c == ')' ||
       c == ',' ||
       c == ':' ||
-      c == 'ÿ';
+      c == 'Ã¿';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
   public boolean isComment (char c) throws IOException
