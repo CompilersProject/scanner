@@ -5,11 +5,10 @@ import java.util.ArrayList;
 public class TableDrivenParser extends Parser
 
 {
-  //public static int currentActuals;
   public static int functionDepth;
-  public static ArrayList<Integer> actualsCounts;
+  public static List<Integer> actualsCounts;
 
-  private Stack stackAttack;
+  private Stack<SemanticAction> stackAttack;
   private ParsingTable kleinTable;
   private SemanticAction programNode;
 
@@ -18,9 +17,8 @@ public class TableDrivenParser extends Parser
     public TableDrivenParser( Scanner source )
     {
       super( source );
-      //currentActuals = 0;
       functionDepth = 0;
-      actualsCounts = new ArrayList<Integer>();
+      actualsCounts = new ArrayList<>();
       
       kleinTable = makeKleinParsingTable();
     }
@@ -28,8 +26,8 @@ public class TableDrivenParser extends Parser
     protected void parseProgram() throws IOException, LexicalException, SemanticException
     {
       Stack parseStack = new Stack();
-      Stack nameStack = new Stack();
-      stackAttack = new Stack();
+      Stack<String> nameStack = new Stack<String>();
+      stackAttack = new Stack<SemanticAction>();
       
       new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
       new Push( "PROGRAM" ).execute(parseStack); // Step 2

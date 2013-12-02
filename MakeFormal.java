@@ -17,7 +17,7 @@ public class MakeFormal extends SemanticAction
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, Stack nameStack ){
+  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug ){
       System.out.println("Pushing Formal " + this.name);
     }

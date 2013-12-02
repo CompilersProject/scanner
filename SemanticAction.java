@@ -51,7 +51,7 @@ public class SemanticAction implements ParseAction
   }
   
   // Applies a semantic action 
-  public void updateAST( Stack semanticStack, Stack nameStack ){
+  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     semanticStack.push( this );
   }
   
@@ -74,6 +74,17 @@ public class SemanticAction implements ParseAction
     while( n > 0 ){
       branches.add( (SemanticAction) stack.pop() );
       n--;
+    }
+    
+    java.util.Collections.reverse( branches ); // So all branches will be in the expected order (GenerateCode)
+  }
+  
+  public SemanticAction getLastNode() 
+  { 
+    if( branches.isEmpty() ){ 
+      return new SemanticAction(); 
+    } else { 
+      return branches.get(branches.size() - 1); 
     }
   }
   

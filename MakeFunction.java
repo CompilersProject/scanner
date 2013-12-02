@@ -15,7 +15,7 @@ public class MakeFunction extends SemanticAction
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, Stack nameStack ){
+  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Function" );
     
@@ -24,9 +24,9 @@ public class MakeFunction extends SemanticAction
     //addNodes( semanticStack, TableDrivenParser.currentActuals );
     //TableDrivenParser.currentActuals = 0;
     
-    //addNodes( semanticStack, TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth ) );
-    //TableDrivenParser.actualsCounts.remove( TableDrivenParser.functionDepth );
-    //TableDrivenParser.functionDepth--;
+    addNodes( semanticStack, TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth ) );
+    TableDrivenParser.actualsCounts.remove( TableDrivenParser.functionDepth );
+    TableDrivenParser.functionDepth--;
     
     addNodes( semanticStack, 1 );
     
