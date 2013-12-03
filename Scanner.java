@@ -2,6 +2,15 @@ import java.io.PushbackInputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 
+/**
+ * 
+ * Used to scan the Klein file. Contains methods to
+ * peek ahead, grab the next token and create a token. 
+ * This class also defines what it is to be white 
+ * space, a symbol and a comment.
+ *
+ */
+
 
 public class Scanner
 {
