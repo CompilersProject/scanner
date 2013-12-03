@@ -9,7 +9,7 @@ public class Compiler {
   // No good compile-time code stripping for Java
   // Any if statements with static final variables should be evaluated at compile time
   // So this should work without unnecessary overhead
-  public static boolean extendedDebug = false;
+  public static boolean extendedDebug = true;
   
   public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
   {

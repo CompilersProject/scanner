@@ -1,3 +1,12 @@
+/**
+ * 
+ * The Token class uses a string and decides which token it is
+ * using state machine-like statements. If the string is not matched
+ * to one of the types it is returned as an identifier. This class
+ * also handles the limits of the size of numbers.
+ * 
+ */
+
 public class Token 
 {     
     private TYPE type;

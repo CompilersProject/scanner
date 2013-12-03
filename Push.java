@@ -1,5 +1,13 @@
 import java.util.Stack;
 
+/**
+ * 
+ * The Push class contains the methods necessary to
+ * push strings and tokens onto the stack using the
+ * execute method.
+ *
+ */
+
 public class Push implements ParseAction {
  
   private Token token;

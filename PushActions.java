@@ -1,6 +1,12 @@
-// *** Not sure if we need this yet because our ParseActions are all one Push class ***
-
 import java.util.Stack;
+
+/**
+ * 
+ * Creates an array of ParseActions then uses the
+ * execute function to push the contents of the array
+ * into the stack.
+ *
+ */
 
 public class PushActions implements ParseAction
 {

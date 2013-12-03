@@ -1,5 +1,13 @@
 import java.util.Stack;
 
+/**
+ * 
+ * Uses the ParseAction interface to push
+ * names of an identifier token onto the 
+ * stack.
+ *
+ */
+
 public class NameAction implements ParseAction
 {
   public void addName( Stack<String> stack, String name )

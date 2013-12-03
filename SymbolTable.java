@@ -3,6 +3,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * 
+ * Symbol table implemented as a hash map and
+ * contains a method to add to the hash map.
+ *
+ */
+
 public class SymbolTable 
 {
   Map<String, List<SemanticAction>> table;

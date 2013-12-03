@@ -3,6 +3,14 @@ import java.util.Stack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * Using the the Klein grammar, rules are created,
+ * then added to a table which was created in ParsingTable. 
+ * While parsing the program, comments are skipped.
+ * 
+ */	
+
 public class TableDrivenParser extends Parser
 
 {

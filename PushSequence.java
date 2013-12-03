@@ -1,5 +1,12 @@
 import java.util.Stack;
 
+/**
+ * 
+ * The execute method in PushSequence pushes
+ * the tokens onto the stack in reverse order.
+ *
+ */
+
 public class PushSequence implements ParseAction {
 
   private ParseAction[] actions;
