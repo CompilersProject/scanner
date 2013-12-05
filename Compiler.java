@@ -9,7 +9,7 @@ public class Compiler {
   // No good compile-time code stripping for Java
   // Any if statements with static final variables should be evaluated at compile time
   // So this should work without unnecessary overhead
-  public static boolean extendedDebug = true;
+  public static boolean extendedDebug = false;
   
   public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
   {
@@ -35,6 +35,8 @@ public class Compiler {
       
       analyzer = new SemanticAnalyzer( programNode );
       
+//      analyzer.showErrors();
+      
       if(extendedDebug == true) {
         for( String defName: analyzer.getSymbolTable().getTable().keySet() )
       	{
@@ -44,7 +46,10 @@ public class Compiler {
       
       analyzer.analyzeTree( );
       
-      CodeGenerator.generateTMCode( testFile, programNode );
+      if (analyzer.showErrors().isEmpty()){
+    	  CodeGenerator.generateTMCode( testFile, programNode );
+      }
+
     }
     catch(Exception e){
       System.out.println( e );

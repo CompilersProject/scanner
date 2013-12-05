@@ -7,7 +7,8 @@ public class SemanticAnalyzer
   private SymbolTable symbolTable = new SymbolTable();
   private SemanticAction startNode = new SemanticAction();
   private int mainCounter;
-
+  private ArrayList<String> errorList = new ArrayList<String>();
+		  
   public SemanticAnalyzer( SemanticAction node )
   {
     mainCounter = 0;
@@ -22,7 +23,7 @@ public class SemanticAnalyzer
     {
       String defName = def.getName();
       if( defName.equals("print") ){
-        System.out.println( "User-defined print function not allowed." );
+        errorList.add( "User-defined print function not allowed.\n" );
       } else if( defName.equals("main") ){
         mainCounter++;
       }
@@ -36,9 +37,9 @@ public class SemanticAnalyzer
     
     
     if( mainCounter < 1 )
-      System.out.println( "No main function defined." );
+      errorList.add( "No main function defined.\n" );
     else if( mainCounter > 1 )
-      System.out.println( "Too many main functions defined." );
+      errorList.add( "Too many main functions defined.\n" );
   }
   
   public void analyzeTree( )
@@ -60,14 +61,14 @@ public class SemanticAnalyzer
         return;
       } else {
         if( !symbolTable.compare( defName, node ) ){
-          System.out.println( "No formal parameter: " + node + " inside defintion of " + defName );
+          errorList.add( "No formal parameter: " + node + " inside defintion of " + defName + "\n" );
         }
       }
     }
     
     if( node.getType() == SemanticAction.TYPE.FUNCTION &&
        !symbolTable.checkFunctionCall( node.getName() ) ){
-      System.out.println( "No function definition for call to: " + node.getName() );
+      errorList.add( "No function definition for call to: " + node.getName() + "\n" );
     }
     
     for( SemanticAction branch: node.getBranches() )
@@ -85,4 +86,13 @@ public class SemanticAnalyzer
   }
 
   public SymbolTable getSymbolTable() { return symbolTable; }
+  
+  public ArrayList<String> showErrors(){
+  if (!errorList.isEmpty()) {
+	  for (int i = 0; i < errorList.size(); i++){
+		  System.out.println(errorList.get(i));
+		}
+  }
+  	return errorList;
+  }
 }
