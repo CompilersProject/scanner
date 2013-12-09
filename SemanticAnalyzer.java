@@ -15,6 +15,19 @@ public class SemanticAnalyzer
     
     startNode = node;
     makeSymbolTable();
+    getReturnType();
+  }
+  
+  public void getReturnType()
+  {
+	  for ( SemanticAction def: startNode.getBranches() )
+	  { 
+		  for( SemanticAction typeNode: def.getBranches() )
+		  {
+			if(typeNode.type==SemanticAction.TYPE.TYPE)
+			  System.out.println(typeNode);
+		  }
+	  }
   }
   
   private void makeSymbolTable( )
