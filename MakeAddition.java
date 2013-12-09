@@ -14,6 +14,8 @@ public class MakeAddition extends SemanticAction
 {
   public MakeAddition(){
     type = TYPE.ADDITION;
+    returnType = "integer";
+    childType = "integer";
   }
   
   public MakeAddition( MakeAddition mi ){
@@ -21,6 +23,8 @@ public class MakeAddition extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

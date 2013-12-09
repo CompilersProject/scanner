@@ -14,6 +14,8 @@ public class MakeDivision extends SemanticAction
 {
   public MakeDivision(){
     type = TYPE.DIVISION;
+    returnType = "integer";
+    childType = "integer";
   }
   
   public MakeDivision( MakeDivision mi ){
@@ -21,6 +23,8 @@ public class MakeDivision extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

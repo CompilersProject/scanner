@@ -14,6 +14,8 @@ public class MakeAnd extends SemanticAction
 {
   public MakeAnd(){
     type = TYPE.AND;
+    returnType = "boolean";
+    childType = "boolean";
   }
   
   public MakeAnd( MakeAnd mi ){
@@ -21,6 +23,8 @@ public class MakeAnd extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

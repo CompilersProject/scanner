@@ -14,6 +14,8 @@ public class MakeSubtraction extends SemanticAction
 {
   public MakeSubtraction(){
     type = TYPE.SUBTRACTION;
+    returnType = "integer";
+    childType = "integer";
   }
   
   public MakeSubtraction( MakeSubtraction mi ){
@@ -21,6 +23,8 @@ public class MakeSubtraction extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

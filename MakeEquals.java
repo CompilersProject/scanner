@@ -14,6 +14,8 @@ public class MakeEquals extends SemanticAction
 {
   public MakeEquals(){
     type = TYPE.EQUALS;
+    returnType = "integer";
+    childType = "integer";
   }
   
   public MakeEquals( MakeEquals mi ){
@@ -21,6 +23,8 @@ public class MakeEquals extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

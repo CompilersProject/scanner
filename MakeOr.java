@@ -14,6 +14,8 @@ public class MakeOr extends SemanticAction
 {
   public MakeOr(){
     type = TYPE.OR;
+    returnType = "boolean";
+    childType = "boolean";
   }
   
   public MakeOr( MakeOr mi ){
@@ -21,6 +23,8 @@ public class MakeOr extends SemanticAction
     
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
+    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
