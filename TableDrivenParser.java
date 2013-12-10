@@ -9,130 +9,130 @@ import java.util.List;
  * then added to a table which was created in ParsingTable. 
  * While parsing the program, comments are skipped.
  * 
- */	
+ */ 
 
 public class TableDrivenParser extends Parser
 
 {
   public static int functionDepth;
   public static List<Integer> actualsCounts;
-
+  
   private Stack<SemanticAction> stackAttack;
   private ParsingTable kleinTable;
   private SemanticAction programNode;
-
+  
   private String tmpIdentifierName;
-
-    public TableDrivenParser( Scanner source )
-    {
-      super( source );
-      functionDepth = -1; // TODO: This is crazy hacky
-      actualsCounts = new ArrayList<Integer>();
+  
+  public TableDrivenParser( Scanner source )
+  {
+    super( source );
+    functionDepth = -1; // TODO: This is crazy hacky
+    actualsCounts = new ArrayList<Integer>();
+    
+    kleinTable = makeKleinParsingTable();
+  }
+  
+  protected void parseProgram() throws IOException, LexicalException, SemanticException
+  {
+    Stack parseStack = new Stack();
+    Stack<String> nameStack = new Stack<String>();
+    stackAttack = new Stack<SemanticAction>();
+    
+    new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
+    new Push( "PROGRAM" ).execute(parseStack); // Step 2
+    
+    while( true ){ // Step 3
+      Object symbol = parseStack.pop(); // Pop A
       
-      kleinTable = makeKleinParsingTable();
-    }
-
-    protected void parseProgram() throws IOException, LexicalException, SemanticException
-    {
-      Stack parseStack = new Stack();
-      Stack<String> nameStack = new Stack<String>();
-      stackAttack = new Stack<SemanticAction>();
+      skipComments( scanner.peek() );
       
-      new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
-      new Push( "PROGRAM" ).execute(parseStack); // Step 2
-      
-      while( true ){ // Step 3
-        Object symbol = parseStack.pop(); // Pop A
-        
-        skipComments( scanner.peek() );
-        
-        if( symbol instanceof NameAction ){
-          ((NameAction) symbol).addName( nameStack, scanner.peek().getValue() );
-        } else if( symbol instanceof Token ){ // A is terminal
-          Token terminal = (Token) symbol;
-          if( terminal.getType() == Token.TYPE.EOS ){
-            if( Compiler.extendedDebug ){
-              System.out.println("\nFinished.\nProgram parsed with no errors.\n\nSemantic Stack:\n");
-            }
-            return;
-          } else if( terminal.equals( scanner.peek() )){
-            if( Compiler.extendedDebug ){
-              // * For debugging *
+      if( symbol instanceof NameAction ){
+        ((NameAction) symbol).addName( nameStack, scanner.peek().getValue() );
+      } else if( symbol instanceof Token ){ // A is terminal
+        Token terminal = (Token) symbol;
+        if( terminal.getType() == Token.TYPE.EOS ){
+          if( Compiler.extendedDebug ){
+            System.out.println("\nFinished.\nProgram parsed with no errors.\n\nSemantic Stack:\n");
+          }
+          return;
+        } else if( terminal.equals( scanner.peek() )){
+          if( Compiler.extendedDebug ){
+            // * For debugging *
               tmpIdentifierName = scanner.getNextToken().toString();
               System.out.println( "Consumed: " + tmpIdentifierName );
             } else {
               tmpIdentifierName = scanner.getNextToken().toString();
             }
-          } else{
-            // * For debugging *
-            if( Compiler.extendedDebug ){
-              System.out.println( "Next Token: " + scanner.peek().typeToInt() );
-              System.out.println( "Terminal: " + terminal.typeToInt() );
-            }
-            throw new SemanticException("Bad things found"); // TODO: Consider adding alternate Semantic Exception to output found/expected Tokens
+        } else{
+          // * For debugging *
+          if( Compiler.extendedDebug ){
+            System.out.println( "Next Token: " + scanner.peek().typeToInt() );
+            System.out.println( "Terminal: " + terminal.typeToInt() );
           }
+          throw new SemanticException("Bad things found"); // TODO: Consider adding alternate Semantic Exception to output found/expected Tokens
         }
-        else if( symbol instanceof String ){ // A is non-terminal
-          String nonTerminal = (String) symbol;
-          Token tmp = scanner.peek();
-          ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
-
-          if( rule instanceof PushSequence ){
-            if( Compiler.extendedDebug ){
-              System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
-            }
-              rule.execute(parseStack); // PushSequence loops through rules backwards
-          } else if( rule instanceof PushNothing ){
-            // **** Do nothing? ****
+      }
+      else if( symbol instanceof String ){ // A is non-terminal
+        String nonTerminal = (String) symbol;
+        Token tmp = scanner.peek();
+        ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
+        
+        if( rule instanceof PushSequence ){
+          if( Compiler.extendedDebug ){
+            System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
+          }
+          rule.execute(parseStack); // PushSequence loops through rules backwards
+        } else if( rule instanceof PushNothing ){
+          // **** Do nothing? ****
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
-        } else if( symbol instanceof SemanticAction ){
-          SemanticAction sa = ( (SemanticAction) symbol ).copy();
-          sa.updateAST( stackAttack, nameStack );
+      } else if( symbol instanceof SemanticAction ){
+        SemanticAction sa = ( (SemanticAction) symbol ).copy();
+        sa.updateAST( stackAttack, nameStack );
         } else {
           throw new SemanticException("Invalid object found on parse stack."); // Create a new exception for this?
         }
-      }
     }
-
-    private ParsingTable makeKleinParsingTable()
-    {
-       ParsingTable table = new ParsingTable();
-
-       try {
-        
-       Token endOfStream        = new Token( Token.TYPE.EOS );
-       Token plusOp             = new Token( Token.TYPE.PLUS );
-       Token minusOp            = new Token( Token.TYPE.MINUS );
-       Token multiplyOp         = new Token( Token.TYPE.MULTIPLY );
-       Token assignmentOp       = new Token( Token.TYPE.ASSIGNMENT );
-       Token lessThanOp         = new Token( Token.TYPE.LESSTHAN );
-       Token openParen          = new Token( Token.TYPE.OPEN_PAREN );
-       Token closedParen        = new Token( Token.TYPE.CLOSED_PAREN );
-       Token ifOp               = new Token( Token.TYPE.IF );
-       Token thenOp             = new Token( Token.TYPE.THEN );
-       Token elseOp             = new Token( Token.TYPE.ELSE );
-       Token endIfOp            = new Token( Token.TYPE.END_IF );
-       Token notOp              = new Token( Token.TYPE.NOT );
-       Token orOp               = new Token( Token.TYPE.OR );
-       Token andOp              = new Token( Token.TYPE.AND );
-       Token comment            = new Token( Token.TYPE.COMMENT );
-       Token forwardSlash       = new Token( Token.TYPE.FORWARD_SLASH );
-       Token comma              = new Token( Token.TYPE.COMMA );
-       Token booleanOp          = new Token( Token.TYPE.BOOLEAN );
-       Token trueOp             = new Token( Token.TYPE.TRUE );
-       Token falseOp            = new Token( Token.TYPE.FALSE );
-       Token colonOp            = new Token( Token.TYPE.COLON );
-       Token integerOp          = new Token( Token.TYPE.INTEGER );
-       Token identifierOp       = new Token( Token.TYPE.IDENTIFIER );
-       Token print              = new Token( Token.TYPE.PRINT );
-       Token number             = new Token( Token.TYPE.NUMBER );
-
+  }
+  
+  private ParsingTable makeKleinParsingTable()
+  {
+    ParsingTable table = new ParsingTable();
+    
+    try {
+      
+      Token endOfStream        = new Token( Token.TYPE.EOS );
+      Token plusOp             = new Token( Token.TYPE.PLUS );
+      Token minusOp            = new Token( Token.TYPE.MINUS );
+      Token multiplyOp         = new Token( Token.TYPE.MULTIPLY );
+      Token assignmentOp       = new Token( Token.TYPE.ASSIGNMENT );
+      Token lessThanOp         = new Token( Token.TYPE.LESSTHAN );
+      Token openParen          = new Token( Token.TYPE.OPEN_PAREN );
+      Token closedParen        = new Token( Token.TYPE.CLOSED_PAREN );
+      Token ifOp               = new Token( Token.TYPE.IF );
+      Token thenOp             = new Token( Token.TYPE.THEN );
+      Token elseOp             = new Token( Token.TYPE.ELSE );
+      Token endIfOp            = new Token( Token.TYPE.END_IF );
+      Token notOp              = new Token( Token.TYPE.NOT );
+      Token orOp               = new Token( Token.TYPE.OR );
+      Token andOp              = new Token( Token.TYPE.AND );
+      Token comment            = new Token( Token.TYPE.COMMENT );
+      Token forwardSlash       = new Token( Token.TYPE.FORWARD_SLASH );
+      Token comma              = new Token( Token.TYPE.COMMA );
+      Token booleanOp          = new Token( Token.TYPE.BOOLEAN );
+      Token trueOp             = new Token( Token.TYPE.TRUE );
+      Token falseOp            = new Token( Token.TYPE.FALSE );
+      Token colonOp            = new Token( Token.TYPE.COLON );
+      Token integerOp          = new Token( Token.TYPE.INTEGER );
+      Token identifierOp       = new Token( Token.TYPE.IDENTIFIER );
+      Token print              = new Token( Token.TYPE.PRINT );
+      Token number             = new Token( Token.TYPE.NUMBER );
+      
        
 
-       ParseAction rule00 = new PushNothing();
-       ParseAction rule01 = new PushSequence(
+      ParseAction rule00 = new PushNothing();
+      ParseAction rule01 = new PushSequence(
                  new ParseAction[] { new Push("DEFINITIONS"),
                                      new MakeProgram(),
                       } );
@@ -221,13 +221,15 @@ public class TableDrivenParser extends Parser
                     } );
        ParseAction rule19 = new PushSequence(
                new ParseAction[] { new Push(plusOp),
-                              new Push("SIMPLE-EXPR"),
-                              new MakeAddition()
+                              new Push("TERM"),
+                              new MakeAddition(),
+                              new Push("TERM2"),
                     } );
        ParseAction rule20 = new PushSequence(
                new ParseAction[] { new Push(minusOp),
-                                   new Push("SIMPLE-EXPR"),
-                                   new MakeSubtraction()
+                                   new Push("TERM"),
+                                   new MakeSubtraction(),
+                                   new Push("TERM2"),
                     } );
        ParseAction rule21 = new PushSequence(
                new ParseAction[] { new Push("FACTOR"),
@@ -235,8 +237,12 @@ public class TableDrivenParser extends Parser
                     } );
        ParseAction rule22 = new PushSequence(
                new ParseAction[] { new Push(andOp),
-                                   new Push("TERM"),
-                                   new MakeAnd()
+                                   new Push("FACTOR"),
+                                   new MakeAnd(),
+                                   new Push("TERM1"),
+                                   //new MakeAnd()
+                                   //new Push("TERM"),
+                                   //new MakeAnd()
                     } );
        ParseAction rule23 = new PushSequence(
                new ParseAction[] { new Push(multiplyOp),
