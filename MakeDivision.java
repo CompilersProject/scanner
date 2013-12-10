@@ -16,6 +16,7 @@ public class MakeDivision extends SemanticAction
     type = TYPE.DIVISION;
     returnType = "integer";
     childType = "integer";
+    name = "division";
   }
   
   public MakeDivision( MakeDivision mi ){

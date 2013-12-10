@@ -16,6 +16,7 @@ public class MakeAddition extends SemanticAction
     type = TYPE.ADDITION;
     returnType = "integer";
     childType = "integer";
+    name = "addition";
   }
   
   public MakeAddition( MakeAddition mi ){

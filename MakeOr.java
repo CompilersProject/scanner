@@ -16,6 +16,7 @@ public class MakeOr extends SemanticAction
     type = TYPE.OR;
     returnType = "boolean";
     childType = "boolean";
+    name = "or";
   }
   
   public MakeOr( MakeOr mi ){

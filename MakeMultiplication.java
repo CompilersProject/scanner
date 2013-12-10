@@ -16,6 +16,7 @@ public class MakeMultiplication extends SemanticAction
     type = TYPE.MULTIPLICATION;
     returnType = "integer";
     childType = "integer";
+    name = "multiplication";
   }
   
   public MakeMultiplication( MakeMultiplication mi ){

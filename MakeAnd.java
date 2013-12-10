@@ -16,6 +16,7 @@ public class MakeAnd extends SemanticAction
     type = TYPE.AND;
     returnType = "boolean";
     childType = "boolean";
+    name = "and";
   }
   
   public MakeAnd( MakeAnd mi ){

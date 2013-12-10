@@ -7,6 +7,8 @@ public class SemanticAction implements ParseAction
   
   protected TYPE type;
   protected String name;
+  protected String returnType;
+  protected String childType;
 
   public enum TYPE {
     ADDITION,

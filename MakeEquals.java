@@ -16,6 +16,7 @@ public class MakeEquals extends SemanticAction
     type = TYPE.EQUALS;
     returnType = "integer";
     childType = "integer";
+    name = "equals";
   }
   
   public MakeEquals( MakeEquals mi ){

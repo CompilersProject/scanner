@@ -16,6 +16,7 @@ public class MakeLessThan extends SemanticAction
     type = TYPE.LESSTHAN;
     returnType = "boolean";
     childType = "boolean";
+    name = "less than";
   }
   
   public MakeLessThan( MakeLessThan mi ){

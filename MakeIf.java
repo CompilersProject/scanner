@@ -16,6 +16,7 @@ public class MakeIf extends SemanticAction
     type = TYPE.IF;
     returnType = "boolean";
     childType = "boolean";
+    name = "if";
   }
   
   public MakeIf( MakeIf mi ){

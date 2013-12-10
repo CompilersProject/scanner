@@ -16,6 +16,28 @@ public class SemanticAnalyzer
     startNode = node;
     makeSymbolTable();
     getReturnType();
+    bodyTraversal();
+  }
+  
+  public void bodyTraversal()
+  {
+	  for ( SemanticAction def: startNode.getBranches() )
+	  { 
+//		  System.out.println(def+" level 1");
+		  for( SemanticAction typeNode: def.getBranches() )
+		  {
+//			  System.out.println(typeNode+" level 2");
+//			  System.out.println(typeNode.name);
+			  for( SemanticAction moreNode: typeNode.getBranches() )
+			  {
+//				  System.out.println(moreNode.name);
+				  for( SemanticAction stuffNode: moreNode.getBranches() )
+				  {
+//					  System.out.println(stuffNode);
+				  }
+			  }
+		  }
+	  }
   }
   
   public void getReturnType()
@@ -25,7 +47,8 @@ public class SemanticAnalyzer
 		  for( SemanticAction typeNode: def.getBranches() )
 		  {
 			if(typeNode.type==SemanticAction.TYPE.TYPE)
-			  System.out.println(typeNode);
+			  System.out.println("RETURN TYPE: "+typeNode.name);
+//			  System.out.println("RETURN TYPE: "+typeNode);
 		  }
 	  }
   }
