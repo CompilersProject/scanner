@@ -37,7 +37,6 @@ public class CodeGenerator
         appendRegisterOnly(   "HALT", 0, 0, 0 );
         
         //TODO: move to recursive loop
-        
         appendCommentFunctName( "MAIN" ); // ***
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
         memoryCounter++;
@@ -61,7 +60,7 @@ public class CodeGenerator
   // Overloaded to accept comments
   private static void appendRegisterMemory( String instruction, int r1, int offset, int r2, String comment )
   {
-    output += currentLineNumber + ": " + instruction + " " + r1 + ", " + offset + "(" + r2 + ")\t\t* " + comment + "\n";
+    output += currentLineNumber + ": " + instruction + " " + r1 + ", " + offset + "(" + r2 + ")\t\t\t* " + comment + "\n";
     currentLineNumber++;
   }
   
@@ -73,7 +72,7 @@ public class CodeGenerator
   // Overloaded to accept comments
   private static void appendRegisterOnly( String instruction, int r1, int r2, int r3, String comment )
   {
-    output += currentLineNumber + ": " + instruction + " " + r1 + ", " + r2 + ", " + r3 + "\t\t* " + comment + "\n";
+    output += currentLineNumber + ": " + instruction + " " + r1 + ", " + r2 + ", " + r3 + "\t\t\t* " + comment + "\n";
     currentLineNumber++;
   }
   
@@ -114,6 +113,17 @@ public class CodeGenerator
         appendRegisterOnly( "ADD", branchReturnRegister, leftWorkingRegister, rightReturnRegister );
         break;
         
+      case AND:
+        branchHelperGuy(node);
+        
+        appendRegisterMemory( "LDA", jumpAddressRegister, 4, programCounter, "Store address of false return value" );
+        appendRegisterMemory( "JEQ", leftWorkingRegister, 0, jumpAddressRegister );
+        appendRegisterMemory( "JEQ", rightReturnRegister, 0, jumpAddressRegister );
+        appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Return true" ); // *Is arithmetic faster than LDC?*
+        appendRegisterMemory( "LDA", programCounter, 1, programCounter, "Skip over return false instruction" );
+        appendRegisterOnly( "MUL", branchReturnRegister, 0, 0, "Return false" );
+        break;
+        
       case BOOLEAN:
         if( node.getName().equals("true") )
           appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Load 'true' ( 1 )" );
@@ -126,8 +136,47 @@ public class CodeGenerator
         appendRegisterOnly( "DIV", branchReturnRegister, leftWorkingRegister, rightReturnRegister );
         break;
         
+      case EQUALS:
+        branchHelperGuy(node);
+        
+        appendRegisterMemory( "LDA", jumpAddressRegister, 4, programCounter, "Store address of false return value" );
+        
+        appendRegisterOnly( "SUB", leftWorkingRegister, leftWorkingRegister, rightReturnRegister, "Difference of operands (a = b -> a - b)" );
+        appendRegisterMemory( "JEQ", leftWorkingRegister, 0, jumpAddressRegister );
+        
+        appendRegisterOnly( "MUL", branchReturnRegister, 0, 0, "Return false" );
+        appendRegisterMemory( "LDA", programCounter, 1, programCounter, "Skip over return true instruction" );
+        appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Return true" ); // *Is arithmetic faster than LDC?*
+        break;
+        
+      /*case IDENTIFIER:
+        
+        break;*/
+        
+      case IF:
+        appendComment( "Start If" );
+        typeCheckCodeGenerator( node.getBranches().get(0), leftReturnRegister );
+        appendComment( "End If: value of conditional stored in register " + leftReturnRegister );
+        
+        branchHelperGirl( node.getBranches().get(1), node.getBranches().get(2), branchReturnRegister );
+        
+        break;
+        
       case INTEGER:
         appendRegisterMemory( "LDC", branchReturnRegister, Integer.parseInt( node.getName() ), 0 );
+        break;
+        
+      case LESSTHAN:
+        branchHelperGuy(node);
+        
+        appendRegisterMemory( "LDA", jumpAddressRegister, 4, programCounter, "Store address of false return value" );
+        
+        appendRegisterOnly( "SUB", leftWorkingRegister, leftReturnRegister, rightReturnRegister, "Difference of operands (a < b -> a - b)" );
+        appendRegisterMemory( "JGE", leftWorkingRegister, 0, jumpAddressRegister );
+        
+        appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Return true" ); // *Is arithmetic faster than LDC?*
+        appendRegisterMemory( "LDA", programCounter, 1, programCounter, "Skip over return false instruction" );
+        appendRegisterOnly( "MUL", branchReturnRegister, 0, 0, "Return false" );
         break;
         
       /*case FUNCTION:
@@ -151,7 +200,7 @@ public class CodeGenerator
         appendRegisterMemory( "JGT", leftWorkingRegister, 0, jumpAddressRegister );
         appendRegisterMemory( "JGT", rightReturnRegister, 0, jumpAddressRegister );
         appendRegisterOnly( "MUL", branchReturnRegister, 0, 0, "Return false" ); // *Is arithmetic faster than LDC?*
-        //appendRegisterOnly( "ADD", programCounter, programCounter, 1, "Skip over false return instruction" ); // Not working?
+        //appendRegisterOnly( "ADD", programCounter, programCounter, 1, "Skip over false return instruction" ); // TODO: Not working?
         appendRegisterMemory( "LDA", programCounter, 1, programCounter, "Skip over return true instruction" );
         appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Return true" );
         break;
@@ -177,5 +226,27 @@ public class CodeGenerator
     typeCheckCodeGenerator( node.getBranches().get(1), rightReturnRegister ); // Call right branch
     memoryCounter--;
     appendRegisterMemory( "LD", leftWorkingRegister, memoryCounter, 0, "Load left branch value back into left working register" );
+  }
+  
+  // This is for if
+  private static void branchHelperGirl( SemanticAction leftNode, SemanticAction rightNode, int branchReturnRegister ){
+    int tmpLineNumber = currentLineNumber;
+    currentLineNumber += 2;
+    
+    typeCheckCodeGenerator( leftNode, branchReturnRegister );
+    
+    int elseLineNumber = currentLineNumber + 1;
+    currentLineNumber = tmpLineNumber;
+    appendRegisterMemory( "LDC", jumpAddressRegister, elseLineNumber, 0, "Load else line number" );
+    appendRegisterMemory( "JEQ", leftReturnRegister, 0, jumpAddressRegister, "Jump to else" );
+    
+    tmpLineNumber = elseLineNumber - 1;
+    currentLineNumber = elseLineNumber;
+    typeCheckCodeGenerator( rightNode, branchReturnRegister );
+    
+    int wallingfordsTmpNumber = currentLineNumber;
+    currentLineNumber = tmpLineNumber;
+    appendRegisterMemory( "LDC", programCounter, wallingfordsTmpNumber, 0, "End of 'then' statement, so skip 'else' and return value in register 2" );
+    currentLineNumber = wallingfordsTmpNumber;
   }
 }
