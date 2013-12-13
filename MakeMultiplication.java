@@ -32,6 +32,8 @@ public class MakeMultiplication extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Multiplication" );
 
+    removeFuncCallCount( 2 );
+    
     addNodes( semanticStack, 2 );
     
     semanticStack.push( this );

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class MakeSubtraction extends SemanticAction
 {
   public MakeSubtraction(){
+    name = "SUBTRACTION";
     type = TYPE.SUBTRACTION;
     returnType = "integer";
     childType = "integer";
@@ -31,6 +32,8 @@ public class MakeSubtraction extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Subtraction" );
 
+    removeFuncCallCount( 2 );
+    
     addNodes( semanticStack, 2 );
     
     semanticStack.push( this );

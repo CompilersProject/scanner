@@ -32,6 +32,8 @@ public class MakeAddition extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Addtion" );
     
+    removeFuncCallCount( 2 ); // TODO: Magic numbers everywhere!
+    
     // Get L and R Hand Operands
     addNodes( semanticStack, 2 );
     

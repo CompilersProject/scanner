@@ -14,26 +14,25 @@ public class MakeBoolean extends SemanticAction
   public MakeBoolean( ){
     type = TYPE.BOOLEAN;
     returnType = "boolean";
-    childType = "boolean";
   }
   
   public MakeBoolean( String name ){
     type = TYPE.BOOLEAN;
     this.name = name;
     returnType = "boolean";
-    childType = "boolean";
   }
   
   public MakeBoolean( MakeBoolean mi ){
     type = mi.type;
     name = mi.name;
     returnType = mi.returnType;
-    childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug )
       System.out.println("Pushing Boolean");
+    
+    removeFuncCallCount( 2 );
     
     name = (String) nameStack.pop();
     

@@ -3,7 +3,7 @@ import java.util.Stack;
 public class StartFunction extends SemanticAction
 {
   public StartFunction(){
-    name = "End Function Call";
+    name = "Start Function Call";
     type = TYPE.ERROR; // This should only be used for counting actuals
   }
   
@@ -15,13 +15,17 @@ public class StartFunction extends SemanticAction
   
   public void execute( Stack stack )
   {
-    System.out.println( "Pushing End Function" );
+    if( Compiler.extendedDebug )
+      System.out.println( "Pushing Start Function" );
     stack.push( this );
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack )
   {
-    TableDrivenParser.functionDepth++;
+    if( TableDrivenParser.functionDepth > 0 ){
+      TableDrivenParser.functionDepth++;
+    }
+    
     TableDrivenParser.actualsCounts.add( TableDrivenParser.functionDepth ); // So we have soething in the right position, I don't like this solution but it works
     TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, 0 );
     

@@ -32,6 +32,8 @@ public class MakeOr extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Or" );
 
+    removeFuncCallCount( 2 );
+    
     addNodes( semanticStack, 2 );
     
     semanticStack.push( this );

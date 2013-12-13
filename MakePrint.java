@@ -28,6 +28,8 @@ public class MakePrint extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Print" );
 
+    removeFuncCallCount( 2 );
+    
     addNodes( semanticStack, 2 );
     
     semanticStack.push( this );
@@ -35,5 +37,10 @@ public class MakePrint extends SemanticAction
   
   public SemanticAction copy(){
     return new MakePrint( this );
+  }
+  
+  // Overloaded from SemanticAction because this returnType depends on it's child's type
+  public String getReturnType(){
+    return branches.get(1).getReturnType();
   }
 }

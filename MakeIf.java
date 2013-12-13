@@ -14,8 +14,8 @@ public class MakeIf extends SemanticAction
 {
   public MakeIf(){
     type = TYPE.IF;
-    returnType = "boolean";
-    childType = "boolean";
+    //returnType = "boolean";
+    //childType = "boolean";
     name = "if";
   }
   
@@ -24,14 +24,16 @@ public class MakeIf extends SemanticAction
     
     type = mi.type;
     name = mi.name;
-    returnType = mi.returnType;
-    childType = mi.childType;
+    //returnType = mi.returnType;
+    //childType = mi.childType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing If" );
 
+    removeFuncCallCount( 3 );
+    
     addNodes( semanticStack, 3 );
     
     semanticStack.push( this );

@@ -8,49 +8,48 @@ public class SemanticAnalyzer
   private SemanticAction startNode = new SemanticAction();
   private int mainCounter;
   private ArrayList<String> errorList = new ArrayList<String>();
-		  
+    
   public SemanticAnalyzer( SemanticAction node )
   {
     mainCounter = 0;
     
     startNode = node;
     makeSymbolTable();
-    getReturnType();
-    bodyTraversal();
+    //getReturnType();
+    //bodyTraversal();
   }
   
   public void bodyTraversal()
   {
-	  for ( SemanticAction def: startNode.getBranches() )
-	  { 
-//		  System.out.println(def+" level 1");
-		  for( SemanticAction typeNode: def.getBranches() )
-		  {
-//			  System.out.println(typeNode+" level 2");
-//			  System.out.println(typeNode.name);
-			  for( SemanticAction moreNode: typeNode.getBranches() )
-			  {
-//				  System.out.println(moreNode.name);
-				  for( SemanticAction stuffNode: moreNode.getBranches() )
-				  {
-//					  System.out.println(stuffNode);
-				  }
-			  }
-		  }
-	  }
+    for ( SemanticAction def: startNode.getBranches() )
+    { 
+      System.out.println(def+" level 1");
+      for( SemanticAction typeNode: def.getBranches() )
+      {
+        System.out.println(typeNode+" level 2");
+        System.out.println(typeNode.name);
+        for( SemanticAction moreNode: typeNode.getBranches() )
+        {
+          System.out.println(moreNode.name);
+          for( SemanticAction stuffNode: moreNode.getBranches() )
+          {
+            System.out.println(stuffNode);
+          }
+        }
+      }
+    }
   }
   
   public void getReturnType()
   {
-	  for ( SemanticAction def: startNode.getBranches() )
-	  { 
-		  for( SemanticAction typeNode: def.getBranches() )
-		  {
-			if(typeNode.type==SemanticAction.TYPE.TYPE)
-			  System.out.println("RETURN TYPE: "+typeNode.name);
-//			  System.out.println("RETURN TYPE: "+typeNode);
-		  }
-	  }
+    for ( SemanticAction def: startNode.getBranches() )
+    { 
+      for( SemanticAction typeNode: def.getBranches() )
+      {
+        if(typeNode.type==SemanticAction.TYPE.TYPE)
+          System.out.println("RETURN TYPE: "+typeNode.name); // why?
+      }
+    }
   }
   
   private void makeSymbolTable( )
@@ -83,6 +82,7 @@ public class SemanticAnalyzer
     for( SemanticAction defNode: startNode.getBranches() )
     {
       helper( defNode.getName(), defNode.getBranches().get(0) );
+      checkDefReturn( defNode );
     }
   }
   
@@ -91,6 +91,7 @@ public class SemanticAnalyzer
     if( Compiler.extendedDebug ){
       System.out.println( node.getName() );
     }
+    
     if( node.getBranches().isEmpty() ){
       if(node.getType() == SemanticAction.TYPE.INTEGER ||
          node.getType() == SemanticAction.TYPE.BOOLEAN ){
@@ -111,24 +112,74 @@ public class SemanticAnalyzer
     {
       helper( defName, branch );
     }
+    
+    checkTypes( defName, node );
   }
 
-  public void adder(ArrayList allElements, int col)
+  private void checkTypes( String defName, SemanticAction node )
   {
-    for (int i=0; i<allElements.size(); i++)
-    {
-      //symbolTable.add( allElements.get(i), i, col );
+    switch( node.type ){
+      case IF:
+        String funcReturnType = symbolTable.getFunctionType( defName );
+        String nodeReturnType = node.getBranches().get(0).getReturnType();
+        if( !nodeReturnType.equals( "boolean" ) ){
+          errorList.add( "If conditional statements expect type boolean. " + node.getBranches().get(0).getName() + " is type " + nodeReturnType ); // ***
+        }
+        nodeReturnType = node.getBranches().get(1).getReturnType();
+        if( !nodeReturnType.equals( funcReturnType ) ){
+          errorList.add( "Argument " + node.getBranches().get(1).getName() + " does not match return type of " + node.getName() + ". Expected " + funcReturnType );
+        }
+        nodeReturnType = node.getBranches().get(2).getReturnType();
+        if( !nodeReturnType.equals( funcReturnType ) ){
+          errorList.add( "Argument " + node.getBranches().get(1).getName() + " does not match return type of " + node.getName() + ". Expected " + funcReturnType );
+        }
+        break;
+        
+      case FUNCTION:
+        
+        break;
+
+      case IDENTIFIER:
+        
+        break;
+        
+      case PRINT:
+        // Skip print as it has branches but there is no requirement for their types
+        break;
+        
+      default: // Not a special case, so we should have a return type
+        if( node.hasBranches() ){ // TODO: Try without this check, the only nodes with out branches should have already been dealt with.
+          String childType = node.getChildType();
+          for( SemanticAction child: node.getBranches() ){
+            if( !child.getReturnType().equals( childType ) ){
+              errorList.add( "Argument " + child.getName() + " does not match type of " + node.getName() + ". Expected " + childType );
+            }
+          }
+        }
+    }
+  }
+  
+  private void checkDefReturn( SemanticAction defNode ){
+    // Skip if statements because they handle matching return values in checkTypes
+    if( defNode.getBranches().get(0).getType() == SemanticAction.TYPE.IF ){
+      return;
+    }
+    
+    String defReturn = defNode.getBranches().get(1).getReturnType();
+    String bodyType = defNode.getBranches().get(0).getReturnType();
+    if( !defReturn.equals( bodyType ) ){
+      errorList.add( "Type mismatch. Function " + defNode.getName() + " does not return type " + bodyType + " expected " + defReturn );
     }
   }
 
   public SymbolTable getSymbolTable() { return symbolTable; }
   
   public ArrayList<String> showErrors(){
-  if (!errorList.isEmpty()) {
-	  for (int i = 0; i < errorList.size(); i++){
-		  System.out.println(errorList.get(i));
-		}
-  }
-  	return errorList;
+    if (!errorList.isEmpty()) {
+      for (int i = 0; i < errorList.size(); i++){
+        System.out.println(errorList.get(i));
+      }
+    }
+    return errorList;
   }
 }

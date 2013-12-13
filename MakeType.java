@@ -12,6 +12,7 @@ import java.util.Stack;
 public class MakeType extends SemanticAction
 {
   public MakeType( ){
+    name = "TYPE";
     type = TYPE.TYPE;
   }
   
@@ -23,6 +24,7 @@ public class MakeType extends SemanticAction
   public MakeType( MakeType mi ){
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
@@ -30,6 +32,7 @@ public class MakeType extends SemanticAction
       System.out.println("Pushing Type");
     
     name = (String) nameStack.pop();
+    returnType = name;
     semanticStack.push( this );
   }
   
@@ -40,4 +43,12 @@ public class MakeType extends SemanticAction
   public SemanticAction copy(){
     return new MakeType( this );
   }
+  
+  /*
+  // Overloaded because this type relies on the type of its child but there is no reason to make other functions dig any deeper node-wise
+  public String getReturnType()
+  {
+    return branches.get(0).getReturnType();
+  }
+  */
 }

@@ -31,8 +31,7 @@ public class MakeIdentifier extends SemanticAction
     
     try{
       int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
-      tmp++;
-      TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, tmp++ );
+      TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, ++tmp );
     }
     catch(Exception e){
       // Do nothing if we are not in a function call

@@ -48,5 +48,10 @@ public class SymbolTable
       table.get( functionName ).add( node );
   }
   
+  public String getFunctionType( String functionName )
+  {
+    return table.get( functionName ).get(0).getReturnType();
+  }
+  
   public Map<String, List<SemanticAction>> getTable() { return table; }
 }

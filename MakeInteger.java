@@ -13,16 +13,19 @@ public class MakeInteger extends SemanticAction
 {
   public MakeInteger( ){
     type = TYPE.INTEGER;
+    returnType = "integer";
   }
   
   public MakeInteger( String name ){
     type = TYPE.INTEGER;
     this.name = name;
+    returnType = "integer";
   }
   
   public MakeInteger( MakeInteger mi ){
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
   }
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){

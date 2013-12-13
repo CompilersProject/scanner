@@ -15,7 +15,7 @@ public class MakeLessThan extends SemanticAction
   public MakeLessThan(){
     type = TYPE.LESSTHAN;
     returnType = "boolean";
-    childType = "boolean";
+    childType = "integer";
     name = "less than";
   }
   
@@ -31,6 +31,8 @@ public class MakeLessThan extends SemanticAction
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Less Than" );
+    
+    removeFuncCallCount( 2 );
     
     addNodes( semanticStack, 2 );
     

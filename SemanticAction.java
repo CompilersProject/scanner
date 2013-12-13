@@ -18,9 +18,9 @@ public class SemanticAction implements ParseAction
       DIVISION,
       EQUALS,
       FORMAL,
-      FUNCTION,
-      IDENTIFIER,
-      IF,
+      FUNCTION,// NOT DONE
+      IDENTIFIER,// NOT DONE?
+      IF,// NOT DONE
       INTEGER,
       LESSTHAN,
       MULTIPLICATION,
@@ -90,7 +90,19 @@ public class SemanticAction implements ParseAction
     }
   }
   
+  // Checks if we are in a function call, removes a consumed node if so
+  protected void removeFuncCallCount( int nodeChildren ){
+    if( !TableDrivenParser.actualsCounts.isEmpty() ){
+      int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
+      tmp = tmp - (nodeChildren - 1);
+      TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, tmp );
+    }
+  }
+  
   public ArrayList<SemanticAction> getBranches() {return branches;}
   public String getName() {return name;}
   public TYPE getType() {return type;}
+  public String getReturnType() {return returnType;}
+  public String getChildType() {return childType;}
+  public boolean hasBranches() {return !branches.isEmpty();}
 }

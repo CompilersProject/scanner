@@ -32,6 +32,8 @@ public class MakeEquals extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Equals" );
 
+    removeFuncCallCount( 2 );
+    
     addNodes( semanticStack, 2 );
     
     semanticStack.push( this );
