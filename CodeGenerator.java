@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.Map;
+import java.util.HashMap;
 
 public class CodeGenerator
 {
@@ -19,6 +21,9 @@ public class CodeGenerator
   
   private static String output = ""; // Avoid passing around the reference everywhere. All appends should be serial anyway
   
+  private static Map<String, Integer> identifierTable = new HashMap<String, Integer>();
+  private static String currentDefName = "";
+  
   public static void generateTMCode( String inputFileName, SemanticAction programNode )
   {
     for( SemanticAction def: programNode.getBranches() ){
@@ -27,7 +32,8 @@ public class CodeGenerator
         
         for( SemanticAction child: def.getBranches() ){
           if( child.getType() == SemanticAction.TYPE.FORMAL ){
-            appendRegisterMemory( "LD", registerCounter, memoryCounter, 0, "Load command-line args" );          
+            hashHelp( def.getName(), child.getName() );
+            //appendRegisterMemory( "LD", registerCounter, memoryCounter++, 0, "Load command-line args" );
           }
         }
         
@@ -38,6 +44,7 @@ public class CodeGenerator
         
         //TODO: move to recursive loop
         appendCommentFunctName( "MAIN" ); // ***
+        currentDefName = def.getName();
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
         memoryCounter++;
         typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
@@ -149,9 +156,10 @@ public class CodeGenerator
         appendRegisterMemory( "LDC", branchReturnRegister, 1, 0, "Return true" ); // *Is arithmetic faster than LDC?*
         break;
         
-      /*case IDENTIFIER:
-        
-        break;*/
+      case IDENTIFIER:
+        int identifierMemoryLocation = identifierTable.get( currentDefName + "/" + node.getName() );
+        appendRegisterMemory( "LD", branchReturnRegister, identifierMemoryLocation, 0, ("Load variable: " + node.getName()) );
+        break;
         
       case IF:
         appendComment( "Start If" );
@@ -180,9 +188,12 @@ public class CodeGenerator
         break;
         
       /*case FUNCTION:
-        //appendCommentFunctName( "MAIN" ); // ***
+        appendCommentFunctName( "MAIN" ); // ***
+        currentDefName = def.getName();
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
-        typeCheckCodeGenerator( node.getBranches().get(0), returnValue );
+        memoryCounter++;
+        typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
+        memoryCounter--;
         appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC
         break;
         */
@@ -248,5 +259,11 @@ public class CodeGenerator
     currentLineNumber = tmpLineNumber;
     appendRegisterMemory( "LDC", programCounter, wallingfordsTmpNumber, 0, "End of 'then' statement, so skip 'else' and return value in register 2" );
     currentLineNumber = wallingfordsTmpNumber;
+  }
+  
+  private static void hashHelp( String defName, String idName ){
+    String key = defName + "/" + idName;
+    identifierTable.put( key, new Integer(memoryCounter) );
+    memoryCounter++;
   }
 }

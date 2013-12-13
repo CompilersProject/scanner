@@ -40,10 +40,26 @@ public class MakeDefinition extends SemanticAction
       branches.add( sa );
     }
     
+    reverseFormals();
+    
     semanticStack.push( this );
   }
   
   public SemanticAction copy(){
     return new MakeDefinition( this );
+  }
+  
+  // Puts formals in order of Klein definition. Needed for CodeGenerator
+  private void reverseFormals()
+  {
+    // Skip body and return type nodes
+    // This is all Jordan's fault
+    ArrayList<SemanticAction> tmp = new ArrayList<SemanticAction>(branches.subList( 0, 2 ));
+    ArrayList<SemanticAction> tmp2 = new ArrayList<SemanticAction>(branches.subList( 2, branches.size() ));
+    branches.clear();
+    
+    java.util.Collections.reverse( tmp2 );
+    tmp.addAll( tmp2 );
+    branches = tmp;
   }
 }

@@ -151,6 +151,9 @@ public class SemanticAnalyzer
         if( node.hasBranches() ){ // TODO: Try without this check, the only nodes with out branches should have already been dealt with.
           String childType = node.getChildType();
           for( SemanticAction child: node.getBranches() ){
+            if( child.getType() == SemanticAction.TYPE.IDENTIFIER || child.getType() == SemanticAction.TYPE.FUNCTION ){ // ****** REMOVE AFTER IMPLEMENTING IDENTIFIER TYPE CHECKING *******
+              break;
+            } // **************************
             if( !child.getReturnType().equals( childType ) ){
               errorList.add( "Argument " + child.getName() + " does not match type of " + node.getName() + ". Expected " + childType );
             }
