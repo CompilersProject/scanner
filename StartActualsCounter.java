@@ -4,8 +4,6 @@ public class StartActualsCounter extends SemanticAction
 {
   public void execute( Stack stack )
   {
-    //TableDrivenParser.actualsCounts.add(0);
-    //TableDrivenParser.functionDepth++;
     
     stack.push( this );
   }

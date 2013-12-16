@@ -18,9 +18,9 @@ public class SemanticAction implements ParseAction
       DIVISION,
       EQUALS,
       FORMAL,
-      FUNCTION,// NOT DONE
-      IDENTIFIER,// NOT DONE?
-      IF,// NOT DONE
+      FUNCTION,
+      IDENTIFIER,
+      IF,
       INTEGER,
       LESSTHAN,
       MULTIPLICATION,
@@ -28,7 +28,7 @@ public class SemanticAction implements ParseAction
       PRINT,
       PROGRAM,
       SUBTRACTION,
-      TYPE, // TODO: CHANGE THIS NAME
+      TYPE, 
       ERROR
   }
   

@@ -32,7 +32,7 @@ public class MakeDefinition extends SemanticAction
     while( !semanticStack.isEmpty() ){
       SemanticAction sa = (SemanticAction) semanticStack.pop();
       if( sa instanceof MakeDefinition ){
-        // Replace the Def node so we don't nest them but it is still on the stack
+        
         semanticStack.push( sa );
         break;
       }

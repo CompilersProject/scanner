@@ -26,7 +26,7 @@ public class StartFunction extends SemanticAction
       TableDrivenParser.functionDepth++;
     }
     
-    TableDrivenParser.actualsCounts.add( TableDrivenParser.functionDepth ); // So we have soething in the right position, I don't like this solution but it works
+    TableDrivenParser.actualsCounts.add( TableDrivenParser.functionDepth ); 
     TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, 0 );
     
     if( TableDrivenParser.functionDepth > 0 ){

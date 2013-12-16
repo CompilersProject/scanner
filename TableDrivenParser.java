@@ -26,7 +26,7 @@ public class TableDrivenParser extends Parser
   public TableDrivenParser( Scanner source )
   {
     super( source );
-    functionDepth = 0; // TODO: fixt?
+    functionDepth = 0; 
     actualsCounts = new ArrayList<Integer>();
     
     kleinTable = makeKleinParsingTable();
@@ -83,7 +83,7 @@ public class TableDrivenParser extends Parser
           }
           rule.execute(parseStack); // PushSequence loops through rules backwards
         } else if( rule instanceof PushNothing ){
-          // **** Do nothing? ****
+          // 
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
@@ -240,9 +240,6 @@ public class TableDrivenParser extends Parser
                                    new Push("FACTOR"),
                                    new MakeAnd(),
                                    new Push("TERM1"),
-                                   //new MakeAnd()
-                                   //new Push("TERM"),
-                                   //new MakeAnd()
                     } );
        ParseAction rule23 = new PushSequence(
                new ParseAction[] { new Push(multiplyOp),
@@ -353,11 +350,11 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "NONEMPTYFORMALS", identifierOp, rule07 );
-       table.add( "NONEMPTYFORMALS", closedParen, rule00 ); // Follow set
+       table.add( "NONEMPTYFORMALS", closedParen, rule00 ); 
        
        
        table.add( "NONEMPTYFORMALS1", comma, rule08 );
-       table.add( "NONEMPTYFORMALS1", closedParen, rule00 ); // Not in follow set?
+       table.add( "NONEMPTYFORMALS1", closedParen, rule00 );
 
 
        table.add( "FORMAL", identifierOp , rule09 );
@@ -613,5 +610,5 @@ public class TableDrivenParser extends Parser
       }
     }
     
-    public SemanticAction getProgramNode() { return (SemanticAction) stackAttack.pop(); }//if( programNode != null) return programNode; else return (SemanticAction) stackAttack.pop(); }
+    public SemanticAction getProgramNode() { return (SemanticAction) stackAttack.pop(); }
 }

@@ -12,12 +12,12 @@ public class Token
     private TYPE type;
     private String literalValue;
     
-    // To get the integer value of enum, use this.ordinal()
+    
     public enum TYPE {
       PLUS,
         MINUS,
         MULTIPLY,
-        ASSIGNMENT,   // TODO: *** RENAME ***
+        ASSIGNMENT,   
         LESSTHAN,
         OPEN_PAREN,
         CLOSED_PAREN,
@@ -1205,7 +1205,7 @@ public class Token
      
      Long temp = Long.valueOf(num).longValue();
      if( !(lowerBound<=temp) || !(upperBound>=temp) ){
-       // TODO: Add exception here
+       
        throw new LexicalException("Number out of range");
      }
      

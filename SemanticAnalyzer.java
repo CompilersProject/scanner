@@ -15,8 +15,6 @@ public class SemanticAnalyzer
     
     startNode = node;
     makeSymbolTable();
-    //getReturnType();
-    //bodyTraversal();
   }
   
   public void bodyTraversal()

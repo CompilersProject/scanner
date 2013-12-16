@@ -44,11 +44,4 @@ public class MakeType extends SemanticAction
     return new MakeType( this );
   }
   
-  /*
-  // Overloaded because this type relies on the type of its child but there is no reason to make other functions dig any deeper node-wise
-  public String getReturnType()
-  {
-    return branches.get(0).getReturnType();
-  }
-  */
 }

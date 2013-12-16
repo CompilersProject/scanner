@@ -73,7 +73,7 @@ public class ParsingTable {
         if (symbol.equalsIgnoreCase( "literal" )          ) return 24;
         if (symbol.equalsIgnoreCase( "print" )            ) return 25;       
 
-        return 0; // return an exception
+        return 0; 
     }
 
     private int convertToken( Token token )

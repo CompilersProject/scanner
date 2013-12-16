@@ -39,7 +39,7 @@ public class MakePrint extends SemanticAction
     return new MakePrint( this );
   }
   
-  // Overloaded from SemanticAction because this returnType depends on it's child's type
+  
   public String getReturnType(){
     return branches.get(1).getReturnType();
   }

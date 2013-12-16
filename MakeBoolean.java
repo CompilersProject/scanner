@@ -40,7 +40,7 @@ public class MakeBoolean extends SemanticAction
   }
   
   public String toString(){
-    return type + " " + name; // NAMING
+    return type + " " + name; 
   }
   
   public SemanticAction copy(){
