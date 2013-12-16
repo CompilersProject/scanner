@@ -3,6 +3,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CodeGenerator
 {
@@ -21,41 +23,88 @@ public class CodeGenerator
   
   private static String output = ""; // Avoid passing around the reference everywhere. All appends should be serial anyway
   
-  private static Map<String, Integer> identifierTable = new HashMap<String, Integer>();
+  private static Map<String, Integer> memoryMap = new HashMap<String, Integer>();
   private static String currentDefName = "";
+  private static ArrayList<String> functionCallList = new ArrayList<String>();
+  //private static int functionDepth = 0; // Used to avoid overwritting memory in recursion
   
-  public static void generateTMCode( String inputFileName, SemanticAction programNode )
+  private static SymbolTable symbolTable;
+  
+  public static void generateTMCode( String inputFileName, SemanticAction programNode, SymbolTable st )
   {
+    symbolTable = new SymbolTable(st);
+    
+    for( SemanticAction def: programNode.getBranches() ){
+      for( SemanticAction child: def.getBranches() ){
+        if( child.getType() == SemanticAction.TYPE.FORMAL ){
+          hashHelp( def.getName(), child.getName() );
+        }
+      }
+    }
+    
     for( SemanticAction def: programNode.getBranches() ){
       if( def.getName().equals("main") ){
         appendCommentFunctName( "RUN-TIME SETUP" ); // ***
-        
+        /*
         for( SemanticAction child: def.getBranches() ){
           if( child.getType() == SemanticAction.TYPE.FORMAL ){
             hashHelp( def.getName(), child.getName() );
-            //appendRegisterMemory( "LD", registerCounter, memoryCounter++, 0, "Load command-line args" );
           }
-        }
+        }*/
         
         appendRegisterMemory( "LDA", returnAddress, 1, programCounter, "save return address in r1" ); // LDA 1, 1(7) store return address
         appendRegisterMemory( "LDA", programCounter, (currentLineNumber + 3), 0, "jump to main loop" );
         appendRegisterOnly(   "OUT", returnValue, 0, 0 );
         appendRegisterOnly(   "HALT", 0, 0, 0 );
         
+        //typeCheckCodeGenerator( def, returnValue );
         //TODO: move to recursive loop
-        appendCommentFunctName( "MAIN" ); // ***
+        
         currentDefName = def.getName();
+        appendCommentFunctName( currentDefName );
+        memoryMap.put( new String(currentDefName), new Integer(currentLineNumber) );
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
         memoryCounter++;
         typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
         memoryCounter--;
         appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC
-        
-        
+        memoryCounter++;
         break;
       }
     }
 
+    for( SemanticAction def: programNode.getBranches() ){
+      if( !def.getName().equals("main") ){
+        /*
+        for( SemanticAction child: def.getBranches() ){
+          if( child.getType() == SemanticAction.TYPE.FORMAL ){
+            hashHelp( def.getName(), child.getName() );
+          }
+        }*/
+        
+        currentDefName = def.getName();
+        appendCommentFunctName( currentDefName ); 
+        memoryMap.put( new String(currentDefName), new Integer(currentLineNumber)  );
+        memoryCounter++;
+        typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
+        memoryCounter--;
+        appendRegisterMemory( "LD", programCounter, memoryCounter, 0, "Load return address" );
+        memoryCounter++;
+      }
+    }
+    
+    // Write jumps after we have all the information necessary
+    for( String x: functionCallList ){
+      String[] y = x.split("/");
+      String lineNumber = y[0];
+      String functionName = y[1];
+      String comment = y[2];
+      
+      int functionAddress = memoryMap.get( functionName );
+      appendComment( "Start of function call addresses" );
+      output += lineNumber + ": LDA " + jumpAddressRegister + ", " + functionAddress + "(0) \t\t\t*" + comment + "\n";
+    }
+    
     writeOutputFile( outputFileName(inputFileName) );
   }
   
@@ -157,7 +206,7 @@ public class CodeGenerator
         break;
         
       case IDENTIFIER:
-        int identifierMemoryLocation = identifierTable.get( currentDefName + "/" + node.getName() );
+        int identifierMemoryLocation = memoryMap.get( currentDefName + "/" + node.getName() );
         appendRegisterMemory( "LD", branchReturnRegister, identifierMemoryLocation, 0, ("Load variable: " + node.getName()) );
         break;
         
@@ -187,16 +236,32 @@ public class CodeGenerator
         appendRegisterOnly( "MUL", branchReturnRegister, 0, 0, "Return false" );
         break;
         
-      /*case FUNCTION:
-        appendCommentFunctName( "MAIN" ); // ***
-        currentDefName = def.getName();
-        appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
+      case FUNCTION:
+        // Save variables
+        appendComment( "Calculate arguments for " + node.getName() );
+        int argCounter = 1;
+        for( SemanticAction arg: node.getBranches() ){
+          typeCheckCodeGenerator( arg, branchReturnRegister );
+          // * Wrong
+          String argName = symbolTable.getFormalNamez( node.getName(), argCounter );
+          int formalMemoryLocation = memoryMap.get( node.getName() + "/" + argName );
+          appendRegisterMemory( "ST", branchReturnRegister, formalMemoryLocation, 0, "Save argument number " + argCounter );
+          argCounter++;
+        }
+        
+        appendRegisterMemory( "LDA", returnAddress, 3, programCounter, "Save branch return address" );
+        appendRegisterMemory( "ST", returnAddress, memoryCounter, 0, "Save branch return address" ); // Store return address into offset[0]
         memoryCounter++;
-        typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
+        
+        addFunctionJump( currentLineNumber, node.getName(), "Store address of function " + node.getName() );
+        currentLineNumber++;
+        appendRegisterMemory( "LDA", programCounter, 0, jumpAddressRegister, "Jump to " + node.getName() );
+        
+        //typeCheckCodeGenerator( node.getBranches().get(0), branchReturnRegister );
+        
         memoryCounter--;
-        appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC
+        //appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC*/
         break;
-        */
         
       case MULTIPLICATION:
         branchHelperGuy(node);
@@ -263,7 +328,11 @@ public class CodeGenerator
   
   private static void hashHelp( String defName, String idName ){
     String key = defName + "/" + idName;
-    identifierTable.put( key, new Integer(memoryCounter) );
+    memoryMap.put( key, new Integer(memoryCounter) );
     memoryCounter++;
+  }
+  
+  private static void addFunctionJump( int lineNumber, String functionName, String comment ){
+    functionCallList.add( lineNumber + "/" + functionName + "/" + comment );
   }
 }

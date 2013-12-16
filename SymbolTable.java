@@ -19,6 +19,11 @@ public class SymbolTable
     table = new HashMap<String, List<SemanticAction>>();
   }
   
+  public SymbolTable( SymbolTable st )
+  {
+    this.table = st.table;
+  }
+  
   public boolean compare( String key, SemanticAction value )
   {
     List<SemanticAction> nodes = table.get( key );
@@ -54,4 +59,9 @@ public class SymbolTable
   }
   
   public Map<String, List<SemanticAction>> getTable() { return table; }
+  
+  public String getFormalNamez( String functionName, int argNumber )
+  {
+    return table.get( functionName ).get( argNumber ).getName();
+  }
 }
