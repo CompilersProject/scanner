@@ -33,7 +33,6 @@ public class StartFunction extends SemanticAction
     }
   }
   
-  
   public SemanticAction copy(){
     return new StartFunction( this );
   }

@@ -90,7 +90,7 @@ public class CodeGenerator
         memoryMap.put( new String(currentDefName), new Integer(currentLineNumber)  );
         memoryCounter++;
         typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
-        memoryCounter--;
+        //memoryCounter--;
         int returnLocation = memoryMap.get( def.getName() + "/return" );
         functionReturnList.add( currentLineNumber + ": LD " + programCounter + ", " + returnLocation + "(0) \t\t\t* Magic\n" );
         currentLineNumber++;
@@ -253,13 +253,12 @@ public class CodeGenerator
         int argCounter = 1;
         for( SemanticAction arg: node.getBranches() ){
           typeCheckCodeGenerator( arg, branchReturnRegister );
-          // * Wrong
           String argName = symbolTable.getFormalNamez( node.getName(), argCounter );
           int formalMemoryLocation = memoryMap.get( node.getName() + "/" + argName );
           appendRegisterMemory( "ST", branchReturnRegister, formalMemoryLocation, 0, "Save argument number " + argCounter );
           argCounter++;
         }
-        
+        memoryCounter--;
         appendRegisterMemory( "LDA", returnAddress, 3, programCounter, "Save branch return address" );
         //memoryCounter++;
         memoryMap.put( node.getName() + "/return", memoryCounter );
