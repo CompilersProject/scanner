@@ -26,7 +26,7 @@ public class CodeGenerator
   private static Map<String, Integer> memoryMap = new HashMap<String, Integer>();
   private static String currentDefName = "";
   private static ArrayList<String> functionCallList = new ArrayList<String>();
-  //private static int functionDepth = 0; // Used to avoid overwritting memory in recursion
+  private static ArrayList<String> functionReturnList = new ArrayList<String>();
   
   private static SymbolTable symbolTable;
   
@@ -56,19 +56,22 @@ public class CodeGenerator
         appendRegisterMemory( "LDA", programCounter, (currentLineNumber + 3), 0, "jump to main loop" );
         appendRegisterOnly(   "OUT", returnValue, 0, 0 );
         appendRegisterOnly(   "HALT", 0, 0, 0 );
-        
-        //typeCheckCodeGenerator( def, returnValue );
+
         //TODO: move to recursive loop
         
         currentDefName = def.getName();
         appendCommentFunctName( currentDefName );
         memoryMap.put( new String(currentDefName), new Integer(currentLineNumber) );
+        memoryCounter++;
+        memoryMap.put( currentDefName + "/return", memoryCounter );
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0 ); // Store return address into offset[0]
         memoryCounter++;
         typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
         memoryCounter--;
-        appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC
-        memoryCounter++;
+        int returnLocation = memoryMap.get( currentDefName + "/return" );
+        appendRegisterMemory( "LD", programCounter, returnLocation, 0 ); // Load return address into PC
+//appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC
+        memoryCounter--;
         break;
       }
     }
@@ -88,7 +91,10 @@ public class CodeGenerator
         memoryCounter++;
         typeCheckCodeGenerator( def.getBranches().get(0), returnValue );
         memoryCounter--;
-        appendRegisterMemory( "LD", programCounter, memoryCounter, 0, "Load return address" );
+        int returnLocation = memoryMap.get( def.getName() + "/return" );
+        functionReturnList.add( currentLineNumber + ": LD " + programCounter + ", " + returnLocation + "(0) \t\t\t* Magic\n" );
+        currentLineNumber++;
+//appendRegisterMemory( "LD", programCounter, memoryCounter, 0, "Load return address" );
         memoryCounter++;
       }
     }
@@ -103,6 +109,11 @@ public class CodeGenerator
       int functionAddress = memoryMap.get( functionName );
       appendComment( "Start of function call addresses" );
       output += lineNumber + ": LDA " + jumpAddressRegister + ", " + functionAddress + "(0) \t\t\t*" + comment + "\n";
+    }
+    
+    for( String y: functionReturnList ){
+      appendComment( "Start return address magic" );
+      output += y;
     }
     
     writeOutputFile( outputFileName(inputFileName) );
@@ -250,6 +261,8 @@ public class CodeGenerator
         }
         
         appendRegisterMemory( "LDA", returnAddress, 3, programCounter, "Save branch return address" );
+        //memoryCounter++;
+        memoryMap.put( node.getName() + "/return", memoryCounter );
         appendRegisterMemory( "ST", returnAddress, memoryCounter, 0, "Save branch return address" ); // Store return address into offset[0]
         memoryCounter++;
         
@@ -259,7 +272,7 @@ public class CodeGenerator
         
         //typeCheckCodeGenerator( node.getBranches().get(0), branchReturnRegister );
         
-        memoryCounter--;
+        //memoryCounter--;
         //appendRegisterMemory( "LD", programCounter, memoryCounter, 0 ); // Load return address into PC*/
         break;
         
@@ -297,11 +310,13 @@ public class CodeGenerator
   
   private static void branchHelperGuy( SemanticAction node ){
     typeCheckCodeGenerator( node.getBranches().get(0), leftReturnRegister ); // Call left branch
+    memoryCounter++;
     appendRegisterMemory( "ST", leftReturnRegister, memoryCounter, 0, "Store left branch value so it is not overwritten." );
     memoryCounter++;
     typeCheckCodeGenerator( node.getBranches().get(1), rightReturnRegister ); // Call right branch
     memoryCounter--;
     appendRegisterMemory( "LD", leftWorkingRegister, memoryCounter, 0, "Load left branch value back into left working register" );
+    memoryCounter--;
   }
   
   // This is for if
@@ -328,6 +343,7 @@ public class CodeGenerator
   
   private static void hashHelp( String defName, String idName ){
     String key = defName + "/" + idName;
+    //memoryCounter++; ?
     memoryMap.put( key, new Integer(memoryCounter) );
     memoryCounter++;
   }

@@ -32,7 +32,14 @@ public class MakeBoolean extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println("Pushing Boolean");
     
-    removeFuncCallCount( 2 );
+    //removeFuncCallCount( 2 );
+    try{
+      int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
+      TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, ++tmp );
+    }
+    catch(Exception e){
+      // Do nothing if we are not in a function call
+    }
     
     name = (String) nameStack.pop();
     

@@ -85,6 +85,7 @@ public class SemanticAnalyzer
   {
     switch( node.type ){
       case IF:
+        /*
         String funcReturnType = symbolTable.getFunctionType( defName );
         String nodeReturnType = node.getBranches().get(0).getReturnType();
         if( !nodeReturnType.equals( "boolean" ) ){
@@ -98,6 +99,7 @@ public class SemanticAnalyzer
         if( !nodeReturnType.equals( funcReturnType ) ){
           errorList.add( "Argument " + node.getBranches().get(1).getName() + " does not match return type of " + node.getName() + ". Expected " + funcReturnType );
         }
+        */
         break;
         
       case FUNCTION:

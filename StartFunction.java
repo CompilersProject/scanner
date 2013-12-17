@@ -22,9 +22,7 @@ public class StartFunction extends SemanticAction
   
   public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack )
   {
-    if( TableDrivenParser.functionDepth > 0 ){
-      TableDrivenParser.functionDepth++;
-    }
+    TableDrivenParser.functionDepth++;
     
     TableDrivenParser.actualsCounts.add( TableDrivenParser.functionDepth ); 
     TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, 0 );

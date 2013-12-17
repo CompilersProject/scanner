@@ -26,7 +26,7 @@ public class TableDrivenParser extends Parser
   public TableDrivenParser( Scanner source )
   {
     super( source );
-    functionDepth = 0; 
+    functionDepth = -1; 
     actualsCounts = new ArrayList<Integer>();
     
     kleinTable = makeKleinParsingTable();

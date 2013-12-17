@@ -32,8 +32,7 @@ public class MakeFunction extends SemanticAction
     
     addNodes( semanticStack, TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth ) );
     TableDrivenParser.actualsCounts.remove( TableDrivenParser.functionDepth );
-    if( TableDrivenParser.functionDepth > 0 )
-      TableDrivenParser.functionDepth--;
+    TableDrivenParser.functionDepth--;
     
     semanticStack.push( this );
   }

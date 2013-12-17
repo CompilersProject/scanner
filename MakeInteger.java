@@ -32,6 +32,14 @@ public class MakeInteger extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println("Pushing Integer");
     
+    try{
+      int tmp = TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth );
+      TableDrivenParser.actualsCounts.set( TableDrivenParser.functionDepth, ++tmp );
+    }
+    catch(Exception e){
+      // Do nothing if we are not in a function call
+    }
+    
     name = (String) nameStack.pop();
     semanticStack.push( this );
   }
