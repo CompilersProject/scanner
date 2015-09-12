@@ -1,0 +1,8 @@
+main(n : integer) : boolean
+  n < 10
+  
+a(b : boolean) : boolean
+  false or x
+  
+//main(x : integer) : integer
+//  1

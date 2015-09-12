@@ -24,6 +24,11 @@ public class SymbolTable
     }
     return false;
   }
+  
+  public boolean checkFunctionCall( String key )
+  {
+    return table.containsKey( key );
+  }
 
   public void put( String functionName, SemanticAction node )
   {

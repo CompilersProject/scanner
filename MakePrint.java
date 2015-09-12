@@ -1,14 +1,15 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakePrint extends SemanticAction
 {
   public MakePrint(){
-    branches = new SemanticAction[2];
     type = TYPE.PRINT;
+    name = "print";
   }
   
   public MakePrint( MakePrint mi ){
-    branches = new SemanticAction[2];
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
     
     type = mi.type;
     name = mi.name;
@@ -17,9 +18,8 @@ public class MakePrint extends SemanticAction
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Print" );
-    
-    branches[1] = (SemanticAction) semanticStack.pop(); // Expression to print
-    branches[0] = (SemanticAction) semanticStack.pop(); // Body
+
+    addNodes( semanticStack, 2 );
     
     semanticStack.push( this );
   }

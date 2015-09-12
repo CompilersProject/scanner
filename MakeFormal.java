@@ -3,14 +3,10 @@ import java.util.Stack;
 public class MakeFormal extends SemanticAction
 {
   public MakeFormal( ){
-    branches = new SemanticAction[1];
-    
     type = TYPE.FORMAL;
   }
   
   public MakeFormal( String name ){
-    branches = new SemanticAction[1];
-    
     type = TYPE.FORMAL;
     this.name = name;
   }
@@ -26,8 +22,8 @@ public class MakeFormal extends SemanticAction
       System.out.println("Pushing Formal " + this.name);
     }
     
-    name = (String) nameStack.pop(); // NAMING
-    branches[0] = (SemanticAction) semanticStack.pop();
+    name = (String) nameStack.pop();
+    addNodes( semanticStack, 1 );
     
     semanticStack.push( this );
   }

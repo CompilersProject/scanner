@@ -1,0 +1,10 @@
+main(n : integer) : integer
+  div(n*f)
+  
+div(a : integer, b : integer) : integer
+  a+b
+  
+diff(x : boolean) : integer
+  print(y)
+  z
+  

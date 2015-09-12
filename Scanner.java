@@ -42,20 +42,23 @@ public class Scanner
     while( isOurWhitespace((char) nextByte) ){
       nextByte = getNextByte();
     }
-   if( nextByte == -1 ){
+    if( nextByte == -1 || nextByte == 'ÿ'){
       // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
       // Saving off a copy of EOS when it is found initially doesn't work well for peeks
       // Best solution that works so far.
       return new Token(Token.TYPE.EOS);
     }
     if( isComment( (char) nextByte) ){
-        char temp='j';
-        while (temp!='\n')
-        {
-          temp = (char) sourceFile.read();
-        }
-        return new Token(Token.TYPE.COMMENT);
+      char temp='j';
+      while (temp!='\n')
+      {         
+        temp = (char) sourceFile.read();
+        if (temp == 65535)
+          break;
       }
+      return new Token(Token.TYPE.COMMENT);
+    }
+    
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
       return makeToken(stringByte);
@@ -67,7 +70,7 @@ public class Scanner
         throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
       
-      if( nextByte != -1 ){ // EOF character
+      if( nextByte != -1 || nextByte == 'ÿ'){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
@@ -111,7 +114,8 @@ public class Scanner
       c == '(' ||
       c == ')' ||
       c == ',' ||
-      c == ':';
+      c == ':' ||
+      c == 'ÿ';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
   public boolean isComment (char c) throws IOException

@@ -1,14 +1,14 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeOr extends SemanticAction
 {
   public MakeOr(){
-    branches = new SemanticAction[2];
     type = TYPE.OR;
   }
   
   public MakeOr( MakeOr mi ){
-    branches = new SemanticAction[2];
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
     
     type = mi.type;
     name = mi.name;
@@ -17,9 +17,8 @@ public class MakeOr extends SemanticAction
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Or" );
-    
-    branches[1] = (SemanticAction) semanticStack.pop();
-    branches[0] = (SemanticAction) semanticStack.pop();
+
+    addNodes( semanticStack, 2 );
     
     semanticStack.push( this );
   }

@@ -1,19 +1,27 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeAddition extends SemanticAction
 {
   public MakeAddition(){
-    type = "Addition Node";
+    type = TYPE.ADDITION;
   }
   
   public MakeAddition( MakeAddition mi ){
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
+    
     type = mi.type;
     name = mi.name;
   }
   
-  public void updateAST( Stack semanticStack, String name ){
+  public void updateAST( Stack semanticStack, Stack nameStack ){
+    if( Compiler.extendedDebug )
+      System.out.println( "Pushing Addtion" );
+    
+    // Get L and R Hand Operands
+    addNodes( semanticStack, 2 );
+    
     semanticStack.push( this );
-    System.out.println( "Pushing Addtion" );
   }
   
   public SemanticAction copy(){

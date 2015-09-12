@@ -1,36 +1,35 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeFunction extends SemanticAction
 {
   public MakeFunction(){
     type = TYPE.FUNCTION;
+    name = "Function";
   }
   
   public MakeFunction( MakeFunction mi ){
-    branches = mi.branches; // Need to copy every element?
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
     
     type = mi.type;
     name = mi.name;
   }
-   
+
   public void updateAST( Stack semanticStack, Stack nameStack ){
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Function" );
     
-    branches = new SemanticAction[semanticStack.size() - TableDrivenParser.defNodes]; // TODO: find a way to not allocate too many spaces
-    //branches = new SemanticAction[ TableDrivenParser.currentActuals ];
-    for( int i = 0; !semanticStack.isEmpty(); i++ ){
-      SemanticAction sa = (SemanticAction) semanticStack.pop();
-      if( sa instanceof MakeType || sa instanceof MakeFormal){
-        // Replace the Def node so we don't nest them but it is still on the stack
-        semanticStack.push( sa );
-        break;
-      }
-      
-      branches[i] = sa;
-    }
+    name = (String) nameStack.pop();
     
+    //addNodes( semanticStack, TableDrivenParser.currentActuals );
     //TableDrivenParser.currentActuals = 0;
+    
+    //addNodes( semanticStack, TableDrivenParser.actualsCounts.get( TableDrivenParser.functionDepth ) );
+    //TableDrivenParser.actualsCounts.remove( TableDrivenParser.functionDepth );
+    //TableDrivenParser.functionDepth--;
+    
+    addNodes( semanticStack, 1 );
+    
     semanticStack.push( this );
   }
   

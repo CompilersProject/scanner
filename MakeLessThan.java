@@ -1,14 +1,14 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class MakeLessThan extends SemanticAction
 {
   public MakeLessThan(){
-    branches = new SemanticAction[2];
     type = TYPE.LESSTHAN;
   }
   
   public MakeLessThan( MakeLessThan mi ){
-    branches = new SemanticAction[2];
+    branches = new ArrayList<SemanticAction>(mi.getBranches());
     
     type = mi.type;
     name = mi.name;
@@ -18,8 +18,7 @@ public class MakeLessThan extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println( "Pushing Less Than" );
     
-    branches[1] = (SemanticAction) semanticStack.pop();
-    branches[0] = (SemanticAction) semanticStack.pop();
+    addNodes( semanticStack, 2 );
     
     semanticStack.push( this );
   }

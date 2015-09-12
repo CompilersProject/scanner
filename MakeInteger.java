@@ -20,12 +20,12 @@ public class MakeInteger extends SemanticAction
     if( Compiler.extendedDebug )
       System.out.println("Pushing Integer");
     
-    name = (String) nameStack.pop(); // NAMING
+    name = (String) nameStack.pop();
     semanticStack.push( this );
   }
   
   public String toString(){
-    return type + " " + name; // NAMING
+    return type + " " + name;
   }
   
   public SemanticAction copy(){

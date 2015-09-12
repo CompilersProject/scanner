@@ -1,45 +1,60 @@
 import java.io.IOException;
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class TableDrivenParser extends Parser
 
 {
-  public Stack stackAttack;
+  //public static int currentActuals;
+  public static int functionDepth;
+  public static ArrayList<Integer> actualsCounts;
+
+  private Stack stackAttack;
   private ParsingTable kleinTable;
-  
-  private String tmpIdentifierName; // NAMING
+  private SemanticAction programNode;
+
+  private String tmpIdentifierName;
 
     public TableDrivenParser( Scanner source )
     {
-        super( source );
-        kleinTable = makeKleinParsingTable();
+      super( source );
+      //currentActuals = 0;
+      functionDepth = 0;
+      actualsCounts = new ArrayList<Integer>();
+      
+      kleinTable = makeKleinParsingTable();
     }
 
     protected void parseProgram() throws IOException, LexicalException, SemanticException
     {
       Stack parseStack = new Stack();
+      Stack nameStack = new Stack();
       stackAttack = new Stack();
       
       new Push( new Token(Token.TYPE.EOS) ).execute(parseStack);   // Step 1
       new Push( "PROGRAM" ).execute(parseStack); // Step 2
       
-      while( true ){ // Step 3?
+      while( true ){ // Step 3
         Object symbol = parseStack.pop(); // Pop A
         
         skipComments( scanner.peek() );
         
-        if( symbol instanceof Token ){ // A is terminal
+        if( symbol instanceof NameAction ){
+          ((NameAction) symbol).addName( nameStack, scanner.peek().getValue() );
+        } else if( symbol instanceof Token ){ // A is terminal
           Token terminal = (Token) symbol;
           if( terminal.getType() == Token.TYPE.EOS ){
-            System.out.println("LE FIN.\nProgram parsed with no errors.");
+            if( Compiler.extendedDebug ){
+              System.out.println("\nFinished.\nProgram parsed with no errors.\n\nSemantic Stack:\n");
+            }
             return;
           } else if( terminal.equals( scanner.peek() )){
             if( Compiler.extendedDebug ){
               // * For debugging *
-              tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
-              System.out.println( "Consumed: " + tmpIdentifierName ); // NAMING
+              tmpIdentifierName = scanner.getNextToken().toString();
+              System.out.println( "Consumed: " + tmpIdentifierName );
             } else {
-              tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
+              tmpIdentifierName = scanner.getNextToken().toString();
             }
           } else{
             // * For debugging *
@@ -54,29 +69,25 @@ public class TableDrivenParser extends Parser
           String nonTerminal = (String) symbol;
           Token tmp = scanner.peek();
           ParseAction rule = kleinTable.lookup(nonTerminal,scanner.peek());
-          
+
           if( rule instanceof PushSequence ){
             if( Compiler.extendedDebug ){
               System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
             }
               rule.execute(parseStack); // PushSequence loops through rules backwards
           } else if( rule instanceof PushNothing ){
-            System.out.println( "PUSH NOTHING" );// **** Do nothing? ****
+            // **** Do nothing? ****
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
         } else if( symbol instanceof SemanticAction ){
           SemanticAction sa = ( (SemanticAction) symbol ).copy();
-          // TODO: Keep track of names/values/etc.
-          sa.updateAST(stackAttack, tmpIdentifierName); // NAMING
+          sa.updateAST( stackAttack, nameStack );
         } else {
           throw new SemanticException("Invalid object found on parse stack."); // Create a new exception for this?
         }
       }
     }
-
-    // -------------------------------------------------------------------
-    // AC PARSING TABLE FACTORY
 
     private ParsingTable makeKleinParsingTable()
     {
@@ -116,7 +127,7 @@ public class TableDrivenParser extends Parser
        ParseAction rule00 = new PushNothing();
        ParseAction rule01 = new PushSequence(
                  new ParseAction[] { new Push("DEFINITIONS"),
-                                     new Push(endOfStream)
+                                     new MakeProgram(),
                       } );
        ParseAction rule02 = new PushSequence(
                  new ParseAction[] { new Push("DEF1")
@@ -132,14 +143,15 @@ public class TableDrivenParser extends Parser
                                 
                       } );
        ParseAction rule05 = new PushSequence(
-                new ParseAction[] { new Push(identifierOp),
+                new ParseAction[] { new NameAction(),
+                                    new Push(identifierOp),
                                     new Push(openParen),
                                     new Push("FORMALS"),
                                     new Push(closedParen),
                                     new Push(colonOp),
                                     new Push("TYPE"),
                                     new Push("BODY"),
-                                    //new MakeIdentifier()
+                                    new MakeDefinition()
                       } );
        ParseAction rule06 = new PushSequence(
                  new ParseAction[] {
@@ -155,83 +167,89 @@ public class TableDrivenParser extends Parser
                                 
                       } );
        ParseAction rule09 = new PushSequence(
-                 new ParseAction[] { new Push(identifierOp),
-                                     new Push(colonOp),
-                                     new Push("TYPE"),
-                                     //new MakeIdentifier()
+                new ParseAction[] { new NameAction(),
+                                    new Push(identifierOp),
+                                    new Push(colonOp),
+                                    new Push("TYPE"),
+                                    new MakeFormal()
                       } );
        ParseAction rule10 = new PushSequence(
-               new ParseAction[] { new Push("PRINT"),
-                                   new Push("BODY1")                             
-                    } );
+                new ParseAction[] { new Push("PRINT"),
+                                    new Push("BODY1"),
+                                    new MakePrint()
+                      } );
        ParseAction rule11 = new PushSequence(
-               new ParseAction[] { new Push("EXPR"),
-                    } );
+                new ParseAction[] { new Push("EXPR"),
+                      } );
        ParseAction rule12 = new PushSequence(
-               new ParseAction[] { new Push("BODY"),
-                    } );
+                new ParseAction[] { new Push("BODY"),
+                      } );
        ParseAction rule13 = new PushSequence(
-               new ParseAction[] { new Push(integerOp),
-                    } );
-       ParseAction rule99 = new PushSequence(
-               new ParseAction[] { new Push(booleanOp)
-                    } );
+                new ParseAction[] { new NameAction(),
+                                    new Push(integerOp),
+                                    new MakeType()
+                      } );
        ParseAction rule14 = new PushSequence(
-               new ParseAction[] { new Push("SIMPLE-EXPR"),
-                                   new Push("SIMPLE-EXPR1"),
-                    } );
+                new ParseAction[] { new Push("SIMPLE-EXPR"),
+                                    new Push("SIMPLE-EXPR1"),
+                      } );
        ParseAction rule15 = new PushSequence(
-               new ParseAction[] { new Push(lessThanOp),
-                                   new Push("EXPR"),
+                new ParseAction[] { new Push(lessThanOp),
+                                    new Push("EXPR"),
+                                    new MakeLessThan()
                     } );
        ParseAction rule16 = new PushSequence(
-               new ParseAction[] { new Push(assignmentOp),
-                          new Push("EXPR"),
+                new ParseAction[] { new Push(assignmentOp),
+                                    new Push("EXPR"),
+                                    new MakeEquals()
                     } );
        ParseAction rule17 = new PushSequence(
-               new ParseAction[] { new Push("TERM"),
-                              new Push("TERM2"),
+                new ParseAction[] { new Push("TERM"),
+                                    new Push("TERM2"),
                     } );
        ParseAction rule18 = new PushSequence(
                new ParseAction[] { new Push(orOp),
                                    new Push("SIMPLE-EXPR"),
+                                   new MakeOr()
                     } );
        ParseAction rule19 = new PushSequence(
-               new ParseAction[] { new Push(plusOp),
-                              new Push("SIMPLE-EXPR"),
-                              new MakeAddition()
+                new ParseAction[] { new Push(plusOp),
+                                    new Push("SIMPLE-EXPR"),
+                                    new MakeAddition()
                     } );
        ParseAction rule20 = new PushSequence(
-               new ParseAction[] { new Push(minusOp),
-                                   new Push("SIMPLE-EXPR"),
-                                   new MakeSubtraction()
+                new ParseAction[] { new Push(minusOp),
+                                    new Push("SIMPLE-EXPR"),
+                                    new MakeSubtraction()
                     } );
        ParseAction rule21 = new PushSequence(
-               new ParseAction[] { new Push("FACTOR"),
-                                   new Push("TERM1"),
+                new ParseAction[] { new Push("FACTOR"),
+                                    new Push("TERM1"),
                     } );
        ParseAction rule22 = new PushSequence(
-               new ParseAction[] { new Push(andOp),
-                                   new Push("TERM"),
+                new ParseAction[] { new Push(andOp),
+                                    new Push("TERM"),
+                                    new MakeAnd()
                     } );
        ParseAction rule23 = new PushSequence(
-               new ParseAction[] { new Push(multiplyOp),
-                                   new Push("TERM"),
-                                   new MakeMultiplication()
+                new ParseAction[] { new Push(multiplyOp),
+                                    new Push("TERM"),
+                                    new MakeMultiplication()
                     } );
        ParseAction rule24 = new PushSequence(
-               new ParseAction[] {  new Push(forwardSlash),
+                new ParseAction[] {  new Push(forwardSlash),
                                     new Push("TERM"),
                                     new MakeDivision()
                     } );
        ParseAction rule25 = new PushSequence(
-               new ParseAction[] { new Push(ifOp),
+                new ParseAction[] { new Push(ifOp),
                               new Push("EXPR"),
                               new Push(thenOp),
                               new Push("EXPR"),
                               new Push(elseOp),
                               new Push("EXPR"),
-                              new Push(endIfOp)
+                              new Push(endIfOp),
+                              new MakeIf()
                     } );
        ParseAction rule26 = new PushSequence(
                new ParseAction[] { new Push(notOp),
@@ -248,14 +266,18 @@ public class TableDrivenParser extends Parser
                                    new Push("FACTOR"),
                     } );
        ParseAction rule30 = new PushSequence(
-               new ParseAction[] { new Push(identifierOp),
+               new ParseAction[] { new NameAction(),
+                                   new Push(identifierOp),
+                                   //new MakeIdentifier(),
                                    new Push("ACTUALS1"),
-                                   new MakeIdentifier()
                     } );
        ParseAction rule31 = new PushSequence(
-               new ParseAction[] { new Push(openParen),
+               new ParseAction[] { 
+                                   new Push(openParen),
                                    new Push("ACTUALS"),
-                                   new Push(closedParen)
+                                   new Push(closedParen),
+                                   new MakeFunction(),
+                                   //new StartActualsCounter(),
                     } );
        ParseAction rule32 = new PushSequence(
                new ParseAction[] { new Push("NONEMPTYACTUALS"),
@@ -269,29 +291,38 @@ public class TableDrivenParser extends Parser
                                    new Push("NONEMPTYACTUALS")
                     } );
        ParseAction rule35 = new PushSequence(
-               new ParseAction[] { new Push(number),
-                     
-                    } );
-       ParseAction rule98 = new PushSequence(
-               new ParseAction[] { 
-                     new Push("BOOLEAN"),
+                new ParseAction[] { new NameAction(),
+                                   new Push(number),
+                                   new MakeInteger()
                     } );
        ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
-                                new Push(openParen),
-                         new Push("EXPR"),
-                     new Push(closedParen)
+                                   new Push(openParen),
+                                   new Push("EXPR"),
+                                   new Push(closedParen),
                     } );
-       ParseAction rule96 = new PushSequence(
-                                             new ParseAction[] { new Push(trueOp) }
+       ParseAction rule37 = new PushSequence(
+                   new ParseAction[] { new NameAction(),
+                                       new Push(trueOp),
+                                       new MakeBoolean() }
                                              );
-       ParseAction rule97 = new PushSequence(
-                                             new ParseAction[] { new Push(falseOp) }
+       ParseAction rule38 = new PushSequence(
+                   new ParseAction[] { new NameAction(),
+                                       new Push(falseOp),
+                                       new MakeBoolean() }
                                              );
-       
+       ParseAction rule39 = new PushSequence(
+               new ParseAction[] { new NameAction(),
+                                   new Push(booleanOp),
+                                   new MakeType()
+                    } );
        ParseAction rule0X = new PushSequence(
                                              new ParseAction[] { new Push(endOfStream) }
-                                             );
+       );
+       
+       ParseAction rule00X = new PushSequence(
+         new ParseAction[] { new MakeIdentifier() }
+       );
        
        table.add( "PROGRAM", identifierOp, rule01 );
        
@@ -307,7 +338,6 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "FORMALS", identifierOp, rule06 );
-       //table.add( "FORMALS", endOfStream,  rule00 );
        table.add( "FORMALS", closedParen,  rule00 );
        
        
@@ -318,7 +348,7 @@ public class TableDrivenParser extends Parser
        table.add( "NONEMPTYFORMALS1", comma, rule08 );
        table.add( "NONEMPTYFORMALS1", closedParen, rule00 ); // Not in follow set?
 
-       
+
        table.add( "FORMAL", identifierOp , rule09 );
        table.add( "FORMAL", closedParen, rule00 );
        table.add( "FORMAL", comma, rule00 );
@@ -345,11 +375,9 @@ public class TableDrivenParser extends Parser
        table.add( "BODY1", falseOp, rule12 );
        table.add( "BODY1", minusOp, rule12 );
        
-       table.add( "BODY1", endOfStream, rule00 );
-       
        
        table.add( "TYPE", integerOp, rule13 );
-       table.add( "TYPE", booleanOp, rule99 );
+       table.add( "TYPE", booleanOp, rule39 );
        
        table.add("TYPE", print, rule00 );
        table.add("TYPE", ifOp, rule00 );
@@ -508,21 +536,21 @@ public class TableDrivenParser extends Parser
        
        table.add( "ACTUALS1", openParen, rule31 );
        
-       table.add( "ACTUALS1", andOp, rule00 );
-       table.add( "ACTUALS1", multiplyOp, rule00 );
-       table.add( "ACTUALS1", forwardSlash, rule00 );
-       table.add( "ACTUALS1", orOp, rule00 );
-       table.add( "ACTUALS1", plusOp, rule00 );
-       table.add( "ACTUALS1", minusOp, rule00 );
-       table.add( "ACTUALS1", lessThanOp, rule00 );
-       table.add( "ACTUALS1", assignmentOp, rule00 );
-       table.add( "ACTUALS1", closedParen, rule00 );
-       table.add( "ACTUALS1", thenOp, rule00 );
-       table.add( "ACTUALS1", elseOp, rule00 );
-       table.add( "ACTUALS1", endIfOp, rule00 );
-       table.add( "ACTUALS1", comma, rule00 );
-       table.add( "ACTUALS1", identifierOp, rule00 );
-       table.add( "ACTUALS1", endOfStream, rule00 );
+       table.add( "ACTUALS1", andOp, rule00X );
+       table.add( "ACTUALS1", multiplyOp, rule00X );
+       table.add( "ACTUALS1", forwardSlash, rule00X );
+       table.add( "ACTUALS1", orOp, rule00X );
+       table.add( "ACTUALS1", plusOp, rule00X );
+       table.add( "ACTUALS1", minusOp, rule00X );
+       table.add( "ACTUALS1", lessThanOp, rule00X );
+       table.add( "ACTUALS1", assignmentOp, rule00X );
+       table.add( "ACTUALS1", closedParen, rule00X );
+       table.add( "ACTUALS1", thenOp, rule00X );
+       table.add( "ACTUALS1", elseOp, rule00X );
+       table.add( "ACTUALS1", endIfOp, rule00X );
+       table.add( "ACTUALS1", comma, rule00X );
+       table.add( "ACTUALS1", identifierOp, rule00X );
+       table.add( "ACTUALS1", endOfStream, rule00X );
        
        
        table.add( "ACTUALS", ifOp, rule32 );
@@ -553,8 +581,8 @@ public class TableDrivenParser extends Parser
        
        
        table.add( "LITERAL", number, rule35 );
-       table.add( "LITERAL", trueOp, rule96 );
-       table.add( "LITERAL", falseOp, rule97 );
+       table.add( "LITERAL", trueOp, rule37 );
+       table.add( "LITERAL", falseOp, rule38 );
        
        
        table.add( "PRINT", print, rule36 );
@@ -573,4 +601,6 @@ public class TableDrivenParser extends Parser
         skipComments( scanner.getNextToken() ); // Consume this token and check again
       }
     }
+    
+    public SemanticAction getProgramNode() { return (SemanticAction) stackAttack.pop(); }//if( programNode != null) return programNode; else return (SemanticAction) stackAttack.pop(); }
 }
