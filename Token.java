@@ -5,18 +5,17 @@ public class Token
     
     // To get the integer value of enum, use this.ordinal()
     public enum TYPE {
-      PLUS_OP, 
-        MINUS_OP, 
-        MULTIPLY_OP, 
-        ASSIGNMENT_OP,
-        LESSTHAN_OP, 
+      PLUS,
+        MINUS,
+        MULTIPLY,
+        ASSIGNMENT,
+        LESSTHAN,
         OPEN_PAREN,
         CLOSED_PAREN,
         IF,
         THEN,
         ELSE,
         END_IF,
-        MAIN,
         NOT,
         OR,
         AND,
@@ -30,10 +29,9 @@ public class Token
         INTEGER,
         PRINT,
         IDENTIFIER,
-        // Do these belong here? Also, consider changing scanner to create START/EOS characters?
-        START,
+        NUMBER,
         EOS
-      }
+    }
     
     public Token(String word) throws LexicalException
     {
@@ -49,15 +47,15 @@ public class Token
     public static TYPE assignType(String sToken) throws LexicalException
     {
       if (isReservedPlusOp(sToken)) {
-        return TYPE.PLUS_OP;
+        return TYPE.PLUS;
       } else if (isReservedMinusOp(sToken)) {
-        return TYPE.MINUS_OP;
+        return TYPE.MINUS;
       } else if(isReservedMultiplyOp(sToken)) {
-        return TYPE.MULTIPLY_OP;
+        return TYPE.MULTIPLY;
       } else if(isReservedAssignmentOp(sToken)) {
-        return TYPE.ASSIGNMENT_OP;
+        return TYPE.ASSIGNMENT;
       } else if (isReservedLessThanOp(sToken)) {
-        return TYPE.LESSTHAN_OP;
+        return TYPE.LESSTHAN;
       } else if (isReservedOpenParen(sToken)) {
         return TYPE.OPEN_PAREN;
       } else if (isReservedClosedParen(sToken)) {
@@ -70,8 +68,11 @@ public class Token
         return TYPE.ELSE;
       } else if (isReservedEndIf(sToken)) {
         return TYPE.END_IF;
+<<<<<<< HEAD
       } else if (isReservedMain(sToken)) {
         return TYPE.MAIN;
+=======
+>>>>>>> c1aa105848f2459944317ed14738b0f87d3f4824
       } else if (isReservedNot(sToken)) {
         return TYPE.NOT;
       } else if (isReservedOr(sToken)) {
@@ -92,11 +93,13 @@ public class Token
         return TYPE.FALSE;
       } else if (isReservedColon(sToken)) {
         return TYPE.COLON;
-      } else if (isInt(sToken)) {
+      } else if (isReservedInteger(sToken)) {
         return TYPE.INTEGER;
       } else if (isReservedPrint(sToken)) {
         return TYPE.PRINT;
-      }else{
+      } else if (isNumber(sToken)) {
+        return TYPE.NUMBER;
+      } else{
         return TYPE.IDENTIFIER;
       }
     }
@@ -782,63 +785,6 @@ public class Token
     }
 
    
-   public static boolean isReservedMain(String candidate) {
-        int START_STATE    = 0;
-        int TERMINAL_STATE = 4; 
-        
-        char   next;
-        
-        if (candidate.length()!=4){
-         return false;
-        }
-
-        int state = START_STATE;
-        for (int i = 0; i < candidate.length(); i++)
-        {
-            next = candidate.charAt(i);
-            switch (state)
-            {
-                case 0:
-                    switch ( next )
-                    {
-                        case 'm': state++; break;
-                        default : state = -1;
-                    }
-                    break;
-
-                case 1:
-                    switch ( next )
-                    {
-                        case 'a': state++; break;
-                        default : state = -1;
-                    }
-                    break;
-
-                case 2:
-                    switch ( next )
-                    {
-                        case 'i': state++; break;
-                        default : state = -1;
-                    }
-                    break;
-
-                case 3:
-                    switch ( next )
-                    {
-                        case 'n': state++; break;
-                        default : state = -1;
-                    }
-                    break;
-            }
-        }
-
-        if ( state == TERMINAL_STATE )
-            return true;
-        else
-            return false;
-    }
-
-   
    public static boolean isReservedMinusOp(String candidate) {
         int START_STATE    = 0;
         int TERMINAL_STATE = 1; 
@@ -1239,9 +1185,8 @@ public class Token
         else
             return false;
     }
-
    
-   public static boolean isInt(String num) throws LexicalException
+   public static boolean isNumber(String num) throws LexicalException
    {
      Long lowerBound = -4294967296L; 
      Long upperBound =  4294967295L;
@@ -1260,7 +1205,7 @@ public class Token
        throw new LexicalException("Number out of range");
      }
      
-     return true; 
+     return true;
    }
    
    public boolean equals(Token otherToken) 

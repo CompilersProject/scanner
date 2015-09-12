@@ -4,29 +4,28 @@ import java.io.PushbackInputStream;
 
 
 public class Compiler {
-   public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
-   {
-    
-     try{
-
-     Scanner test = new Scanner( "testKlein!.txt" );
-     Token tmp = test.getNextToken();
-    
-     System.out.println("<PROGRAM>");
-     while( tmp.getValue() != "" ){
-       
-       if((tmp.getType() == Token.TYPE.IDENTIFIER))
-         System.out.println("<"+tmp.getType()+">" + " " +tmp);
-       
-       else{System.out.println("<"+tmp.getType()+">");
-       }
-       
-       tmp = test.getNextToken();
-     }
+  // No good compile-time code stripping for Java
+  // Any if statements with static final variables should be evaluated at compile time
+  // So this should work without unnecessary overhead
+  public static final boolean extendedDebug = true;
+  
+  public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
+  {
+    try{
+      String testFile;
+      if( args.length != 0 ){
+        testFile = args[0];
+      }
+      else{
+        testFile = "new.txt";
+      }
+      Scanner test = new Scanner( testFile );
+      TableDrivenParser tdp = new TableDrivenParser( test );
      
-     }
-     catch(Exception e){
-       System.out.println( e );
-     }
- }
+      tdp.parseProgram();
+    }
+    catch(Exception e){
+      System.out.println( e );
+    }
+  }
 }

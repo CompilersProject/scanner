@@ -5,19 +5,14 @@ import java.io.FileInputStream;
 
 public class Scanner
 {
-	public static final int MAX_LENGTH = 256;
-	
+ public static final int MAX_LENGTH = 256;
+ 
   private PushbackInputStream sourceFile;
   private Token               nextToken; // Added this for peek as Wallingford pointed out we would need it
 
-  public Scanner( String filename )
+  public Scanner( String filename ) throws IOException
   {
-	try{
-		sourceFile = new PushbackInputStream(new FileInputStream(filename));
-	} catch(IOException e){
-		System.out.println("Invalid filename.");
-		System.exit(0);
-	}
+    sourceFile = new PushbackInputStream(new FileInputStream(filename));
 
     nextToken = null;
   }
@@ -33,13 +28,25 @@ public class Scanner
 
   public Token getNextToken() throws IOException, LexicalException
   {
+    if( nextToken != null ){
+      Token tmp = nextToken;
+      nextToken = null;
+      return tmp;
+    }
+    
     String rawToken = "";
     int nextByte = getNextByte();
     int tokenLength = 1;
     
     // Throw away leading whitespace
     while( isOurWhitespace((char) nextByte) ){
-    	nextByte = getNextByte();
+      nextByte = getNextByte();
+    }
+   if( nextByte == -1 ){
+      // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
+      // Saving off a copy of EOS when it is found initially doesn't work well for peeks
+      // Best solution that works so far.
+      return new Token(Token.TYPE.EOS);
     }
     if( isComment( (char) nextByte) ){
         char temp='j';
@@ -51,40 +58,36 @@ public class Scanner
       }
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
-      return new Token(stringByte);
+      return makeToken(stringByte);
     }
 
     while( !isSymbol( (char) nextByte) && 
-    		!isOurWhitespace( (char) nextByte) ) {
+      !isOurWhitespace( (char) nextByte) ) {
       if( tokenLength > MAX_LENGTH ){
-    	  // TODO: Put exception here
-    	  System.out.println("Identifier is too long. Max identifier length: " + MAX_LENGTH);
-    	  System.exit(0);
+        throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
-    	  
-    	  
+      
       if( nextByte != -1 ){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
       }
       else{
-        return new Token(rawToken);
-      }      
+        // Found the End of FIle, return what we were reading and save an EOS Token
+        //nextToken = new Token(Token.TYPE.EOS);
+        return makeToken(rawToken);
+      }
     }
 
     // If we reach here we found a symbol signifying a new token, so we must first replace it in the stream
     sourceFile.unread( nextByte );
-    return new Token(rawToken);
+    return makeToken(rawToken);
   }
-  
 
   public int getNextByte() throws IOException
   {
-	  return sourceFile.read();
+   return sourceFile.read();
   }
-  
-
   
   // Static member funtions
   public static boolean isOurWhitespace( char c )
@@ -123,4 +126,9 @@ public class Scanner
     return false;
   }
   
+  private Token makeToken( String rawToken ) throws LexicalException
+  {
+    nextToken = new Token( rawToken );
+    return nextToken;
+  }
 }

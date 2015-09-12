@@ -1,0 +1,71 @@
+main():integer 1
+
+main() : integer
+  1
+
+
+main(n : integer) : integer
+  n
+
+
+main(n : integer) : integer
+  n+1
+
+
+main(n : integer) : integer
+  n < 10
+
+
+main(n : integer) : integer
+  if n < 10 then
+    2 * n
+  else
+    n - 10
+  endif
+
+
+main(n : integer) : integer
+  inc(n)
+
+inc(n : integer) : integer
+  2 * n
+
+
+main(n : integer) : integer
+  if f(n+1,n) = 3*n+2 then
+    n
+  else
+    0
+  endif
+
+
+f(m : integer, n : integer) : integer
+  2 * m + n
+
+
+main() : integer
+  print(1)
+  1
+
+
+// Finds the GCD of two integers using Euclid's algorithm
+// based on a program by Chuck Hoffman
+
+remainder(a : integer, b : integer) : integer
+   if a < b then
+      a
+   else
+      remainder(a-b, b)
+   endif
+
+
+gcd(a : integer, b : integer) : integer
+   if b = 0 then
+      a
+   else
+      gcd(b, remainder(a, b))
+   endif
+
+
+main(a : integer, b : integer) : integer
+   gcd(a,b)
