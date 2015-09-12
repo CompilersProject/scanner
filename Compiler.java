@@ -11,18 +11,23 @@ public class Compiler {
   
   public static void main( String[] args ) throws java.io.FileNotFoundException, IOException
   {
+    
     try{
       String testFile;
       if( args.length != 0 ){
         testFile = args[0];
       }
       else{
-        testFile = "new.txt";
+        testFile = "klein-programs/tests02-parser/03-arithmetic.kln";
       }
       Scanner test = new Scanner( testFile );
       TableDrivenParser tdp = new TableDrivenParser( test );
-     
+      
       tdp.parseProgram();
+      
+      while( !tdp.stackAttack.empty() ){
+        System.out.println( tdp.stackAttack.pop() );
+      }
     }
     catch(Exception e){
       System.out.println( e );

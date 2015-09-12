@@ -2,7 +2,6 @@ import java.util.Stack;
 
 public class MakeIdentifier extends SemanticAction
 {
-  //String name; // NAMING
   public MakeIdentifier( ){
     type = "Identifier Node";
   }

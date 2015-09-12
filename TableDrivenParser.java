@@ -6,12 +6,8 @@ public class TableDrivenParser extends Parser
 {
   public Stack stackAttack;
   private ParsingTable kleinTable;
-<<<<<<< HEAD
-
   
   private String tmpIdentifierName; // NAMING
-=======
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
 
     public TableDrivenParser( Scanner source )
     {
@@ -35,25 +31,15 @@ public class TableDrivenParser extends Parser
         if( symbol instanceof Token ){ // A is terminal
           Token terminal = (Token) symbol;
           if( terminal.getType() == Token.TYPE.EOS ){
-<<<<<<< HEAD
-            System.out.println("\nFinished.\nProgram parsed with no errors.\n\nSemantic Stack:\n");
-=======
             System.out.println("LE FIN.\nProgram parsed with no errors.");
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
             return;
           } else if( terminal.equals( scanner.peek() )){
             if( Compiler.extendedDebug ){
               // * For debugging *
-<<<<<<< HEAD
               tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
               System.out.println( "Consumed: " + tmpIdentifierName ); // NAMING
             } else {
               tmpIdentifierName = scanner.getNextToken().toString(); // NAMING
-=======
-              System.out.println( "Consumed: " + scanner.getNextToken() );
-            } else {
-              scanner.getNextToken();
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
             }
           } else{
             // * For debugging *
@@ -72,29 +58,17 @@ public class TableDrivenParser extends Parser
           if( rule instanceof PushSequence ){
             if( Compiler.extendedDebug ){
               System.out.println("Found a rule for nonTerminal: " + nonTerminal + " and token: " + scanner.peek());
-<<<<<<< HEAD
             }
               rule.execute(parseStack); // PushSequence loops through rules backwards
           } else if( rule instanceof PushNothing ){
-            //System.out.println( "PUSH NOTHING" );// **** Do nothing? ****
-=======
-              rule.execute(parseStack); // PushSequence loops through rules backwards
-            }
-          } else if( rule instanceof PushNothing ){
-            // **** Do nothing? ****
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
+            System.out.println( "PUSH NOTHING" );// **** Do nothing? ****
           }else{ // Failed to find rule for table[A,i]
             throw new SemanticException("No rule for non-terminal: " + nonTerminal + " and terminal: " + scanner.peek());
           }
         } else if( symbol instanceof SemanticAction ){
-<<<<<<< HEAD
           SemanticAction sa = ( (SemanticAction) symbol ).copy();
           // TODO: Keep track of names/values/etc.
           sa.updateAST(stackAttack, tmpIdentifierName); // NAMING
-=======
-          SemanticAction sa = (SemanticAction) symbol;
-          sa.execute(stackAttack);
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
         } else {
           throw new SemanticException("Invalid object found on parse stack."); // Create a new exception for this?
         }
@@ -183,12 +157,8 @@ public class TableDrivenParser extends Parser
        ParseAction rule09 = new PushSequence(
                  new ParseAction[] { new Push(identifierOp),
                                      new Push(colonOp),
-<<<<<<< HEAD
                                      new Push("TYPE"),
                                      //new MakeIdentifier()
-=======
-                                     new Push("TYPE")
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
                       } );
        ParseAction rule10 = new PushSequence(
                new ParseAction[] { new Push("PRINT"),
@@ -229,11 +199,7 @@ public class TableDrivenParser extends Parser
        ParseAction rule19 = new PushSequence(
                new ParseAction[] { new Push(plusOp),
                               new Push("SIMPLE-EXPR"),
-<<<<<<< HEAD
                               new MakeAddition()
-=======
-                              new SemanticAction("Plus Action")
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
                     } );
        ParseAction rule20 = new PushSequence(
                new ParseAction[] { new Push(minusOp),
@@ -297,7 +263,6 @@ public class TableDrivenParser extends Parser
        ParseAction rule33 = new PushSequence(
                new ParseAction[] { new Push("EXPR"),
                                   new Push("NONEMPTYACTUALS1")
-<<<<<<< HEAD
                     } );
        ParseAction rule34 = new PushSequence(
                new ParseAction[] { new Push(comma),
@@ -311,21 +276,6 @@ public class TableDrivenParser extends Parser
                new ParseAction[] { 
                      new Push("BOOLEAN"),
                     } );
-=======
-                    } );
-       ParseAction rule34 = new PushSequence(
-               new ParseAction[] { new Push(comma),
-                                   new Push("NONEMPTYACTUALS")
-                    } );
-       ParseAction rule35 = new PushSequence(
-               new ParseAction[] { new Push(number),
-                     
-                    } );
-       ParseAction rule98 = new PushSequence(
-               new ParseAction[] { 
-                     new Push("BOOLEAN"),
-                    } );
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
        ParseAction rule36 = new PushSequence(
                new ParseAction[] { new Push(print),
                                 new Push(openParen),

@@ -11,17 +11,12 @@ public class PushSequence implements ParseAction {
   
   public void execute( Stack stack )
   {
-<<<<<<< HEAD
     for (int i = actions.length-1; i >= 0; i--){
       if( Compiler.extendedDebug ){
-        //System.out.println(actions[i]);
+        System.out.println(actions[i]);
       }
       actions[i].execute( stack );
     }
-=======
-    for (int i = actions.length-1; i >= 0; i--)
-      actions[i].execute( stack );
->>>>>>> 7abfbba130cea9ae24b4bec117ce954bc99815ad
   }
   
   public String toString()

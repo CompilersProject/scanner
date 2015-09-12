@@ -68,11 +68,6 @@ public class Token
         return TYPE.ELSE;
       } else if (isReservedEndIf(sToken)) {
         return TYPE.END_IF;
-<<<<<<< HEAD
-      } else if (isReservedMain(sToken)) {
-        return TYPE.MAIN;
-=======
->>>>>>> c1aa105848f2459944317ed14738b0f87d3f4824
       } else if (isReservedNot(sToken)) {
         return TYPE.NOT;
       } else if (isReservedOr(sToken)) {
