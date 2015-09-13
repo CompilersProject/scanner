@@ -1,8 +1,18 @@
 import java.util.Stack;
 
+/**
+ * 
+ * Makes a node from the semantic stack to 
+ * be placed in the AST. Uses the updateAST method
+ * to add it to the AST. The copy constructor allows
+ * us to carry information for later use.
+ *
+ */
+
 public class MakeType extends SemanticAction
 {
   public MakeType( ){
+    name = "TYPE";
     type = TYPE.TYPE;
   }
   
@@ -14,13 +24,15 @@ public class MakeType extends SemanticAction
   public MakeType( MakeType mi ){
     type = mi.type;
     name = mi.name;
+    returnType = mi.returnType;
   }
   
-  public void updateAST( Stack semanticStack, Stack nameStack ){
+  public void updateAST( Stack<SemanticAction> semanticStack, Stack<String> nameStack ){
     if( Compiler.extendedDebug )
       System.out.println("Pushing Type");
     
     name = (String) nameStack.pop();
+    returnType = name;
     semanticStack.push( this );
   }
   

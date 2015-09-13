@@ -2,13 +2,22 @@ import java.io.PushbackInputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 
+/**
+ * 
+ * Used to scan the Klein file. Contains methods to
+ * peek ahead, grab the next token and create a token. 
+ * This class also defines what it is to be white 
+ * space, a symbol and a comment.
+ *
+ */
+
 
 public class Scanner
 {
  public static final int MAX_LENGTH = 256;
  
   private PushbackInputStream sourceFile;
-  private Token               nextToken; // Added this for peek as Wallingford pointed out we would need it
+  private Token               nextToken;
 
   public Scanner( String filename ) throws IOException
   {
@@ -40,24 +49,23 @@ public class Scanner
     
     // Throw away leading whitespace
     while( isOurWhitespace((char) nextByte) ){
-      nextByte = getNextByte();
+     nextByte = getNextByte();
     }
-    if( nextByte == -1 || nextByte == 'Ã¿'){
+   if( nextByte == -1 || nextByte == 'ÿ'){
       // Doing a check within Token is tricky, because we are passing in a valid integer value for literals
       // Saving off a copy of EOS when it is found initially doesn't work well for peeks
-      // Best solution that works so far.
       return new Token(Token.TYPE.EOS);
     }
     if( isComment( (char) nextByte) ){
-      char temp='j';
-      while (temp!='\n')
-      {         
-        temp = (char) sourceFile.read();
-        if (temp == 65535)
-          break;
+        char temp='j';
+        while (temp!='\n')
+        {         
+          temp = (char) sourceFile.read();
+          if (temp == 65535)
+            break;
+        }
+        return new Token(Token.TYPE.COMMENT);
       }
-      return new Token(Token.TYPE.COMMENT);
-    }
     
     if( isSymbol( (char) nextByte) ){
       String stringByte =  Character.toString((char)nextByte);
@@ -70,14 +78,13 @@ public class Scanner
         throw new LexicalException("Identifier is too long. Max identifier length: " + MAX_LENGTH);
       }
       
-      if( nextByte != -1 || nextByte == 'Ã¿'){ // EOF character
+      if( nextByte != -1 || nextByte == 'ÿ'){ // EOF character
         rawToken += (char) nextByte;
         tokenLength++;
         nextByte = getNextByte();
       }
       else{
         // Found the End of FIle, return what we were reading and save an EOS Token
-        //nextToken = new Token(Token.TYPE.EOS);
         return makeToken(rawToken);
       }
     }
@@ -115,12 +122,12 @@ public class Scanner
       c == ')' ||
       c == ',' ||
       c == ':' ||
-      c == 'Ã¿';
+      c == 'ÿ';
     // Note: Comment tag is two characters and is perceived as a keyword
   }
   public boolean isComment (char c) throws IOException
   {
-    char temp = (char)sourceFile.read();
+    char temp = (char)sourceFile.read();    
     if ((c=='/') && temp=='/')
     {
       sourceFile.unread(temp);

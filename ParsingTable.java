@@ -1,5 +1,15 @@
 import java.util.Stack;
 
+/**
+ * 
+ * Creates a table using terminals as columns and 
+ * non terminals as rows. Adding to the table and 
+ * doing lookups is done with "add" and "lookup",
+ * respectively. This class also handles converting
+ * non terminals to integers.
+ *
+ */
+
 public class ParsingTable {
  private ParseAction[][] table;
 
@@ -62,12 +72,11 @@ public class ParsingTable {
         if (symbol.equalsIgnoreCase( "nonemptyactuals1" ) ) return 23;
         if (symbol.equalsIgnoreCase( "literal" )          ) return 24;
         if (symbol.equalsIgnoreCase( "print" )            ) return 25;       
-        return 0; // return an exception
+        return 0; 
     }
 
     private int convertToken( Token token )
     {
         return token.typeToInt();
     }
-
 }

@@ -1,14 +1,22 @@
+/**
+ * 
+ * The Token class uses a string and decides which token it is
+ * using state machine-like statements. If the string is not matched
+ * to one of the types it is returned as an identifier. This class
+ * also handles the limits of the size of numbers.
+ * 
+ */
+
 public class Token 
 {     
     private TYPE type;
     private String literalValue;
     
-    // To get the integer value of enum, use this.ordinal()
     public enum TYPE {
       PLUS,
         MINUS,
         MULTIPLY,
-        ASSIGNMENT,   // TODO: *** RENAME ***
+        ASSIGNMENT,   
         LESSTHAN,
         OPEN_PAREN,
         CLOSED_PAREN,
@@ -1196,7 +1204,7 @@ public class Token
      
      Long temp = Long.valueOf(num).longValue();
      if( !(lowerBound<=temp) || !(upperBound>=temp) ){
-       // TODO: Add exception here
+       
        throw new LexicalException("Number out of range");
      }
      

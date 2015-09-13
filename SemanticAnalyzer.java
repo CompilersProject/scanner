@@ -7,7 +7,8 @@ public class SemanticAnalyzer
   private SymbolTable symbolTable = new SymbolTable();
   private SemanticAction startNode = new SemanticAction();
   private int mainCounter;
-
+  private ArrayList<String> errorList = new ArrayList<String>();
+    
   public SemanticAnalyzer( SemanticAction node )
   {
     mainCounter = 0;
@@ -22,7 +23,6 @@ public class SemanticAnalyzer
     {
       String defName = def.getName();
       if( defName.equals("print") ){
-        System.out.println( "User-defined print function not allowed." );
       } else if( defName.equals("main") ){
         mainCounter++;
       }
@@ -36,9 +36,9 @@ public class SemanticAnalyzer
     
     
     if( mainCounter < 1 )
-      System.out.println( "No main function defined." );
+      errorList.add( "No main function defined.\n" );
     else if( mainCounter > 1 )
-      System.out.println( "Too many main functions defined." );
+      errorList.add( "Too many main functions defined.\n" );
   }
   
   public void analyzeTree( )
@@ -46,6 +46,7 @@ public class SemanticAnalyzer
     for( SemanticAction defNode: startNode.getBranches() )
     {
       helper( defNode.getName(), defNode.getBranches().get(0) );
+      checkDefReturn( defNode );
     }
   }
   
@@ -60,29 +61,94 @@ public class SemanticAnalyzer
         return;
       } else {
         if( !symbolTable.compare( defName, node ) ){
-          System.out.println( "No formal parameter: " + node + " inside defintion of " + defName );
+          errorList.add( "No formal parameter: " + node + " inside defintion of " + defName + "\n" );
         }
       }
     }
     
     if( node.getType() == SemanticAction.TYPE.FUNCTION &&
        !symbolTable.checkFunctionCall( node.getName() ) ){
-      System.out.println( "No function definition for call to: " + node.getName() );
+      errorList.add( "No function definition for call to: " + node.getName() + "\n" );
     }
     
     for( SemanticAction branch: node.getBranches() )
     {
       helper( defName, branch );
     }
+    
+    checkTypes( defName, node );
   }
 
-  public void adder(ArrayList allElements, int col)
+  private void checkTypes( String defName, SemanticAction node )
   {
-    for (int i=0; i<allElements.size(); i++)
-    {
-      //symbolTable.add( allElements.get(i), i, col );
+    switch( node.type ){
+      case IF:
+        /*
+        String funcReturnType = symbolTable.getFunctionType( defName );
+        String nodeReturnType = node.getBranches().get(0).getReturnType();
+        if( !nodeReturnType.equals( "boolean" ) ){
+          errorList.add( "If conditional statements expect type boolean. " + node.getBranches().get(0).getName() + " is type " + nodeReturnType ); // ***
+        }
+        nodeReturnType = node.getBranches().get(1).getReturnType();
+        if( !nodeReturnType.equals( funcReturnType ) ){
+          errorList.add( "Argument " + node.getBranches().get(1).getName() + " does not match return type of " + node.getName() + ". Expected " + funcReturnType );
+        }
+        nodeReturnType = node.getBranches().get(2).getReturnType();
+        if( !nodeReturnType.equals( funcReturnType ) ){
+          errorList.add( "Argument " + node.getBranches().get(1).getName() + " does not match return type of " + node.getName() + ". Expected " + funcReturnType );
+        }
+        */
+        break;
+        
+      case FUNCTION:
+        
+        break;
+
+      case IDENTIFIER:
+        
+        break;
+        
+      case PRINT:
+        // Skip print as it has branches but there is no requirement for their types
+        break;
+        
+      default: // Not a special case, so we should have a return type
+        if( node.hasBranches() ){ // TODO: Try without this check, the only nodes with out branches should have already been dealt with.
+          String childType = node.getChildType();
+          for( SemanticAction child: node.getBranches() ){
+            if( child.getType() == SemanticAction.TYPE.IDENTIFIER || child.getType() == SemanticAction.TYPE.FUNCTION ){ // ****** REMOVE AFTER IMPLEMENTING IDENTIFIER TYPE CHECKING *******
+              break;
+            } // **************************
+            if( !child.getReturnType().equals( childType ) ){
+              errorList.add( "Argument " + child.getName() + " does not match type of " + node.getName() + ". Expected " + childType );
+            }
+          }
+        }
+    }
+  }
+  
+  private void checkDefReturn( SemanticAction defNode ){
+    // Skip if statements because they handle matching return values in checkTypes
+    if( defNode.getBranches().get(0).getType() == SemanticAction.TYPE.IF ||
+        defNode.getType() == SemanticAction.TYPE.DEFINITION ){ // *** REMOVE ***get(0).getType() == SemanticAction.TYPE.IF ){
+      return;
+    }
+    
+    String defReturn = defNode.getBranches().get(1).getReturnType();
+    String bodyType = defNode.getBranches().get(0).getReturnType();
+    if( !defReturn.equals( bodyType ) ){
+      errorList.add( "Type mismatch. Function " + defNode.getName() + " does not return type " + bodyType + " expected " + defReturn );
     }
   }
 
   public SymbolTable getSymbolTable() { return symbolTable; }
+  
+  public ArrayList<String> showErrors(){
+    if (!errorList.isEmpty()) {
+      for (int i = 0; i < errorList.size(); i++){
+        System.out.println(errorList.get(i));
+      }
+    }
+    return errorList;
+  }
 }
